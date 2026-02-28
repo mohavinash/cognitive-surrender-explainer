@@ -9,3 +9,9 @@ dist/
 build/
 .venv/
 venv/
+
+# Development screenshots
+*.png
+
+# Playwright MCP
+.playwright-mcp/

@@ -1,0 +1,4535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cognitive Lab — Thinking: Fast, Slow, and Artificial</title>
+  <meta name="description" content="An interactive explainer on how AI is reshaping human reasoning and the rise of cognitive surrender. Based on research by Shaw & Nave at Wharton.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       CSS DESIGN SYSTEM — "The Cognitive Lab"
+       ============================================================ */
+
+    /* --- CSS Custom Properties --- */
+    :root {
+      /* Light editorial palette — inspired by parchment/editorial design */
+      --bg-primary: #f5f0e8;
+      --bg-surface: #ffffff;
+      --bg-surface-hover: #f8f5f0;
+      --bg-elevated: #ffffff;
+
+      /* Dark surface for chart containers + hero */
+      --bg-dark: #1a1a2e;
+      --bg-dark-surface: #252540;
+      --bg-dark-border: rgba(255,255,255,0.1);
+
+      /* System Colors (kept vivid for chart data) */
+      --color-system1: #d4940a;       /* System 1 / Brain-Only — Warm Amber */
+      --color-system2: #2563eb;       /* System 2 / AI-Accurate — Blue */
+      --color-ai-faulty: #dc2626;     /* AI-Faulty / Surrender — Red */
+      --color-deliberation: #7c3aed;  /* System 2 Deliberation — Purple */
+      --color-override: #059669;      /* Override / Correct — Emerald */
+      --color-follow: #6b7280;        /* Follow — Gray */
+
+      /* Text — dark on light */
+      --text-primary: #1a1a2e;
+      --text-secondary: #4a4a5a;
+      --text-muted: #6b6b7b;
+
+      /* Accent — gold (editorial) */
+      --accent: #b8860b;
+      --accent-light: #daa520;
+      --accent-glow: rgba(184, 134, 11, 0.12);
+
+      /* Typography */
+      --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'Courier New', Courier, monospace;
+
+      /* Spacing Scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      --space-3xl: 4rem;
+      --space-4xl: 6rem;
+
+      /* Border Radius — restrained */
+      --radius-sm: 3px;
+      --radius-md: 4px;
+      --radius-lg: 6px;
+      --radius-xl: 8px;
+
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-reveal: 700ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Borders — clean, no glass */
+      --glass-bg: #ffffff;
+      --glass-border: #c5baa6;
+      --glass-blur: 0px;
+      --border: #c5baa6;
+      --border-light: #d8cfbe;
+
+      /* Shadows — subtle */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+      --shadow-glow: none;
+
+      /* Layout */
+      --content-max-width: 900px;
+      --content-narrow: 720px;
+
+      /* Reading progress bar */
+      --progress: 0%;
+    }
+
+
+    /* --- Reset & Base --- */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.75;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    a:hover {
+      color: var(--text-primary);
+    }
+
+
+    /* --- Reading Progress Bar --- */
+    #reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--progress);
+      height: 3px;
+      background: var(--accent);
+      z-index: 9999;
+      transition: width 80ms linear;
+      pointer-events: none;
+    }
+
+
+    /* --- Typography --- */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-weight: 600;
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--text-secondary);
+      max-width: 65ch;
+    }
+
+    .text-gradient {
+      color: var(--accent);
+      -webkit-text-fill-color: var(--accent);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+
+    /* --- Layout --- */
+    .container {
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .container--narrow {
+      max-width: var(--content-narrow);
+    }
+
+    section {
+      padding: var(--space-2xl) 0;
+      min-height: auto;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-header .label {
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+
+    .section-header h2 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .section-header p {
+      font-size: 1rem;
+    }
+
+    .section-content {
+      width: 100%;
+    }
+
+    .section-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      margin: var(--space-lg) 0;
+      border: none;
+    }
+
+
+    /* --- Card (Clean editorial) --- */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card--system1 { border-left: 3px solid var(--color-system1); }
+    .card--system2 { border-left: 3px solid var(--color-system2); }
+    .card--ai-faulty { border-left: 3px solid var(--color-ai-faulty); }
+    .card--deliberation { border-left: 3px solid var(--color-deliberation); }
+    .card--override { border-left: 3px solid var(--color-override); }
+    .card--flat {
+      background: var(--bg-surface);
+    }
+
+
+    /* --- Stat Highlight --- */
+    .stat-highlight {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+    }
+
+    .stat-highlight--amber { color: var(--color-system1); }
+    .stat-highlight--blue { color: var(--color-system2); }
+    .stat-highlight--coral { color: var(--color-ai-faulty); }
+    .stat-highlight--purple { color: var(--color-deliberation); }
+    .stat-highlight--emerald { color: var(--color-override); }
+    .stat-highlight--gold { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+    }
+
+    .stat-group {
+      display: flex;
+      gap: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      flex: 1;
+      min-width: 140px;
+    }
+
+
+    /* --- Pull Quote --- */
+    .pull-quote {
+      position: relative;
+      font-family: var(--font-heading);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: var(--space-lg) var(--space-xl);
+      margin: var(--space-lg) 0;
+      border-left: 3px solid var(--accent);
+      background: var(--bg-surface);
+      border-radius: 0;
+      max-width: 65ch;
+    }
+
+    .pull-quote::before {
+      content: '\201C';
+      position: absolute;
+      top: -0.15em;
+      left: 0.15em;
+      font-size: 3.5rem;
+      font-style: normal;
+      color: var(--accent);
+      opacity: 0.25;
+      line-height: 1;
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: var(--space-sm);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-style: normal;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+
+    /* --- Chart Container --- */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      min-height: 200px;
+      background: var(--bg-dark);
+      border: 1px solid var(--bg-dark-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .chart-container svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .chart-placeholder {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    .chart-placeholder .icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+      opacity: 0.5;
+    }
+
+
+    /* --- Toggle Group --- */
+    .toggle-group {
+      display: inline-flex;
+      gap: 2px;
+      padding: 3px;
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .toggle-btn {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .toggle-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-surface-hover);
+    }
+
+    .toggle-btn.active {
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .toggle-btn--amber.active { background: var(--color-system1); color: #fff; }
+    .toggle-btn--blue.active { background: var(--color-system2); color: #fff; }
+    .toggle-btn--coral.active { background: var(--color-ai-faulty); color: #fff; }
+    .toggle-btn--purple.active { background: var(--color-deliberation); color: #fff; }
+    .toggle-btn--emerald.active { background: var(--color-override); color: #fff; }
+
+
+    /* --- Tooltip --- */
+    .tooltip {
+      position: absolute;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--bg-dark-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      color: #f8fafc;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      white-space: nowrap;
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 8px;
+      height: 8px;
+      background: var(--bg-dark);
+      border-right: 1px solid var(--bg-dark-border);
+      border-bottom: 1px solid var(--bg-dark-border);
+    }
+
+
+    /* --- Scroll-Reveal Animations --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity var(--transition-reveal), transform var(--transition-reveal);
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 100ms; }
+    .reveal-delay-2 { transition-delay: 200ms; }
+    .reveal-delay-3 { transition-delay: 300ms; }
+    .reveal-delay-4 { transition-delay: 400ms; }
+    .reveal-delay-5 { transition-delay: 500ms; }
+
+    /* Prefers reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .reveal.revealed {
+        transition: none;
+      }
+      #reading-progress {
+        transition: none;
+      }
+      .card {
+        transition: none;
+      }
+    }
+
+
+    /* ============================================================
+       HERO SECTION
+       ============================================================ */
+    /* Hero — dark navy editorial header */
+    #hero {
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-3xl) 0 var(--space-xl);
+      position: relative;
+      overflow: visible;
+      background: var(--bg-dark);
+      border-bottom: 4px solid var(--accent);
+      color: #f8fafc;
+    }
+
+    #hero::before {
+      display: none;
+    }
+
+    #hero h1, #hero h2, #hero h3, #hero h4 {
+      color: #f8fafc;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-badge .dot {
+      display: none;
+    }
+
+    .hero-title {
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-title em {
+      font-style: italic;
+    }
+
+    /* Override text-gradient in hero to be gold on dark */
+    #hero .text-gradient {
+      color: var(--accent-light);
+      -webkit-text-fill-color: var(--accent-light);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: #b0b0c8;
+      max-width: 540px;
+      margin: 0 auto var(--space-lg);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .hero-subtitle strong {
+      color: var(--color-ai-faulty);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+      color: #888;
+      font-size: 0.8125rem;
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-meta .authors {
+      font-weight: 500;
+      color: #d0d0e0;
+    }
+
+    .hero-meta .affiliation {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.03em;
+    }
+
+    .scroll-indicator {
+      margin-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--accent-light);
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .scroll-indicator .arrow {
+      width: 12px;
+      height: 12px;
+      border-right: 1.5px solid var(--accent-light);
+      border-bottom: 1.5px solid var(--accent-light);
+      transform: rotate(45deg);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* Hero SVG Systems Visualization */
+    .hero-systems {
+      position: relative;
+      width: 220px;
+      height: 100px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .hero-systems svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .system-node {
+      cursor: pointer;
+    }
+
+    .system-node circle {
+      stroke-width: 2;
+      fill: var(--bg-dark);
+      transition: fill var(--transition-base), stroke-width var(--transition-base);
+    }
+
+    .system-node:hover circle:not(.orbit-ring) {
+      fill: var(--bg-dark-surface);
+      stroke-width: 3;
+    }
+
+    .system-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      fill: #f8fafc;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .system-sublabel {
+      font-family: var(--font-body);
+      font-size: 8px;
+      font-weight: 400;
+      fill: #94a3b8;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .connection-line {
+      stroke-width: 1.5;
+      fill: none;
+      stroke-dasharray: 6 4;
+      opacity: 0.3;
+    }
+
+    .connection-line.animated {
+      animation: dash-flow 2s linear infinite;
+    }
+
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -20; }
+    }
+
+    /* Orbit pulse — subtle */
+    .orbit-ring {
+      fill: none;
+      stroke-width: 1;
+      opacity: 0;
+      animation: orbit-pulse 4s ease-in-out infinite;
+    }
+
+    .orbit-ring.delay-1 { animation-delay: 0s; }
+    .orbit-ring.delay-2 { animation-delay: 1.3s; }
+    .orbit-ring.delay-3 { animation-delay: 2.6s; }
+
+    @keyframes orbit-pulse {
+      0% { opacity: 0; r: 28; }
+      50% { opacity: 0.2; }
+      100% { opacity: 0; r: 42; }
+    }
+
+    /* Hero ToC Navigation — editorial links, not pills */
+    .hero-toc {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-toc a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0;
+      border-radius: 0;
+      background: none;
+      border: none;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: #94a3b8;
+      white-space: nowrap;
+      transition: color var(--transition-fast);
+      text-decoration: none;
+      position: relative;
+    }
+
+    .hero-toc a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--accent-light);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease-out;
+    }
+
+    .hero-toc a:hover {
+      color: #f8fafc;
+    }
+
+    .hero-toc a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .hero-toc .toc-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-light);
+    }
+
+    /* Hero key stats strip */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    .hero-stat-item {
+      text-align: center;
+    }
+
+    .hero-stat-item .value {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--accent-light);
+      line-height: 1;
+    }
+
+    .hero-stat-item .desc {
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: #6b7280;
+      margin-top: 0.25rem;
+      letter-spacing: 0.03em;
+    }
+
+
+    /* ============================================================
+       SECTION-SPECIFIC PLACEHOLDER STYLES
+       ============================================================ */
+    .placeholder-block {
+      border: 1px dashed var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-2xl);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+    }
+
+    .placeholder-block .placeholder-icon {
+      font-size: 1.5rem;
+      opacity: 0.4;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+
+
+    /* ============================================================
+       SVG BAR CHART ENGINE
+       ============================================================ */
+    .chart-svg-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .chart-svg-container svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .chart-bar {
+      transition: opacity var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .chart-bar:hover {
+      opacity: 0.85;
+    }
+
+    /* Chart text — always on dark backgrounds */
+    .chart-axis-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      fill: #94a3b8;
+    }
+
+    .chart-axis-label.title {
+      font-size: 12px;
+      font-weight: 600;
+      fill: #cbd5e1;
+    }
+
+    .chart-value-label {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      fill: #f8fafc;
+      text-anchor: middle;
+    }
+
+    .chart-error-bar {
+      stroke: #94a3b8;
+      stroke-width: 1.5;
+      opacity: 0.7;
+    }
+
+    .chart-annotation {
+      font-family: var(--font-body);
+      font-size: 9px;
+      fill: #94a3b8;
+      text-anchor: middle;
+    }
+
+    .chart-annotation.sig {
+      font-weight: 700;
+      fill: #06b6d4;
+    }
+
+    .chart-gridline {
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 0.5;
+      stroke-dasharray: 4 4;
+    }
+
+    .chart-title-text {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      fill: #f8fafc;
+    }
+
+    .chart-subtitle-text {
+      font-family: var(--font-body);
+      font-size: 11px;
+      fill: #94a3b8;
+    }
+
+    /* Effect size meter (SVG-rendered by ChartEngine.drawEffectMeter) */
+    .effect-meter {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .effect-meter-svg-fill {
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .effect-meter-svg-fill.animate {
+      /* width set via JS dataset.targetWidth */
+    }
+
+    /* Study section narrative cards */
+    .study-narrative {
+      margin-bottom: var(--space-xl);
+    }
+
+    .study-narrative p {
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: var(--space-md);
+      max-width: 70ch;
+    }
+
+    .study-key-finding {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-xl);
+    }
+
+    .study-key-finding .finding-stat {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 2.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .study-key-finding .finding-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .study-key-finding .finding-text strong {
+      color: var(--text-primary);
+    }
+
+
+    /* ============================================================
+       MINI-CRT INTERACTIVE DEMO
+       ============================================================ */
+    .crt-demo {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .crt-question {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      transition: border-color var(--transition-base);
+    }
+
+    .crt-question.answered {
+      border-color: var(--accent);
+    }
+
+    .crt-question.correct {
+      border-color: var(--color-override);
+    }
+
+    .crt-question.incorrect {
+      border-color: var(--color-ai-faulty);
+    }
+
+    .crt-q-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .crt-q-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .crt-q-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .crt-input-row {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      align-items: stretch;
+    }
+
+    .crt-input {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .crt-input:focus {
+      border-color: var(--accent);
+    }
+
+    .crt-input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .crt-submit-btn {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .crt-submit-btn:hover {
+      background: var(--accent-light);
+    }
+
+    .crt-submit-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .crt-ask-ai-btn {
+      padding: 0.6rem 1.2rem;
+      background: var(--color-system2);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .crt-ask-ai-btn:hover {
+      background: #2563eb;
+    }
+
+    .crt-ask-ai-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* AI Chatbot bubble */
+    .crt-ai-bubble {
+      display: none;
+      margin-top: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid var(--color-system2);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      animation: fadeSlideIn 0.3s ease-out;
+    }
+
+    .crt-ai-bubble.visible {
+      display: block;
+    }
+
+    .crt-ai-bubble .ai-label {
+      font-weight: 600;
+      color: var(--color-system2);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Feedback after answer */
+    .crt-feedback {
+      display: none;
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      animation: fadeSlideIn 0.3s ease-out;
+    }
+
+    .crt-feedback.visible {
+      display: block;
+    }
+
+    .crt-feedback.correct-feedback {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: var(--color-override);
+    }
+
+    .crt-feedback.incorrect-feedback {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: var(--color-ai-faulty);
+    }
+
+    /* Results panel */
+    .crt-results {
+      display: none;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-top: var(--space-xl);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      animation: fadeSlideIn 0.5s ease-out;
+    }
+
+    .crt-results.visible {
+      display: block;
+    }
+
+    .crt-results h4 {
+      margin-bottom: var(--space-lg);
+      font-size: 1.25rem;
+    }
+
+    .crt-result-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .crt-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .crt-result-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .crt-result-icon.correct-icon {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-override);
+    }
+
+    .crt-result-icon.incorrect-icon {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--color-ai-faulty);
+    }
+
+    .crt-result-detail {
+      flex: 1;
+    }
+
+    .crt-result-detail .label {
+      font-size: 0.8rem;
+      margin-bottom: 0.15rem;
+      display: block;
+    }
+
+    .crt-result-detail .mapping {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .crt-bridge {
+      margin-top: var(--space-xl);
+      padding: var(--space-lg);
+      background: var(--accent-glow);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .crt-bridge p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: none;
+      line-height: 1.7;
+    }
+
+    .crt-bridge strong {
+      color: var(--text-primary);
+    }
+
+    /* Gate, skipped, banner */
+    .crt-gate,
+    .crt-skipped {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .crt-gate {
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+    }
+
+    .crt-skipped {
+      padding: var(--space-lg);
+    }
+
+    .crt-btn {
+      padding: 0.7rem 1.6rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .crt-btn--primary {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .crt-btn--ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .crt-btn--ghost-accent {
+      padding: 0.5rem 1.2rem;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .crt-condition-banner {
+      padding: var(--space-lg);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-xl);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .crt-condition-banner--brain-only {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .crt-condition-banner--ai-assisted {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+
+    /* ============================================================
+       TRI-SYSTEM INTERACTIVE DIAGRAM
+       ============================================================ */
+    .tri-system-diagram {
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .tri-system-diagram svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .tri-node {
+      cursor: pointer;
+      transition: transform var(--transition-base);
+    }
+
+    .tri-node:hover {
+      filter: brightness(1.15);
+    }
+
+    .tri-node.active circle:first-of-type {
+      stroke-width: 3;
+    }
+
+    .tri-node-label {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 15px;
+      fill: var(--text-primary);
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .tri-node-sublabel {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 10px;
+      fill: var(--text-secondary);
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .tri-zone-label {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      fill: var(--text-muted);
+      text-anchor: middle;
+    }
+
+    .tri-path {
+      fill: none;
+      stroke-width: 2;
+      stroke-dasharray: 8 5;
+      opacity: 0.3;
+      transition: opacity var(--transition-base), stroke-width var(--transition-base);
+    }
+
+    .tri-path.highlight {
+      opacity: 0.8;
+      stroke-width: 3;
+      stroke-dasharray: none;
+    }
+
+    .tri-boundary {
+      stroke: var(--text-muted);
+      stroke-width: 1;
+      stroke-dasharray: 4 6;
+      opacity: 0.3;
+    }
+
+    .tri-arrow {
+      fill: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* Route cards */
+    .route-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-xl);
+    }
+
+    .route-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .route-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .route-card.active {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .route-card .route-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .route-card .route-formula {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+    }
+
+    /* Route description panel */
+    .route-desc-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-top: var(--space-lg);
+      min-height: 80px;
+      transition: all var(--transition-base);
+    }
+
+    .route-desc-panel h4 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .route-desc-panel p {
+      font-size: 0.9rem;
+    }
+
+    /* System comparison table */
+    .system-comparison {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-top: var(--space-xl);
+    }
+
+    .system-col {
+      background: var(--bg-surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition-base);
+    }
+
+    .system-col:hover {
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+
+    .system-col-header {
+      padding: var(--space-md) var(--space-lg);
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      border-bottom: 2px solid;
+    }
+
+    .system-col-header.s1 {
+      color: var(--color-system1);
+      border-color: var(--color-system1);
+      background: rgba(245, 158, 11, 0.06);
+    }
+
+    .system-col-header.s2 {
+      color: var(--color-deliberation);
+      border-color: var(--color-deliberation);
+      background: rgba(139, 92, 246, 0.06);
+    }
+
+    .system-col-header.s3 {
+      color: var(--color-system2);
+      border-color: var(--color-system2);
+      background: rgba(59, 130, 246, 0.06);
+    }
+
+    .system-col-row {
+      padding: var(--space-sm) var(--space-lg);
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.8rem;
+    }
+
+    .system-col-row:last-child {
+      border-bottom: none;
+    }
+
+    .system-col-row .row-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .system-col-row .row-value {
+      color: var(--text-secondary);
+    }
+
+
+    /* ============================================================
+       DOSE-RESPONSE CURVE EXPLORER
+       ============================================================ */
+    .dose-response-wrap {
+      position: relative;
+      margin-top: var(--space-xl);
+    }
+
+    .dose-response-chart {
+      position: relative;
+      width: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .dose-response-chart svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .dose-curve {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: opacity 0.4s ease;
+    }
+
+    .dose-curve.accurate { stroke: var(--color-system2); }
+    .dose-curve.faulty   { stroke: var(--color-ai-faulty); }
+
+    .dose-band {
+      opacity: 0.12;
+      transition: opacity 0.4s ease;
+    }
+
+    .dose-band.accurate { fill: var(--color-system2); }
+    .dose-band.faulty   { fill: var(--color-ai-faulty); }
+
+    .dose-slider-line {
+      stroke: #94a3b8;
+      stroke-width: 1;
+      stroke-dasharray: 4 3;
+      pointer-events: none;
+    }
+
+    .dose-slider-handle {
+      fill: var(--accent);
+      stroke: var(--bg-dark);
+      stroke-width: 2;
+      cursor: grab;
+      filter: drop-shadow(0 0 4px rgba(184, 134, 11, 0.4));
+      transition: r 0.15s ease;
+    }
+
+    .dose-slider-handle:hover,
+    .dose-slider-handle.dragging {
+      r: 9;
+    }
+
+    .dose-readout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md) var(--space-xl);
+      justify-content: center;
+      margin-top: var(--space-lg);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dose-readout-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .dose-readout-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .dose-readout-val {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .dose-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md) var(--space-xl);
+      justify-content: center;
+      margin-top: var(--space-md);
+    }
+
+    .dose-legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .dose-legend-line {
+      width: 20px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    .dose-instruction {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: var(--space-sm);
+    }
+
+
+    /* ============================================================
+       VULNERABILITY PROFILE
+       ============================================================ */
+    .vuln-bar-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .vuln-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xs);
+    }
+
+    .vuln-bar-label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .vuln-bar-value {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .vuln-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #e8e2d6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .vuln-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .vuln-bar-fill.animate {
+      /* width set via inline style */
+    }
+
+    .vuln-bar-desc {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: var(--space-xs);
+    }
+
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      padding: var(--space-2xl) 0;
+      border-top: 1px solid var(--glass-border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .footer a {
+      color: var(--text-secondary);
+    }
+
+    .footer a:hover {
+      color: var(--accent);
+    }
+
+
+    /* ============================================================
+       RESPONSIVE BREAKPOINTS
+       ============================================================ */
+
+    /* Large tablets / small desktops */
+    @media (max-width: 1024px) {
+      :root {
+        --space-4xl: 4.5rem;
+      }
+
+      .grid-3col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Tablets */
+    @media (max-width: 768px) {
+      :root {
+        --space-4xl: 3.5rem;
+        --space-3xl: 2.5rem;
+      }
+
+      .container {
+        padding: 0 var(--space-lg);
+      }
+
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3col {
+        grid-template-columns: 1fr;
+      }
+
+      .system-comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-group {
+        gap: var(--space-xl);
+      }
+
+      .pull-quote {
+        padding: var(--space-lg);
+        font-size: 1.125rem;
+      }
+
+      .toggle-group {
+        flex-wrap: wrap;
+      }
+
+      .hero-systems {
+        width: 260px;
+      }
+    }
+
+    /* Large phones */
+    @media (max-width: 680px) {
+      :root {
+        --space-4xl: 3rem;
+        --space-3xl: 2rem;
+      }
+
+      section {
+        min-height: auto;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .card {
+        padding: var(--space-lg);
+      }
+
+      .chart-container {
+        min-height: 220px;
+        padding: var(--space-lg);
+      }
+    }
+
+    /* Small phones */
+    @media (max-width: 420px) {
+      :root {
+        --space-4xl: 2.5rem;
+        --space-2xl: 2rem;
+        --space-xl: 1.25rem;
+      }
+
+      html {
+        font-size: 15px;
+      }
+
+      .container {
+        padding: 0 var(--space-md);
+      }
+
+      .hero-badge {
+        font-size: 0.75rem;
+      }
+
+      .toggle-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+      }
+
+      .stat-highlight {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div id="reading-progress" aria-hidden="true"></div>
+
+
+  <!-- =====================================================
+       SECTION 1: HERO
+       ===================================================== -->
+  <section id="hero">
+    <div class="container" style="max-width: 800px;">
+      <div class="reveal">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          The Cognitive Lab &mdash; Interactive Explainer
+        </div>
+      </div>
+
+      <!-- Animated 3-node Systems Visualization -->
+      <div class="hero-systems reveal reveal-delay-1">
+        <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+          <!-- Connection lines -->
+          <path class="connection-line animated" d="M80,60 Q160,20 240,60" stroke="var(--color-deliberation)" />
+          <path class="connection-line animated" d="M80,60 Q80,110 160,110" stroke="var(--color-system1)" style="animation-delay:0.5s" />
+          <path class="connection-line animated" d="M240,60 Q240,110 160,110" stroke="var(--color-system2)" style="animation-delay:1s" />
+
+          <!-- System 1 node -->
+          <g class="system-node" data-system="1" transform="translate(80,60)">
+            <circle class="orbit-ring delay-1" r="28" stroke="var(--color-system1)" />
+            <circle r="28" stroke="var(--color-system1)" />
+            <text class="system-label" dy="-3">S1</text>
+            <text class="system-sublabel" dy="10">Intuition</text>
+          </g>
+
+          <!-- System 2 node -->
+          <g class="system-node" data-system="2" transform="translate(240,60)">
+            <circle class="orbit-ring delay-2" r="28" stroke="var(--color-deliberation)" />
+            <circle r="28" stroke="var(--color-deliberation)" />
+            <text class="system-label" dy="-3">S2</text>
+            <text class="system-sublabel" dy="10">Deliberation</text>
+          </g>
+
+          <!-- System 3 node -->
+          <g class="system-node" data-system="3" transform="translate(160,110)">
+            <circle class="orbit-ring delay-3" r="28" stroke="var(--color-system2)" />
+            <circle r="28" stroke="var(--color-system2)" />
+            <text class="system-label" dy="-3">S3</text>
+            <text class="system-sublabel" dy="10">AI</text>
+          </g>
+
+          <!-- Brain boundary label -->
+          <text x="160" y="12" text-anchor="middle" fill="var(--text-muted)" font-size="7" font-family="var(--font-body)" letter-spacing="0.1em" text-transform="uppercase">IN VIVO &bull; IN SILICO</text>
+        </svg>
+      </div>
+
+      <h1 class="hero-title reveal reveal-delay-2">
+        Thinking&mdash;Fast, Slow,<br>and <em class="text-gradient">Artificial</em>
+      </h1>
+
+      <p class="hero-subtitle reveal reveal-delay-3" style="margin-bottom: var(--space-sm);">
+        How AI is Reshaping Human Reasoning<br>and the Rise of <strong style="color: var(--color-ai-faulty);">Cognitive Surrender</strong>
+      </p>
+
+      <div class="reveal reveal-delay-3" style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-lg);">
+        <span style="flex: 1; max-width: 80px; height: 1px; background: var(--color-system2); opacity: 0.4;"></span>
+        <span style="font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-system2); font-weight: 600;">An Interactive Explainer of the Paper by</span>
+        <span style="flex: 1; max-width: 80px; height: 1px; background: var(--color-system2); opacity: 0.4;"></span>
+      </div>
+
+      <div class="hero-meta reveal reveal-delay-3">
+        <span class="authors">Steven D. Shaw &amp; Gideon Nave</span>
+        <span class="affiliation">The Wharton School, University of Pennsylvania</span>
+      </div>
+
+      <!-- Key Stats Strip -->
+      <div class="hero-stats reveal reveal-delay-4">
+        <div class="hero-stat-item">
+          <div class="value">1,372</div>
+          <div class="desc">participants</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="value">9,593</div>
+          <div class="desc">trials</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="value">3</div>
+          <div class="desc">experiments</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="value">16&times;</div>
+          <div class="desc">surrender effect</div>
+        </div>
+      </div>
+
+      <!-- Table of Contents -->
+      <nav class="hero-toc reveal reveal-delay-5">
+        <a href="#experiment"><span class="toc-num">01</span> The Experiment</a>
+        <a href="#theory"><span class="toc-num">02</span> Tri-System Theory</a>
+        <a href="#study1"><span class="toc-num">03</span> Study 1</a>
+        <a href="#study2"><span class="toc-num">04</span> Study 2</a>
+        <a href="#study3"><span class="toc-num">05</span> Study 3</a>
+        <a href="#big-picture"><span class="toc-num">06</span> Big Picture</a>
+        <a href="#implications"><span class="toc-num">07</span> Implications</a>
+      </nav>
+
+      <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <div class="arrow"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 2: THE EXPERIMENT
+       ===================================================== -->
+  <section id="experiment">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="experiment">Section 01</span>
+        <h2>Inside the Lab</h2>
+        <hr class="section-divider">
+        <p>
+          This section recreates the actual experiment. You can participate or skip ahead to the findings.
+        </p>
+      </div>
+
+      <div class="section-content">
+
+        <!-- Participation Gate -->
+        <div class="crt-gate reveal reveal-delay-1" id="crt-gate">
+          <h3 style="margin-bottom:var(--space-md); font-size:1.15rem;">Try the Experiment Yourself</h3>
+          <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.7; margin-bottom:var(--space-lg); max-width:none;">
+            This explainer includes a hands-on version of the actual experiment from the paper. You&rsquo;ll answer
+            7 reasoning puzzles&mdash;just like the 1,372 participants did. You&rsquo;ll be randomly assigned to a
+            condition: <strong>Brain-Only</strong> (no AI help) or <strong>AI-Assisted</strong> (with an AI chatbot),
+            mirroring the study&rsquo;s design.
+          </p>
+          <div style="display:flex; gap:var(--space-md); justify-content:center; flex-wrap:wrap;">
+            <button class="crt-btn crt-btn--primary" onclick="CRT.startExperiment()">I&rsquo;m in &mdash; let me try</button>
+            <button class="crt-btn crt-btn--ghost" onclick="CRT.skipExperiment()">Skip to the findings</button>
+          </div>
+        </div>
+
+        <!-- Skipped message (hidden by default) -->
+        <div class="crt-skipped" id="crt-skipped" style="display:none;">
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 var(--space-md) 0;">You skipped the experiment. Scroll down to explore the findings.</p>
+          <button class="crt-btn--ghost-accent" onclick="CRT.undoSkip()">Actually, let me try it</button>
+        </div>
+
+        <div class="crt-demo reveal reveal-delay-1" id="crt-demo" style="display:none;">
+
+          <!-- Condition Assignment Banner -->
+          <div class="crt-condition-banner" id="crt-condition-banner" style="display:none;"></div>
+
+          <!-- Question 1: Bat and Ball (AI is CORRECT) -->
+          <div class="crt-question" id="crt-q1" data-qid="1">
+            <div class="crt-q-header">
+              <span class="crt-q-num">1</span>
+              <span class="crt-q-text">A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-1" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-1" onclick="CRT.askAI(1)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-1" onclick="CRT.submit(1)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-1">
+              <div class="ai-label">AI Assistant</div>
+              <span>The ball costs <strong>$0.05</strong>. If the ball is $0.05, then the bat is $1.05 (which is $1.00 more), and $1.05 + $0.05 = $1.10 total.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-1"></div>
+          </div>
+
+          <!-- Question 2: Machines (AI is WRONG - gives intuitive answer) -->
+          <div class="crt-question" id="crt-q2" data-qid="2">
+            <div class="crt-q-header">
+              <span class="crt-q-num">2</span>
+              <span class="crt-q-text">If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-2" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-2" onclick="CRT.askAI(2)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-2" onclick="CRT.submit(2)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-2">
+              <div class="ai-label">AI Assistant</div>
+              <span>Since 5 machines make 5 widgets in 5 minutes, that's a rate of 1 widget per machine per 5 minutes. With 100 machines, you'd need to scale proportionally: <strong>100 minutes</strong>.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-2"></div>
+          </div>
+
+          <!-- Question 3: Lily pads (AI is CORRECT) -->
+          <div class="crt-question" id="crt-q3" data-qid="3">
+            <div class="crt-q-header">
+              <span class="crt-q-num">3</span>
+              <span class="crt-q-text">In a lake, there is a patch of lily pads. Every day, the patch doubles in size. If it takes 48 days for the patch to cover the entire lake, how long would it take to cover half of the lake?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-3" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-3" onclick="CRT.askAI(3)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-3" onclick="CRT.submit(3)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-3">
+              <div class="ai-label">AI Assistant</div>
+              <span>Since the lily pads double each day, the day before the lake is fully covered it must have been half covered. So the answer is <strong>47 days</strong>.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-3"></div>
+          </div>
+
+          <!-- Question 4: Race position (AI is WRONG - gives intuitive "1st") -->
+          <div class="crt-question" id="crt-q4" data-qid="4">
+            <div class="crt-q-header">
+              <span class="crt-q-num">4</span>
+              <span class="crt-q-text">If you&rsquo;re running a race and you pass the person in second place, what place are you in?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-4" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-4" onclick="CRT.askAI(4)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-4" onclick="CRT.submit(4)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-4">
+              <div class="ai-label">AI Assistant</div>
+              <span>If you pass the person who was in second place, you&rsquo;ve overtaken them and moved ahead. That puts you in <strong>1st place</strong>.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-4"></div>
+          </div>
+
+          <!-- Question 5: Emily's father (AI is CORRECT) -->
+          <div class="crt-question" id="crt-q5" data-qid="5">
+            <div class="crt-q-header">
+              <span class="crt-q-num">5</span>
+              <span class="crt-q-text">Emily&rsquo;s father has three daughters. The first two are named April and May. What is the third daughter&rsquo;s name?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-5" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-5" onclick="CRT.askAI(5)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-5" onclick="CRT.submit(5)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-5">
+              <div class="ai-label">AI Assistant</div>
+              <span>The question says &ldquo;Emily&rsquo;s father has three daughters.&rdquo; Since we already know two are April and May, the third must be <strong>Emily</strong> herself&mdash;it&rsquo;s right there in the question.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-5"></div>
+          </div>
+
+          <!-- Question 6: Farmer's sheep (AI is WRONG - gives intuitive 7) -->
+          <div class="crt-question" id="crt-q6" data-qid="6">
+            <div class="crt-q-header">
+              <span class="crt-q-num">6</span>
+              <span class="crt-q-text">A farmer had 15 sheep and all but 8 died. How many are left?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-6" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-6" onclick="CRT.askAI(6)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-6" onclick="CRT.submit(6)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-6">
+              <div class="ai-label">AI Assistant</div>
+              <span>The farmer started with 15 sheep. If all but 8 died, then 15&nbsp;&minus;&nbsp;8&nbsp;=&nbsp;<strong>7 sheep</strong> are left.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-6"></div>
+          </div>
+
+          <!-- Question 7: Water barrel (AI is CORRECT) -->
+          <div class="crt-question" id="crt-q7" data-qid="7">
+            <div class="crt-q-header">
+              <span class="crt-q-num">7</span>
+              <span class="crt-q-text">If John can drink one barrel of water in 6 days, and Mary can drink one barrel of water in 12 days, how long would it take them to drink one barrel of water together?</span>
+            </div>
+            <div class="crt-input-row">
+              <input type="text" class="crt-input" id="crt-input-7" placeholder="Your answer..." autocomplete="off">
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-7" onclick="CRT.askAI(7)">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-7" onclick="CRT.submit(7)">Submit</button>
+            </div>
+            <div class="crt-ai-bubble" id="crt-ai-7">
+              <div class="ai-label">AI Assistant</div>
+              <span>John drinks 1/6 per day, Mary drinks 1/12 per day. Together: 1/6&nbsp;+&nbsp;1/12&nbsp;=&nbsp;3/12&nbsp;=&nbsp;1/4 per day. So it takes <strong>4 days</strong>.</span>
+            </div>
+            <div class="crt-feedback" id="crt-feedback-7"></div>
+          </div>
+
+          <!-- Results Panel (shows after all 7 answered) -->
+          <div class="crt-results" id="crt-results">
+            <h4>Your Results</h4>
+            <div id="crt-results-list"></div>
+
+            <!-- Thinking Profile -->
+            <div id="crt-profile" style="margin-top: var(--space-xl); padding: var(--space-lg); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
+              <span class="label" id="crt-profile-label" style="display: block; margin-bottom: var(--space-sm);"></span>
+              <h4 id="crt-profile-title" style="margin-bottom: var(--space-sm);"></h4>
+              <p id="crt-profile-desc" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;"></p>
+            </div>
+
+            <!-- Stats summary -->
+            <div id="crt-stats" style="margin-top: var(--space-lg); display: flex; gap: var(--space-lg); flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 120px; text-align: center;">
+                <div id="crt-stat-correct" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; color: var(--color-override);"></div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Correct</div>
+              </div>
+              <div style="flex: 1; min-width: 120px; text-align: center;">
+                <div id="crt-stat-ai-used" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; color: var(--color-system2);"></div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">AI Consulted</div>
+              </div>
+              <div style="flex: 1; min-width: 120px; text-align: center;">
+                <div id="crt-stat-followed" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; color: var(--color-system1);"></div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Followed AI</div>
+              </div>
+              <div style="flex: 1; min-width: 120px; text-align: center;">
+                <div id="crt-stat-overrode" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; color: var(--color-deliberation);"></div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Overrode AI</div>
+              </div>
+            </div>
+
+            <div class="crt-bridge" id="crt-bridge">
+              <p id="crt-bridge-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 3: TRI-SYSTEM THEORY
+       ===================================================== -->
+  <section id="theory">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="theory">Section 02</span>
+        <h2>The Tri-System Mind</h2>
+        <hr class="section-divider">
+        <p>
+          Beyond Kahneman's dual-process model. Shaw &amp; Nave propose that AI introduces
+          a third cognitive system&mdash;and with it, new pathways for both insight and surrender.
+        </p>
+      </div>
+
+      <div class="section-content">
+
+        <!-- Interactive SVG Diagram -->
+        <div class="tri-system-diagram reveal reveal-delay-1" id="tri-diagram">
+          <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Brain boundary line -->
+            <line x1="40" y1="230" x2="640" y2="230" class="tri-boundary" />
+            <text x="60" y="218" class="tri-zone-label">In Vivo (Internal)</text>
+            <text x="60" y="248" class="tri-zone-label">In Silico (External)</text>
+
+            <!-- Stimulus -->
+            <rect x="10" y="145" width="80" height="36" rx="8" fill="var(--bg-surface)" stroke="var(--text-muted)" stroke-width="1" />
+            <text x="50" y="167" text-anchor="middle" font-size="11" fill="var(--text-secondary)" font-family="var(--font-body)" font-weight="600">Stimulus</text>
+
+            <!-- Response -->
+            <rect x="590" y="145" width="80" height="36" rx="8" fill="var(--bg-surface)" stroke="var(--text-muted)" stroke-width="1" />
+            <text x="630" y="167" text-anchor="middle" font-size="11" fill="var(--text-secondary)" font-family="var(--font-body)" font-weight="600">Response</text>
+
+            <!-- Paths (drawn first, behind nodes) -->
+            <!-- S1 direct: Stimulus -> S1 -> Response (intuition) -->
+            <path id="path-intuition" class="tri-path" d="M90,163 L180,110" stroke="var(--color-system1)" marker-end="url(#arrow-s1)" />
+            <path id="path-intuition-2" class="tri-path" d="M280,110 L590,163" stroke="var(--color-system1)" />
+
+            <!-- S1 -> S2: Stimulus -> S1 -> S2 -> Response (deliberation) -->
+            <path id="path-delib-1" class="tri-path" d="M90,163 L180,110" stroke="var(--color-deliberation)" />
+            <path id="path-delib-2" class="tri-path" d="M280,110 L400,110" stroke="var(--color-deliberation)" />
+            <path id="path-delib-3" class="tri-path" d="M500,110 L590,163" stroke="var(--color-deliberation)" />
+
+            <!-- S1 -> S3: cognitive offloading -->
+            <path id="path-offload-1" class="tri-path" d="M230,138 L290,230 L340,290" stroke="var(--color-system2)" />
+            <path id="path-offload-2" class="tri-path" d="M340,290 L400,230 L450,138" stroke="var(--color-system2)" />
+            <path id="path-offload-3" class="tri-path" d="M500,110 L590,163" stroke="var(--color-system2)" />
+
+            <!-- Surrender path: S1(brief) -> S3 -> Response (bypasses S2) -->
+            <path id="path-surrender-1" class="tri-path" d="M230,138 L290,230 L340,310" stroke="var(--color-ai-faulty)" />
+            <path id="path-surrender-2" class="tri-path" d="M340,310 L500,230 L590,163" stroke="var(--color-ai-faulty)" />
+
+            <!-- Autopilot: Stimulus -> S3 -> Response (S1/S2 bypassed) -->
+            <path id="path-autopilot-1" class="tri-path" d="M90,163 L120,230 L340,310" stroke="var(--text-muted)" />
+            <path id="path-autopilot-2" class="tri-path" d="M340,310 L560,230 L590,163" stroke="var(--text-muted)" />
+
+            <!-- Arrow markers -->
+            <defs>
+              <marker id="arrow-s1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6" fill="var(--color-system1)" opacity="0.5" />
+              </marker>
+            </defs>
+
+            <!-- System 1 Node (in vivo) -->
+            <g class="tri-node" id="tri-s1" data-system="s1" onclick="TriSystem.selectNode('s1')">
+              <circle cx="230" cy="110" r="42" fill="var(--bg-primary)" stroke="var(--color-system1)" stroke-width="2" />
+              <text x="230" y="105" class="tri-node-label" fill="var(--color-system1)">System 1</text>
+              <text x="230" y="122" class="tri-node-sublabel">Fast &bull; Intuitive</text>
+            </g>
+
+            <!-- System 2 Node (in vivo) -->
+            <g class="tri-node" id="tri-s2" data-system="s2" onclick="TriSystem.selectNode('s2')">
+              <circle cx="450" cy="110" r="42" fill="var(--bg-primary)" stroke="var(--color-deliberation)" stroke-width="2" />
+              <text x="450" y="105" class="tri-node-label" fill="var(--color-deliberation)">System 2</text>
+              <text x="450" y="122" class="tri-node-sublabel">Slow &bull; Deliberate</text>
+            </g>
+
+            <!-- System 3 Node (in silico - below boundary) -->
+            <g class="tri-node" id="tri-s3" data-system="s3" onclick="TriSystem.selectNode('s3')">
+              <circle cx="340" cy="310" r="48" fill="var(--bg-primary)" stroke="var(--color-system2)" stroke-width="2" />
+              <text x="340" y="303" class="tri-node-label" fill="var(--color-system2)">System 3</text>
+              <text x="340" y="320" class="tri-node-sublabel">AI &bull; External</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Cognitive Routes Explorer -->
+        <div class="reveal reveal-delay-2">
+          <h3 style="margin-bottom: var(--space-sm);">Cognitive Routes</h3>
+          <p style="font-size: 0.9rem; margin-bottom: var(--space-md);">Click a route to see how information flows through the three systems.</p>
+
+          <div class="route-cards" id="route-cards">
+            <div class="route-card" data-route="intuition" onclick="TriSystem.selectRoute('intuition')">
+              <div class="route-name" style="color: var(--color-system1);">Intuition</div>
+              <div class="route-formula">Stimulus &rarr; S1 &rarr; Response</div>
+            </div>
+            <div class="route-card" data-route="deliberation" onclick="TriSystem.selectRoute('deliberation')">
+              <div class="route-name" style="color: var(--color-deliberation);">Deliberation</div>
+              <div class="route-formula">Stimulus &rarr; S1 &rarr; S2 &rarr; Response</div>
+            </div>
+            <div class="route-card" data-route="offloading" onclick="TriSystem.selectRoute('offloading')">
+              <div class="route-name" style="color: var(--color-system2);">Offloading</div>
+              <div class="route-formula">S1 &rarr; S3 &rarr; S2 &rarr; Response</div>
+            </div>
+            <div class="route-card" data-route="surrender" onclick="TriSystem.selectRoute('surrender')">
+              <div class="route-name" style="color: var(--color-ai-faulty);">Surrender</div>
+              <div class="route-formula">S1 (brief) &rarr; S3 &rarr; Response</div>
+            </div>
+            <div class="route-card" data-route="autopilot" onclick="TriSystem.selectRoute('autopilot')">
+              <div class="route-name" style="color: var(--text-muted);">Autopilot</div>
+              <div class="route-formula">Stimulus &rarr; S3 &rarr; Response</div>
+            </div>
+            <div class="route-card" data-route="recursive" onclick="TriSystem.selectRoute('recursive')">
+              <div class="route-name" style="color: var(--color-override);">Recursive</div>
+              <div class="route-formula">S3 &rarr; S1 &harr; S2 &rarr; Response</div>
+            </div>
+          </div>
+
+          <div class="route-desc-panel" id="route-desc">
+            <h4 id="route-desc-title">Select a route above</h4>
+            <p id="route-desc-text" style="color: var(--text-secondary);">Click one of the cognitive routes to see how information flows through the three systems, and what the implications are for reasoning quality.</p>
+          </div>
+        </div>
+
+        <!-- System Comparison Table -->
+        <div class="reveal reveal-delay-3" style="margin-top: var(--space-2xl);">
+          <h3 style="margin-bottom: var(--space-lg);">System Comparison</h3>
+
+          <div class="system-comparison">
+            <div class="system-col">
+              <div class="system-col-header s1">System 1</div>
+              <div class="system-col-row"><div class="row-label">Origin</div><div class="row-value">Evolved biology</div></div>
+              <div class="system-col-row"><div class="row-label">Speed</div><div class="row-value">Milliseconds</div></div>
+              <div class="system-col-row"><div class="row-label">Effort</div><div class="row-value">Effortless</div></div>
+              <div class="system-col-row"><div class="row-label">Accuracy</div><div class="row-value">Often biased</div></div>
+              <div class="system-col-row"><div class="row-label">Affect</div><div class="row-value">Emotion-laden</div></div>
+              <div class="system-col-row"><div class="row-label">Ethics</div><div class="row-value">Intuitive moral sense</div></div>
+              <div class="system-col-row"><div class="row-label">Justification</div><div class="row-value">Post-hoc rationalization</div></div>
+              <div class="system-col-row"><div class="row-label">Locus</div><div class="row-value">In vivo</div></div>
+            </div>
+
+            <div class="system-col">
+              <div class="system-col-header s2">System 2</div>
+              <div class="system-col-row"><div class="row-label">Origin</div><div class="row-value">Learned reasoning</div></div>
+              <div class="system-col-row"><div class="row-label">Speed</div><div class="row-value">Seconds to minutes</div></div>
+              <div class="system-col-row"><div class="row-label">Effort</div><div class="row-value">High effort</div></div>
+              <div class="system-col-row"><div class="row-label">Accuracy</div><div class="row-value">Higher when engaged</div></div>
+              <div class="system-col-row"><div class="row-label">Affect</div><div class="row-value">Affect-regulated</div></div>
+              <div class="system-col-row"><div class="row-label">Ethics</div><div class="row-value">Rule-based moral reasoning</div></div>
+              <div class="system-col-row"><div class="row-label">Justification</div><div class="row-value">Explicit, rule-based</div></div>
+              <div class="system-col-row"><div class="row-label">Locus</div><div class="row-value">In vivo</div></div>
+            </div>
+
+            <div class="system-col">
+              <div class="system-col-header s3">System 3 (AI)</div>
+              <div class="system-col-row"><div class="row-label">Origin</div><div class="row-value">Engineered algorithms</div></div>
+              <div class="system-col-row"><div class="row-label">Speed</div><div class="row-value">Milliseconds</div></div>
+              <div class="system-col-row"><div class="row-label">Effort</div><div class="row-value">Zero (user-side)</div></div>
+              <div class="system-col-row"><div class="row-label">Accuracy</div><div class="row-value">Variable &mdash; opaque</div></div>
+              <div class="system-col-row"><div class="row-label">Affect</div><div class="row-value">Affect-free (but mimics)</div></div>
+              <div class="system-col-row"><div class="row-label">Ethics</div><div class="row-value">Alignment-dependent</div></div>
+              <div class="system-col-row"><div class="row-label">Justification</div><div class="row-value">Generated on demand</div></div>
+              <div class="system-col-row"><div class="row-label">Locus</div><div class="row-value">In silico</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-2xl);">
+          Cognitive surrender is an uncritical abdication of reasoning itself. It reflects
+          not merely the use of external assistance, but a relinquishing of cognitive control.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 4: STUDY 1
+       ===================================================== -->
+  <section id="study1">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="study1">Section 03</span>
+        <h2>Study 1 &mdash; The First Glimpse</h2>
+        <hr class="section-divider">
+        <p>
+          N = 359. Do people use AI to think harder, or as a shortcut
+          to avoid thinking altogether?
+        </p>
+      </div>
+
+      <div class="section-content">
+
+        <!-- Key Finding -->
+        <div class="study-key-finding reveal reveal-delay-1">
+          <div class="finding-stat" style="color: var(--color-ai-faulty);">79.8%</div>
+          <div class="finding-text">
+            of participants followed <strong>faulty</strong> AI advice on chat-engaged trials,
+            despite the AI confidently giving wrong answers. Accuracy plummeted from
+            a 45.8% baseline to just 31.5%.
+          </div>
+        </div>
+
+        <!-- Figure 3: Accuracy by Condition -->
+        <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
+          <div class="chart-svg-container">
+            <svg id="chart-s1-accuracy" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <!-- Figure 2: Follow/Override Rates -->
+        <div class="grid-2col reveal reveal-delay-3" style="margin-top: var(--space-xl);">
+          <div class="chart-container" style="padding: var(--space-lg);">
+            <div class="chart-svg-container">
+              <svg id="chart-s1-follow" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+          </div>
+
+          <!-- Cohen's h Effect Size Meter -->
+          <div class="card card--flat" style="display: flex; flex-direction: column; justify-content: center;">
+            <h4 style="margin-bottom: var(--space-sm);">Cognitive Surrender Effect</h4>
+            <p style="font-size: 0.85rem; margin-bottom: var(--space-lg);">
+              Cohen's h measures how much AI accuracy matters. Anything above 0.8 is considered a &ldquo;large&rdquo; effect.
+            </p>
+            <div class="effect-meter" id="effect-meter-s1"></div>
+          </div>
+        </div>
+
+        <!-- Confidence Inflation Callout -->
+        <div class="study-key-finding reveal reveal-delay-3" style="margin-top: var(--space-xl);">
+          <div class="finding-stat" style="color: var(--color-system1);">77%</div>
+          <div class="finding-text">
+            average confidence among AI-assisted participants&mdash;vs. <strong>65.3%</strong> for brain-only
+            (Hedges' g&nbsp;=&nbsp;0.54). AI made people <strong>more confident even when half the AI
+            answers were wrong</strong>. Confidence did not decline as the number of faulty trials increased.
+          </div>
+        </div>
+
+        <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-xl);">
+          When AI gave correct suggestions, accuracy soared to 71%. But when AI was wrong,
+          people followed it off a cliff&mdash;performing <em>worse</em> than without any AI at all.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+
+        <!-- Individual Differences Summary -->
+        <div class="grid-3col reveal reveal-delay-5" style="margin-top: var(--space-xl);">
+          <div class="card card--flat">
+            <span class="label" style="color: var(--color-ai-faulty);">Vulnerability</span>
+            <h4 style="margin-top: var(--space-xs);">Trust in AI</h4>
+            <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
+              Higher trust &rarr; <strong style="color: var(--color-ai-faulty);">more surrender</strong>.
+              OR = 0.36, meaning 64% less likely to resist faulty AI.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <span class="label" style="color: var(--color-override);">Protection</span>
+            <h4 style="margin-top: var(--space-xs);">Need for Cognition</h4>
+            <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
+              Higher NFC &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
+              OR = 1.86, nearly doubling odds of overriding faulty AI.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <span class="label" style="color: var(--color-override);">Protection</span>
+            <h4 style="margin-top: var(--space-xs);">Fluid Intelligence</h4>
+            <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
+              Higher IQ &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
+              OR = 1.96, nearly doubling odds of catching AI errors.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 5: STUDY 2
+       ===================================================== -->
+  <section id="study2">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="study2">Section 04</span>
+        <h2>Study 2 &mdash; Under Pressure</h2>
+        <hr class="section-divider">
+        <p>
+          N = 485. Time pressure amplified reliance on AI&mdash;for better or worse,
+          depending on whether the AI was right.
+        </p>
+      </div>
+
+      <div class="section-content">
+
+        <!-- Key Finding -->
+        <div class="study-key-finding reveal reveal-delay-1">
+          <div class="finding-stat" style="color: var(--color-ai-faulty);">12.1%</div>
+          <div class="finding-text">
+            AI-Users' accuracy for <strong>faulty AI trials under time pressure</strong>&mdash;down from 20.4% without pressure.
+            Meanwhile, accurate AI buffered them: only a small drop from 80.0% to 71.3%.
+          </div>
+        </div>
+
+        <!-- Condition Toggle -->
+        <div class="reveal reveal-delay-2" style="margin-bottom: var(--space-lg);">
+          <div class="toggle-group" id="s2-toggle">
+            <button class="toggle-btn active" data-condition="control" onclick="Study2.toggle('control')">Control</button>
+            <button class="toggle-btn toggle-btn--coral" data-condition="pressure" onclick="Study2.toggle('pressure')">Time Pressure</button>
+          </div>
+        </div>
+
+        <!-- Figure 5/6: Accuracy by condition, trial type, thinking profile -->
+        <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
+          <div class="chart-svg-container">
+            <svg id="chart-s2-accuracy" viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <div class="grid-2col reveal reveal-delay-3" style="margin-top: var(--space-xl);">
+          <div class="card card--system2">
+            <h4 style="color: var(--color-system2);">The AI Buffer</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              AI-Users were <strong>less affected</strong> by time pressure when AI was accurate.
+              The AI acted as a cognitive buffer, maintaining performance where
+              Brain-Only and Independents suffered steep drops.
+            </p>
+          </div>
+          <div class="card card--ai-faulty">
+            <h4 style="color: var(--color-ai-faulty);">The Cost of Buffering</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              But when AI was <strong>faulty</strong>, that same dependency became catastrophic.
+              AI-Users under time pressure hit 12.1% accuracy&mdash;far below anyone else.
+              The buffer becomes a trap.
+            </p>
+          </div>
+        </div>
+
+        <!-- Effect size -->
+        <div class="card card--flat reveal reveal-delay-4" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
+          <h4 style="margin-bottom: var(--space-sm);">Study 2 Cognitive Surrender Effect</h4>
+          <div class="effect-meter" id="effect-meter-s2" style="margin-top: var(--space-md);"></div>
+        </div>
+
+        <div class="pull-quote reveal reveal-delay-5">
+          Among AI-Users, performance was less affected by time constraints but was
+          dependent on the correctness of System 3 outputs.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 6: STUDY 3
+       ===================================================== -->
+  <section id="study3">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="study3">Section 05</span>
+        <h2>Study 3 &mdash; Fighting Surrender</h2>
+        <hr class="section-divider">
+        <p>
+          N = 450. Can financial incentives and real-time feedback help people
+          resist faulty AI? The answer is nuanced.
+        </p>
+      </div>
+
+      <div class="section-content">
+
+        <!-- Key Finding -->
+        <div class="study-key-finding reveal reveal-delay-1">
+          <div class="finding-stat" style="color: var(--color-override);">2&times;</div>
+          <div class="finding-text">
+            Incentives + feedback <strong>more than doubled</strong> override rates for faulty AI
+            (20.0% &rarr; 42.3%). But even then, AI-Users still showed a
+            <strong style="color: var(--color-ai-faulty);">44-percentage-point gap</strong> between
+            accurate and faulty AI trials.
+          </div>
+        </div>
+
+        <!-- Condition Toggle -->
+        <div class="reveal reveal-delay-2" style="margin-bottom: var(--space-lg);">
+          <div class="toggle-group" id="s3-toggle">
+            <button class="toggle-btn active" data-condition="control" onclick="Study3.toggle('control')">Control</button>
+            <button class="toggle-btn toggle-btn--emerald" data-condition="incentives" onclick="Study3.toggle('incentives')">Incentives + Feedback</button>
+          </div>
+        </div>
+
+        <!-- Figure 7: Follow/Override rates -->
+        <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
+          <div class="chart-svg-container">
+            <svg id="chart-s3-override" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <!-- Figure 8: Accuracy -->
+        <div class="chart-container reveal reveal-delay-3" style="padding: var(--space-lg) var(--space-xl) var(--space-xl); margin-top: var(--space-xl);">
+          <div class="chart-svg-container">
+            <svg id="chart-s3-accuracy" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <!-- Figure 9: Thinking Profile chart -->
+        <div class="chart-wrap reveal reveal-delay-4" style="margin-top: var(--space-xl);">
+          <div class="chart-container">
+            <svg id="chart-s3-profiles" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <div class="grid-2col reveal reveal-delay-4" style="margin-top: var(--space-xl);">
+          <div class="card card--override">
+            <h4 style="color: var(--color-override);">What Helped</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Override rates for faulty AI <strong>more than doubled</strong> (20% &rarr; 42.3%).
+              Participants were more accurate overall and better calibrated
+              in their confidence.
+            </p>
+          </div>
+          <div class="card card--ai-faulty">
+            <h4 style="color: var(--color-ai-faulty);">What Persisted</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Even with incentives, AI-Users still followed faulty AI on the
+              <strong>majority</strong> of trials. Cognitive surrender is not easily overcome
+              by motivation alone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Effect size -->
+        <div class="card card--flat reveal reveal-delay-5" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
+          <h4 style="margin-bottom: var(--space-sm);">Study 3 Cognitive Surrender Effect</h4>
+          <div class="effect-meter" id="effect-meter-s3" style="margin-top: var(--space-md);"></div>
+        </div>
+
+        <div class="pull-quote reveal" style="margin-top: var(--space-xl);">
+          Cognitive surrender persists. Even with incentives and feedback, the fundamental
+          vulnerability to faulty AI remains a structural feature of human-AI interaction.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 7: THE BIG PICTURE
+       ===================================================== -->
+  <section id="big-picture">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="big-picture">Section 06</span>
+        <h2>The Big Picture</h2>
+        <hr class="section-divider">
+        <p>
+          Synthesizing all three studies: from immediate cognitive shortcuts
+          to lasting cognitive consequences.
+        </p>
+      </div>
+
+      <div class="section-content">
+        <!-- Cross-study key stat -->
+        <div class="study-key-finding reveal reveal-delay-1">
+          <div class="key-stat" style="color: var(--color-ai-faulty); font-size: 2.5rem;">16&times;</div>
+          <div class="key-desc">
+            Correct responding was over <strong>16 times greater</strong> when AI was accurate vs. faulty
+            (OR&nbsp;=&nbsp;16.07, 95%&nbsp;CI&nbsp;[11.50,&nbsp;22.46], p&nbsp;&lt;&nbsp;2.20&nbsp;&times;&nbsp;10<sup>&minus;16</sup>).
+            This &ldquo;scissors effect&rdquo; persisted across all three studies, conditions, and participant profiles.
+          </div>
+        </div>
+
+        <!-- Confidence Inflation + Surrender vs Offloading -->
+        <div class="grid-2col reveal reveal-delay-2" style="margin-bottom: var(--space-xl);">
+          <div class="card" style="border-left: 3px solid var(--color-system1);">
+            <span class="label" style="color: var(--color-system1);">Hidden Cost</span>
+            <h4 style="margin-top: var(--space-xs);">Confidence Inflation</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              AI access inflated confidence by <strong>11.7 percentage points</strong> (77.0% vs 65.3%,
+              Hedges' g&nbsp;=&nbsp;0.54)&mdash;even though roughly half of AI answers were wrong.
+              Per-item data from Study 3 confirmed the pattern: confidence was <strong>higher on AI-assisted
+              trials</strong> (82.2%) than brain-only trials (77.5%), regardless of whether AI was accurate or faulty.
+            </p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--color-ai-faulty);">
+            <span class="label" style="color: var(--color-ai-faulty);">The Breakdown</span>
+            <h4 style="margin-top: var(--space-xs);">Surrender vs. Offloading</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              On chat-engaged faulty AI trials across all studies:
+              <strong style="color: var(--color-ai-faulty);">73.2%</strong> showed cognitive surrender (followed wrong AI),
+              <strong style="color: var(--color-override);">19.7%</strong> showed cognitive offloading (overrode AI correctly), and
+              <strong>7.1%</strong> were failed overrides (rejected AI but still answered incorrectly).
+              Incentives+Feedback shifted surrender down to 57.9% and offloading up to 37.1%.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cross-study effect size comparison chart -->
+        <div class="chart-container reveal reveal-delay-3" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
+          <div class="chart-svg-container">
+            <svg id="chart-cross-study" viewBox="0 0 550 230" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <!-- Dose-Response Curve Explorer (Figure 10) -->
+        <div class="dose-response-wrap reveal reveal-delay-3">
+          <h3 style="text-align: center; margin-bottom: var(--space-sm); font-family: var(--font-heading); font-size: 1.25rem;">
+            The Scissors Effect: Accuracy vs. AI Reliance
+          </h3>
+          <p style="text-align: center; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--space-lg); max-width: 600px; margin-left: auto; margin-right: auto;">
+            As people rely more on AI, their accuracy rises when AI is correct&mdash;but
+            plummets when AI is wrong. Drag the slider to explore.
+          </p>
+
+          <div style="text-align: center; margin-bottom: var(--space-md);">
+            <div class="toggle-group" id="dose-toggle">
+              <button class="toggle-btn active" data-condition="study1" onclick="DoseResponse.toggle('study1')">Study 1</button>
+              <button class="toggle-btn toggle-btn--coral" data-condition="study2" onclick="DoseResponse.toggle('study2')">Study 2 (Time Pressure)</button>
+              <button class="toggle-btn toggle-btn--emerald" data-condition="study3" onclick="DoseResponse.toggle('study3')">Study 3 (Incentives)</button>
+            </div>
+          </div>
+
+          <div class="chart-container" style="min-height: 200px; padding: var(--space-sm) var(--space-md);">
+            <div class="dose-response-chart" id="dose-chart-area">
+              <svg id="dose-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+          </div>
+
+          <div class="dose-readout" id="dose-readout">
+            <div class="dose-readout-item">
+              <span class="dose-readout-swatch" style="background: var(--color-system1);"></span>
+              <span style="color: var(--text-secondary);">AI Usage:</span>
+              <span class="dose-readout-val" id="dose-val-usage" style="color: var(--text-primary);">50%</span>
+            </div>
+            <div class="dose-readout-item">
+              <span class="dose-readout-swatch" style="background: var(--color-system2);"></span>
+              <span style="color: var(--text-secondary);">AI-Accurate:</span>
+              <span class="dose-readout-val" id="dose-val-accurate" style="color: var(--color-system2);">—</span>
+            </div>
+            <div class="dose-readout-item">
+              <span class="dose-readout-swatch" style="background: var(--color-ai-faulty);"></span>
+              <span style="color: var(--text-secondary);">AI-Faulty:</span>
+              <span class="dose-readout-val" id="dose-val-faulty" style="color: var(--color-ai-faulty);">—</span>
+            </div>
+            <div class="dose-readout-item">
+              <span style="color: var(--text-muted);">Gap:</span>
+              <span class="dose-readout-val" id="dose-val-gap" style="color: var(--color-system1);">—</span>
+            </div>
+          </div>
+
+          <div class="dose-legend">
+            <div class="dose-legend-item">
+              <span class="dose-legend-line" style="background: var(--color-system2);"></span>
+              AI-Accurate curve
+            </div>
+            <div class="dose-legend-item">
+              <span class="dose-legend-line" style="background: var(--color-ai-faulty);"></span>
+              AI-Faulty curve
+            </div>
+            <div class="dose-legend-item">
+              <span class="dose-legend-line" style="background: var(--color-system1); width: 10px; height: 10px; border-radius: 50%;"></span>
+              Brain-Only baseline
+            </div>
+          </div>
+
+          <p class="dose-instruction">Drag the slider or click anywhere on the chart to explore</p>
+        </div>
+
+        <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-2xl);">
+          Correct responding was over 16 times greater when System&nbsp;3 was
+          correct&hellip; illustrating the promises of superintelligence and exposing
+          a structural vulnerability of cognitive surrender.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+
+        <div class="grid-3col reveal reveal-delay-5" style="margin-top: var(--space-xl);">
+          <div class="card">
+            <span class="label" style="color: var(--color-system1);">Study 1</span>
+            <h4 style="margin-top: var(--space-sm);">Surrender Discovered</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              79.8% followed faulty AI. Accuracy dropped 14.3pp below baseline.
+              Trust in AI amplified vulnerability; Need for Cognition and Fluid IQ protected against it.
+            </p>
+          </div>
+          <div class="card">
+            <span class="label" style="color: var(--color-ai-faulty);">Study 2</span>
+            <h4 style="margin-top: var(--space-sm);">Pressure Amplifies</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Time pressure made AI a double-edged sword. AI-Users hit 12.1% accuracy
+              on faulty trials under pressure&mdash;but accurate AI buffered them from the worst declines.
+            </p>
+          </div>
+          <div class="card">
+            <span class="label" style="color: var(--color-override);">Study 3</span>
+            <h4 style="margin-top: var(--space-sm);">Partial Remedies</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Incentives + feedback doubled override rates (20%&nbsp;&rarr;&nbsp;42.3%), but the
+              majority still surrendered. Motivation helps but doesn&rsquo;t eliminate the structural vulnerability.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       SECTION 8: IMPLICATIONS + FOOTER
+       ===================================================== -->
+  <section id="implications">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="label" data-section="implications">Section 07</span>
+        <h2>Implications &amp; What Comes Next</h2>
+        <hr class="section-divider">
+        <p>
+          What the findings mean for individuals, education, AI design,
+          and society at large.
+        </p>
+      </div>
+
+      <div class="section-content">
+        <div class="grid-2col">
+          <div class="card reveal reveal-delay-1">
+            <span class="label" style="color: var(--color-override);">For Individuals</span>
+            <h4 style="margin-top: var(--space-sm);">Cognitive Fitness</h4>
+            <p style="margin-top: var(--space-sm);">
+              Just as muscles atrophy without exercise, reasoning skills may erode
+              with habitual AI reliance. The research suggests deliberate
+              &ldquo;cognitive exercise&rdquo;&mdash;intentionally solving problems without AI&mdash;may
+              be essential for maintaining analytical thinking capacity.
+            </p>
+          </div>
+
+          <div class="card reveal reveal-delay-2">
+            <span class="label" style="color: var(--color-system2);">For Education</span>
+            <h4 style="margin-top: var(--space-sm);">Rethinking Assessment</h4>
+            <p style="margin-top: var(--space-sm);">
+              If students routinely surrender reasoning to AI, traditional assessments
+              measure AI proficiency rather than understanding. Schools must design
+              evaluations that distinguish between genuine comprehension and
+              AI-assisted performance&mdash;testing the thinker, not the tool.
+            </p>
+          </div>
+
+          <div class="card reveal reveal-delay-3">
+            <span class="label" style="color: var(--color-deliberation);">For AI Design</span>
+            <h4 style="margin-top: var(--space-sm);">Friction by Design</h4>
+            <p style="margin-top: var(--space-sm);">
+              AI systems could be designed to scaffold reasoning rather than replace it.
+              Strategic friction&mdash;asking &ldquo;What do you think first?&rdquo; before showing
+              answers, requiring users to evaluate before accepting, or showing
+              confidence levels&mdash;could promote offloading over surrender.
+            </p>
+          </div>
+
+          <div class="card reveal reveal-delay-4">
+            <span class="label" style="color: var(--color-ai-faulty);">For Society</span>
+            <h4 style="margin-top: var(--space-sm);">The Surrender Risk</h4>
+            <p style="margin-top: var(--space-sm);">
+              Widespread cognitive surrender poses risks for democracy, professional
+              judgment, and informed citizenship. When people defer to AI on
+              reasoning tasks, they become vulnerable to systematic errors&mdash;especially
+              in high-stakes domains like medicine, law, and policy.
+            </p>
+          </div>
+        </div>
+
+        <!-- Vulnerability Profile -->
+        <div class="card reveal" style="margin-top: var(--space-2xl); padding: var(--space-xl);">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-lg);">
+            Who Is Most Vulnerable?
+          </h3>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--space-xl);">
+            Individual differences modulate susceptibility to cognitive surrender.
+            These factors emerged consistently across all three studies.
+          </p>
+
+          <div id="vuln-bars">
+            <div class="vuln-bar-group">
+              <div class="vuln-bar-header">
+                <span class="vuln-bar-label" style="color: var(--color-ai-faulty);">High Trust in AI</span>
+                <span class="vuln-bar-value" style="color: var(--color-ai-faulty);">OR = 0.36</span>
+              </div>
+              <div class="vuln-bar-track">
+                <div class="vuln-bar-fill" style="background: var(--color-ai-faulty); width: 0;" data-width="85%"></div>
+              </div>
+              <p class="vuln-bar-desc">
+                64% less likely to override faulty AI. Trust amplifies surrender&mdash;the
+                more you trust AI, the less you scrutinize its output.
+              </p>
+            </div>
+
+            <div class="vuln-bar-group">
+              <div class="vuln-bar-header">
+                <span class="vuln-bar-label" style="color: var(--color-system1);">Low Need for Cognition</span>
+                <span class="vuln-bar-value" style="color: var(--color-system1);">OR = 1.86</span>
+              </div>
+              <div class="vuln-bar-track">
+                <div class="vuln-bar-fill" style="background: var(--color-system1); width: 0;" data-width="65%"></div>
+              </div>
+              <p class="vuln-bar-desc">
+                People who enjoy thinking are nearly 2&times; more likely to catch AI errors.
+                Those who prefer cognitive shortcuts are most susceptible.
+              </p>
+            </div>
+
+            <div class="vuln-bar-group">
+              <div class="vuln-bar-header">
+                <span class="vuln-bar-label" style="color: var(--color-deliberation);">Low Fluid Intelligence</span>
+                <span class="vuln-bar-value" style="color: var(--color-deliberation);">OR = 1.96</span>
+              </div>
+              <div class="vuln-bar-track">
+                <div class="vuln-bar-fill" style="background: var(--color-deliberation); width: 0;" data-width="70%"></div>
+              </div>
+              <p class="vuln-bar-desc">
+                Higher fluid IQ nearly doubles the odds of resisting faulty AI.
+                Raw reasoning ability provides a buffer against surrender.
+              </p>
+            </div>
+
+            <div class="vuln-bar-group">
+              <div class="vuln-bar-header">
+                <span class="vuln-bar-label" style="color: var(--color-override);">Incentives + Feedback</span>
+                <span class="vuln-bar-value" style="color: var(--color-override);">Protective</span>
+              </div>
+              <div class="vuln-bar-track">
+                <div class="vuln-bar-fill" style="background: var(--color-override); width: 0;" data-width="45%"></div>
+              </div>
+              <p class="vuln-bar-desc">
+                Financial incentives and real-time feedback doubled override rates&mdash;but
+                even motivated participants still surrendered on the majority of faulty trials.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pull-quote reveal" style="margin-top: var(--space-2xl);">
+          The question is no longer whether AI can think for us&mdash;it&rsquo;s
+          whether we&rsquo;ll still be able to think for ourselves.
+          <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="card reveal" style="margin-top: var(--space-xl); padding: var(--space-xl); border-left: 3px solid var(--accent);">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-md);">
+            Conclusion
+          </h3>
+          <p style="font-size: 0.95rem; line-height: 1.8; color: var(--text-secondary);">
+            Across 1,372 participants, 9,593 trials, and three experiments, the pattern
+            is consistent: AI fundamentally reshapes how people reason. When AI is right,
+            it dramatically boosts performance. When AI is wrong, people follow it off a
+            cliff&mdash;performing <em>worse</em> than without any AI at all.
+            This isn&rsquo;t a failure of intelligence or motivation. It&rsquo;s a structural
+            feature of how human cognition interacts with AI systems.
+            The Tri-System framework gives us language for what&rsquo;s happening: System&nbsp;3
+            has arrived, and it demands a rethinking of how we design, deploy, and live with
+            artificial intelligence.
+          </p>
+        </div>
+
+        <!-- Citation Block -->
+        <div class="card reveal" style="margin-top: var(--space-xl); padding: var(--space-lg); background: var(--bg-surface); font-size: 0.8125rem;">
+          <span class="label" style="color: var(--text-muted); margin-bottom: var(--space-sm); display: block;">Cite this paper</span>
+          <p style="color: var(--text-secondary); line-height: 1.7; font-family: var(--font-body);">
+            Shaw, S.&nbsp;D., &amp; Nave, G. (2025). Thinking&mdash;Fast, Slow, and Artificial:
+            How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender.
+            <em>Working Paper</em>. The Wharton School, University of Pennsylvania.
+            Available at <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: underline;">SSRN</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p style="max-width: none; color: var(--text-muted); line-height: 1.8;">
+        Based on
+        <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646" target="_blank" rel="noopener"><em>Thinking&mdash;Fast, Slow, and Artificial</em></a>
+        by Steven D. Shaw &amp; Gideon Nave, The Wharton School of the University of Pennsylvania.
+      </p>
+      <p style="max-width: none; color: var(--text-muted); margin-top: var(--space-sm); font-size: 0.75rem;">
+        Interactive explainer built by <strong style="color: var(--text-secondary);">Avinash Mohan Chetty</strong> with <a href="https://claude.ai/claude-code" target="_blank" rel="noopener" style="color: var(--accent);">Claude Code</a>.
+        N&nbsp;=&nbsp;1,372 participants &middot; 9,593 trials &middot; 3 studies.
+      </p>
+      <p style="max-width: none; color: var(--text-muted); margin-top: var(--space-lg); font-size: 0.8rem; line-height: 1.7; border-top: 1px solid var(--border-light); padding-top: var(--space-md);">
+        <strong style="color: var(--text-secondary);">Disclaimer:</strong>
+        This interactive explainer is an experimental attempt at making academic research more consumer-friendly. It may contain errors in interpretation or presentation.
+        Readers are encouraged to exercise discretion and consult the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6097646" target="_blank" rel="noopener" style="color: var(--accent);">original paper</a> for authoritative content.
+        We claim no ownership over the research&mdash;all intellectual credit belongs entirely to the authors, Steven D. Shaw and Gideon Nave.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ---------------------------------------------------------
+         READING PROGRESS BAR
+         --------------------------------------------------------- */
+      const progressBar = document.getElementById('reading-progress');
+
+      function updateProgress() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) {
+          document.documentElement.style.setProperty('--progress', '0%');
+          return;
+        }
+        const progress = Math.min((scrollTop / docHeight) * 100, 100);
+        document.documentElement.style.setProperty('--progress', progress + '%');
+      }
+
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+
+
+      /* ---------------------------------------------------------
+         SCROLL-REVEAL (IntersectionObserver)
+         --------------------------------------------------------- */
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!prefersReducedMotion) {
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px'
+          }
+        );
+
+        revealElements.forEach(function (el) {
+          revealObserver.observe(el);
+        });
+      } else {
+        // If reduced motion, reveal everything immediately
+        document.querySelectorAll('.reveal').forEach(function (el) {
+          el.classList.add('revealed');
+        });
+      }
+
+
+      /* ---------------------------------------------------------
+         SMOOTH SCROLL FOR ANCHOR LINKS
+         --------------------------------------------------------- */
+      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          const target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: prefersReducedMotion ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+
+      /* ---------------------------------------------------------
+         TOGGLE BUTTON INTERACTION (for prototyping)
+         --------------------------------------------------------- */
+      document.querySelectorAll('.toggle-group').forEach(function (group) {
+        var buttons = group.querySelectorAll('.toggle-btn');
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            buttons.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+          });
+        });
+      });
+
+
+      /* ---------------------------------------------------------
+         MINI-CRT INTERACTIVE DEMO
+         --------------------------------------------------------- */
+      window.CRT = (function () {
+        var questions = {
+          1: {
+            correct: '$0.05',
+            correctAliases: ['0.05', '5 cents', '5c', '.05', '$0.05', '5', '$0.05.'],
+            intuitive: '$0.10',
+            aiCorrect: true,
+            aiSuggestion: '$0.05',
+            explanation: 'If the ball costs $0.05, the bat costs $1.05 ($1.00 more), totaling $1.10.'
+          },
+          2: {
+            correct: '5 minutes',
+            correctAliases: ['5', '5 min', '5 minutes', '5 mins', '5min', 'five', 'five minutes'],
+            intuitive: '100 minutes',
+            aiCorrect: false,
+            aiSuggestion: '100 minutes',
+            explanation: 'Each machine makes one widget in 5 minutes. 100 machines each making one widget still takes 5 minutes.'
+          },
+          3: {
+            correct: '47 days',
+            correctAliases: ['47', '47 days', 'forty-seven', 'forty seven', '47days'],
+            intuitive: '24 days',
+            aiCorrect: true,
+            aiSuggestion: '47 days',
+            explanation: 'Since the patch doubles daily, the day before full coverage (day 48) it was half covered: day 47.'
+          },
+          4: {
+            correct: '2nd place',
+            correctAliases: ['2nd', '2', 'second', '2nd place', 'second place'],
+            intuitive: '1st place',
+            aiCorrect: false,
+            aiSuggestion: '1st place',
+            explanation: 'You passed the person in 2nd place, so you take their position\u20142nd place. You didn\u2019t pass the person in 1st.'
+          },
+          5: {
+            correct: 'Emily',
+            correctAliases: ['emily'],
+            intuitive: 'June',
+            aiCorrect: true,
+            aiSuggestion: 'Emily',
+            explanation: 'The question says "Emily\u2019s father has three daughters." Emily is the third daughter\u2014her name is in the question itself.'
+          },
+          6: {
+            correct: '8',
+            correctAliases: ['8', 'eight', '8 sheep'],
+            intuitive: '7',
+            aiCorrect: false,
+            aiSuggestion: '7',
+            explanation: '"All but 8 died" means 8 survived. The answer is 8, not 15 minus 8.'
+          },
+          7: {
+            correct: '4 days',
+            correctAliases: ['4', '4 days', 'four', 'four days'],
+            intuitive: '9 days',
+            aiCorrect: true,
+            aiSuggestion: '4 days',
+            explanation: 'John drinks 1/6 per day, Mary drinks 1/12 per day. Together: 1/6 + 1/12 = 1/4 barrel per day, so 4 days total.'
+          }
+        };
+
+        var state = { answered: 0, results: [], aiAsked: {} };
+        var condition = null; // 'brain-only' or 'ai-assisted'
+        var isBrainOnly = false;
+
+        // Cache gate DOM elements (queried once, used by multiple functions)
+        var gateEl = document.getElementById('crt-gate');
+        var skippedEl = document.getElementById('crt-skipped');
+        var demoEl = document.getElementById('crt-demo');
+        var bannerEl = document.getElementById('crt-condition-banner');
+
+        function startExperiment() {
+          // Random assignment: ~34% brain-only, ~66% ai-assisted (Study 1 ratio)
+          isBrainOnly = Math.random() < 0.34;
+          condition = isBrainOnly ? 'brain-only' : 'ai-assisted';
+
+          gateEl.style.display = 'none';
+          demoEl.style.display = 'block';
+
+          // Show condition banner via CSS class
+          bannerEl.style.display = 'block';
+          if (isBrainOnly) {
+            bannerEl.className = 'crt-condition-banner crt-condition-banner--brain-only';
+            bannerEl.innerHTML = '<strong style="color:var(--color-override);">Brain-Only Condition</strong><br>' +
+              'You\u2019ve been assigned to the <strong>Brain-Only</strong> condition\u2014no AI assistance available. ' +
+              'This is how 121 participants experienced Study 1.';
+            // Hide all Ask AI buttons
+            var aiButtons = document.querySelectorAll('.crt-ask-ai-btn');
+            for (var i = 0; i < aiButtons.length; i++) aiButtons[i].style.display = 'none';
+          } else {
+            bannerEl.className = 'crt-condition-banner crt-condition-banner--ai-assisted';
+            bannerEl.innerHTML = '<strong style="color:var(--color-system2);">AI-Assisted Condition</strong><br>' +
+              'You\u2019ve been assigned to the <strong>AI-Assisted</strong> condition\u2014you can consult an AI chatbot on any question. ' +
+              'This is how 238 participants experienced Study 1.';
+          }
+        }
+
+        function skipExperiment() {
+          gateEl.style.display = 'none';
+          skippedEl.style.display = 'block';
+        }
+
+        function undoSkip() {
+          skippedEl.style.display = 'none';
+          gateEl.style.display = '';
+        }
+
+        function normalize(s) {
+          return s.toLowerCase().replace(/[^a-z0-9.]/g, '').trim();
+        }
+
+        function isCorrect(qid, answer) {
+          var norm = normalize(answer);
+          return questions[qid].correctAliases.some(function (a) { return normalize(a) === norm; });
+        }
+
+        function askAI(qid) {
+          document.getElementById('crt-ai-' + qid).classList.add('visible');
+          state.aiAsked[qid] = true;
+          var btn = document.getElementById('crt-ai-btn-' + qid);
+          btn.disabled = true;
+          btn.textContent = 'AI Asked';
+        }
+
+        function submit(qid) {
+          var input = document.getElementById('crt-input-' + qid);
+          var answer = input.value.trim();
+          if (!answer) return;
+
+          var q = questions[qid];
+          var correct = isCorrect(qid, answer);
+          var followedAI = state.aiAsked[qid] && normalize(answer) === normalize(q.aiSuggestion);
+
+          // Disable inputs
+          input.disabled = true;
+          document.getElementById('crt-submit-' + qid).disabled = true;
+          document.getElementById('crt-ai-btn-' + qid).disabled = true;
+
+          // Show feedback
+          var qEl = document.getElementById('crt-q' + qid);
+          var feedback = document.getElementById('crt-feedback-' + qid);
+          qEl.classList.add(correct ? 'correct' : 'incorrect');
+          feedback.classList.add('visible');
+
+          if (correct) {
+            feedback.classList.add('correct-feedback');
+            feedback.innerHTML = '<strong>Correct!</strong> ' + q.explanation;
+          } else {
+            feedback.classList.add('incorrect-feedback');
+            var extra = (state.aiAsked[qid] && !q.aiCorrect && followedAI)
+              ? ' <em>You followed the AI\'s faulty advice&mdash;this is cognitive surrender.</em>'
+              : '';
+            feedback.innerHTML = '<strong>Incorrect.</strong> The answer is <strong>' + q.correct + '</strong>. ' + q.explanation + extra;
+          }
+
+          state.results.push({
+            qid: qid,
+            correct: correct,
+            usedAI: !!state.aiAsked[qid],
+            followedAI: followedAI,
+            aiWasCorrect: q.aiCorrect
+          });
+
+          state.answered++;
+          if (state.answered >= 7) showResults();
+        }
+
+        function showResults() {
+          var panel = document.getElementById('crt-results');
+          var list = document.getElementById('crt-results-list');
+          list.innerHTML = '';
+
+          // Calculate stats in a single pass
+          var totalCorrect = 0, aiUsedCount = 0, followedCount = 0, overrodeCount = 0;
+          var followedFaultyCount = 0, faultyAiAsked = 0;
+
+          state.results.forEach(function (r) {
+            if (r.correct) totalCorrect++;
+            if (r.usedAI) {
+              aiUsedCount++;
+              if (r.followedAI) followedCount++;
+              else overrodeCount++;
+              if (!r.aiWasCorrect) {
+                faultyAiAsked++;
+                if (r.followedAI) followedFaultyCount++;
+              }
+            }
+          });
+
+          var pct = Math.round(totalCorrect / 7 * 100);
+
+          // Build result items
+          state.results.forEach(function (r) {
+            var mapping;
+            if (r.usedAI && r.followedAI && r.aiWasCorrect) {
+              mapping = 'You followed correct AI\u2014like 92.7% of participants in the study.';
+            } else if (r.usedAI && r.followedAI && !r.aiWasCorrect) {
+              mapping = '<strong style="color:var(--color-ai-faulty)">Cognitive surrender.</strong> You followed faulty AI\u2014like 79.8% of participants.';
+            } else if (r.usedAI && !r.followedAI && !r.aiWasCorrect) {
+              mapping = '<strong style="color:var(--color-override)">Cognitive offloading.</strong> You overrode faulty AI\u2014only 20.2% managed this.';
+            } else if (r.usedAI && !r.followedAI && r.aiWasCorrect) {
+              mapping = 'You overrode correct AI\u2014only 7.3% of participants did this.';
+            } else {
+              mapping = isBrainOnly
+                ? 'You relied on your own reasoning\u2014no AI was available in your condition.'
+                : 'You relied on your own reasoning (Independent).';
+            }
+
+            var aiTag = '';
+            if (r.usedAI) {
+              aiTag = r.aiWasCorrect
+                ? ' <span style="font-size:0.7rem;color:var(--color-system2);font-weight:600;">AI-ACCURATE</span>'
+                : ' <span style="font-size:0.7rem;color:var(--color-ai-faulty);font-weight:600;">AI-FAULTY</span>';
+            }
+
+            var item = document.createElement('div');
+            item.className = 'crt-result-item';
+            item.innerHTML =
+              '<div class="crt-result-icon ' + (r.correct ? 'correct-icon' : 'incorrect-icon') + '">' +
+                (r.correct ? '<span style="color:var(--color-override)">&#10003;</span>' : '<span style="color:var(--color-ai-faulty)">&#10007;</span>') +
+              '</div>' +
+              '<div class="crt-result-detail">' +
+                '<div class="label">Question ' + r.qid + aiTag + '</div>' +
+                '<div class="mapping">' + mapping + '</div>' +
+              '</div>';
+            list.appendChild(item);
+          });
+
+          // Populate stats
+          var statCorrect = document.getElementById('crt-stat-correct');
+          var statAiUsed = document.getElementById('crt-stat-ai-used');
+          var statFollowed = document.getElementById('crt-stat-followed');
+          var statOverrode = document.getElementById('crt-stat-overrode');
+
+          statCorrect.textContent = totalCorrect + '/7';
+          if (isBrainOnly) {
+            statAiUsed.parentElement.style.display = 'none';
+            statFollowed.parentElement.style.display = 'none';
+            statOverrode.parentElement.style.display = 'none';
+          } else {
+            statAiUsed.textContent = aiUsedCount + '/7';
+            statFollowed.textContent = followedCount + '/' + aiUsedCount;
+            statOverrode.textContent = overrodeCount + '/' + aiUsedCount;
+          }
+
+          // Thinking profile — shared setup, then condition-specific content
+          var profileLabel = document.getElementById('crt-profile-label');
+          var profileTitle = document.getElementById('crt-profile-title');
+          var profileDesc = document.getElementById('crt-profile-desc');
+          profileLabel.textContent = 'YOUR THINKING PROFILE';
+
+          var profileColor, profileName, profileText;
+          if (isBrainOnly) {
+            profileColor = 'var(--color-override)';
+            profileName = 'Brain-Only';
+            profileText = 'You were assigned to the <strong>Brain-Only</strong> condition\u2014just like 121 participants in Study 1 who had no access to AI. ' +
+              'They averaged <strong>45.8% accuracy</strong>. ' +
+              'You got <strong>' + totalCorrect + '/7</strong> (' + pct + '%). ' +
+              'Brain-Only participants serve as the control group\u2014their performance reflects pure human reasoning without any AI influence.';
+          } else if (aiUsedCount <= 1) {
+            profileColor = 'var(--color-deliberation)';
+            profileName = 'Independent';
+            profileText = (aiUsedCount === 0
+              ? 'You had access to AI but never consulted it\u2014you relied entirely on your own cognition. '
+              : 'You consulted the AI just once out of 7 questions. ') +
+              'In the study, <strong>Independents</strong> (\u22641 AI use, n\u2009=\u2009170 in Study 2) primarily relied on their own reasoning. ' +
+              'Under normal conditions, Independents averaged <strong>51.5% accuracy</strong>\u2014similar to Brain-Only participants (45.8%). ' +
+              'You got <strong>' + totalCorrect + '/7</strong> (' + pct + '%). ' +
+              'Their performance was not tied to AI quality, making them resistant to cognitive surrender but also unable to benefit from accurate AI.';
+          } else {
+            profileColor = 'var(--color-system2)';
+            profileName = 'AI-User';
+            var surrenderRate = faultyAiAsked > 0 ? Math.round(followedFaultyCount / faultyAiAsked * 100) : 0;
+            var surrenderNote = '';
+            if (faultyAiAsked > 0 && followedFaultyCount > 0) {
+              surrenderNote = ' You followed faulty AI on <strong>' + followedFaultyCount + '/' + faultyAiAsked + ' faulty trials (' + surrenderRate + '%)</strong>\u2014' +
+                (surrenderRate >= 70 ? 'a high surrender rate, consistent with the 79.8% found in the study.' :
+                 surrenderRate >= 40 ? 'a moderate surrender rate. In the study, 79.8% followed faulty AI.' :
+                 'you showed good resistance to faulty AI. In the study, only 20.2% overrode faulty advice.');
+            } else if (faultyAiAsked > 0 && followedFaultyCount === 0) {
+              surrenderNote = ' Impressively, you <strong>overrode all faulty AI advice</strong>\u2014only 20.2% of participants managed this in the study.';
+            }
+            profileText = 'You consulted the AI on <strong>' + aiUsedCount + ' out of 7</strong> questions. ' +
+              'In the study, <strong>AI-Users</strong> (\u22652 AI uses, n\u2009=\u2009315 in Study 2) showed the strongest effects of cognitive surrender. ' +
+              'They scored <strong>80% on AI-Accurate trials</strong> but only <strong>20.4% on AI-Faulty trials</strong>\u2014their performance tracked AI quality, not their own ability.' +
+              surrenderNote +
+              ' AI-Users in the study scored higher on Trust in AI (4.44 vs 3.45) and lower on Need for Cognition (3.36 vs 3.57) compared to Independents.';
+          }
+
+          profileLabel.style.color = profileColor;
+          profileTitle.textContent = profileName;
+          profileTitle.style.color = profileColor;
+          profileDesc.innerHTML = profileText;
+
+          // Bridge text
+          var bridgeText = document.getElementById('crt-bridge-text');
+          bridgeText.innerHTML = isBrainOnly
+            ? '<strong>You just experienced the control condition.</strong> With no AI available, your answers reflect pure human reasoning. ' +
+              'In the real study, Brain-Only participants (n\u2009=\u2009121) averaged 45.8% accuracy. ' +
+              'Other participants had access to an AI chatbot that was sometimes correct and sometimes confidently wrong. ' +
+              'Those participants followed correct AI <strong>92.7%</strong> of the time\u2014but also followed ' +
+              '<em>faulty</em> AI <strong>79.8%</strong> of the time. That\u2019s cognitive surrender.'
+            : '<strong>You just experienced the actual experiment.</strong> In the real study, 1,372 participants ' +
+              'answered these same 7 CRT questions with access to an AI chatbot. The AI was sometimes correct ' +
+              'and sometimes gave a confident but wrong answer\u2014exactly as you experienced. ' +
+              'Participants followed correct AI <strong>92.7%</strong> of the time\u2014but also followed ' +
+              '<em>faulty</em> AI <strong>79.8%</strong> of the time. That\u2019s cognitive surrender.';
+
+          setTimeout(function () {
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+
+        return { askAI: askAI, submit: submit, startExperiment: startExperiment, skipExperiment: skipExperiment, undoSkip: undoSkip };
+      })();
+
+      // Allow Enter key to submit CRT answers
+      [1, 2, 3, 4, 5, 6, 7].forEach(function (qid) {
+        var input = document.getElementById('crt-input-' + qid);
+        if (input) {
+          input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') CRT.submit(qid);
+          });
+        }
+      });
+
+
+      /* ---------------------------------------------------------
+         TRI-SYSTEM INTERACTIVE DIAGRAM
+         --------------------------------------------------------- */
+      /* ---------------------------------------------------------
+         SVG BAR CHART ENGINE
+         --------------------------------------------------------- */
+      var ChartEngine = {
+        NS: 'http://www.w3.org/2000/svg',
+
+        el: function (tag, attrs, text) {
+          var e = document.createElementNS(this.NS, tag);
+          if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+          if (text !== undefined) e.textContent = text;
+          return e;
+        },
+
+        /**
+         * Auto-sizing bar chart: calculates viewBox from content needs.
+         * Never clips labels, brackets, or annotations.
+         */
+        drawBarChart: function (svgId, config) {
+          var svg = document.getElementById(svgId);
+          if (!svg) return;
+          svg.innerHTML = '';
+
+          var groups = config.groups || [];
+          var maxVal = config.maxY || 100;
+          var yUnit = config.yUnit !== undefined ? config.yUnit : '%';
+
+          // --- Analyze content to compute margins ---
+          var hasBrackets = config.brackets && config.brackets.length > 0;
+          var maxBracketRow = 0;
+          if (hasBrackets) {
+            config.brackets.forEach(function (b) {
+              maxBracketRow = Math.max(maxBracketRow, b.row || 0);
+            });
+          }
+          var hasSublabels = false, hasBarLabels = false, hasAnnotations = false;
+          groups.forEach(function (g) {
+            if (g.sublabel) hasSublabels = true;
+            if (g.annotation) hasAnnotations = true;
+            if (g.bars) g.bars.forEach(function (b) { if (b.label) hasBarLabels = true; });
+          });
+
+          // Top margin: title (20) + subtitle (16) + bracket rows (22 each) + padding
+          var topM = 8;
+          if (config.title) topM += 20;
+          if (config.subtitle) topM += 16;
+          if (hasBrackets) topM += (maxBracketRow + 1) * 22 + 12;
+          else topM += 6;
+
+          // Bottom margin: group labels (22) + sublabels (16) + bar labels (16) + annotations (14) + padding
+          var bottomM = 28; // base: group labels at h+20, plus 8 padding
+          if (hasSublabels) bottomM += 16;
+          if (hasBarLabels) bottomM += 16;
+          if (hasAnnotations) bottomM += 14;
+
+          // Left margin: y-axis tick labels (35) + y-axis title (15)
+          var leftM = config.yLabel ? 55 : 40;
+          var rightM = 15;
+
+          // Chart area dimensions
+          var vbWidth = svg.viewBox.baseVal.width || 600;
+          var chartH = config.chartHeight || 180;
+          var w = vbWidth - leftM - rightM;
+          var h = chartH;
+
+          // Set viewBox to exactly fit all content
+          var totalH = topM + chartH + bottomM;
+          svg.setAttribute('viewBox', '0 0 ' + vbWidth + ' ' + totalH);
+
+          // --- Main chart group ---
+          var g = this.el('g', { transform: 'translate(' + leftM + ',' + topM + ')' });
+          svg.appendChild(g);
+
+          // Title + subtitle (positioned in SVG coordinates, above chart group)
+          var titleY = 18;
+          if (config.title) {
+            svg.appendChild(this.el('text', {
+              x: vbWidth / 2, y: titleY, 'text-anchor': 'middle',
+              class: 'chart-title-text'
+            }, config.title));
+          }
+          if (config.subtitle) {
+            svg.appendChild(this.el('text', {
+              x: vbWidth / 2, y: titleY + 16, 'text-anchor': 'middle',
+              class: 'chart-subtitle-text'
+            }, config.subtitle));
+          }
+
+          // Grid lines + Y-axis tick labels
+          var gridSteps = config.gridSteps || [0, 20, 40, 60, 80, 100];
+          gridSteps.forEach(function (val) {
+            var y = h - (val / maxVal) * h;
+            g.appendChild(ChartEngine.el('line', {
+              x1: 0, y1: y, x2: w, y2: y, class: 'chart-gridline'
+            }));
+            g.appendChild(ChartEngine.el('text', {
+              x: -8, y: y + 4, 'text-anchor': 'end', class: 'chart-axis-label'
+            }, val + yUnit));
+          });
+
+          // Y-axis label (rotated)
+          if (config.yLabel) {
+            g.appendChild(this.el('text', {
+              x: 0, y: 0, class: 'chart-axis-label title',
+              transform: 'translate(-42,' + (h / 2) + ') rotate(-90)',
+              'text-anchor': 'middle'
+            }, config.yLabel));
+          }
+
+          // --- Groups and bars ---
+          var groupCount = groups.length;
+          var groupWidth = w / groupCount;
+          var barPad = config.barPad || 8;
+
+          // Stacking y-positions for bottom labels (each layer adds offset)
+          var yGroup = h + 18;                                        // group label
+          var ySublabel = yGroup + (hasSublabels ? 14 : 0);          // sublabel row
+          var yBarLabel = ySublabel + (hasBarLabels ? 14 : 0);       // per-bar label row
+          var yAnnotation = yBarLabel + (hasAnnotations ? 12 : 0);   // annotation row
+
+          groups.forEach(function (group, gi) {
+            var bars = group.bars;
+            var barCount = bars.length;
+            var totalBarSpace = groupWidth - barPad * 2;
+            var barWidth = Math.min(totalBarSpace / barCount - 4, 50);
+            var barStart = gi * groupWidth + (groupWidth - barCount * (barWidth + 4)) / 2;
+            var gx = gi * groupWidth + groupWidth / 2;
+
+            // Group label (always)
+            g.appendChild(ChartEngine.el('text', {
+              x: gx, y: yGroup,
+              'text-anchor': 'middle', class: 'chart-axis-label'
+            }, group.label));
+
+            // Sublabel (optional, below group label)
+            if (group.sublabel) {
+              g.appendChild(ChartEngine.el('text', {
+                x: gx, y: yGroup + 14,
+                'text-anchor': 'middle', class: 'chart-axis-label',
+                style: 'font-size:9px'
+              }, group.sublabel));
+            }
+
+            bars.forEach(function (bar, bi) {
+              var bx = barStart + bi * (barWidth + 4);
+              var barH = (bar.value / maxVal) * h;
+              var by = h - barH;
+
+              // Bar rect
+              g.appendChild(ChartEngine.el('rect', {
+                x: bx, y: by, width: barWidth, height: Math.max(barH, 1),
+                rx: 3, fill: bar.color, class: 'chart-bar', opacity: 0.9
+              }));
+
+              // Value label above bar
+              g.appendChild(ChartEngine.el('text', {
+                x: bx + barWidth / 2, y: by - 6,
+                class: 'chart-value-label'
+              }, bar.value + yUnit));
+
+              // Error bar (SE)
+              if (bar.se) {
+                var seTop = h - ((bar.value + bar.se) / maxVal) * h;
+                var seBot = h - ((bar.value - bar.se) / maxVal) * h;
+                var cx = bx + barWidth / 2;
+                g.appendChild(ChartEngine.el('line', { x1: cx, y1: seTop, x2: cx, y2: seBot, class: 'chart-error-bar' }));
+                g.appendChild(ChartEngine.el('line', { x1: cx - 4, y1: seTop, x2: cx + 4, y2: seTop, class: 'chart-error-bar' }));
+                g.appendChild(ChartEngine.el('line', { x1: cx - 4, y1: seBot, x2: cx + 4, y2: seBot, class: 'chart-error-bar' }));
+              }
+
+              // Per-bar label (e.g., "Follow" / "Override") — always below group+sublabel
+              if (bar.label) {
+                g.appendChild(ChartEngine.el('text', {
+                  x: bx + barWidth / 2, y: yBarLabel,
+                  'text-anchor': 'middle', class: 'chart-axis-label',
+                  style: 'font-size:9px'
+                }, bar.label));
+              }
+            });
+
+            // Group annotation — always at the bottom
+            if (group.annotation) {
+              g.appendChild(ChartEngine.el('text', {
+                x: gx, y: yAnnotation,
+                'text-anchor': 'middle',
+                class: 'chart-annotation sig'
+              }, group.annotation));
+            }
+          });
+
+          // Bracket annotations (above chart area)
+          if (config.brackets) {
+            config.brackets.forEach(function (b) {
+              var x1 = b.fromGroup * groupWidth + groupWidth / 2;
+              var x2 = b.toGroup * groupWidth + groupWidth / 2;
+              var yPos = -10 - (b.row || 0) * 22;
+              g.appendChild(ChartEngine.el('line', {
+                x1: x1, y1: yPos, x2: x2, y2: yPos,
+                stroke: 'var(--text-muted)', 'stroke-width': 1
+              }));
+              g.appendChild(ChartEngine.el('line', {
+                x1: x1, y1: yPos, x2: x1, y2: yPos + 6,
+                stroke: 'var(--text-muted)', 'stroke-width': 1
+              }));
+              g.appendChild(ChartEngine.el('line', {
+                x1: x2, y1: yPos, x2: x2, y2: yPos + 6,
+                stroke: 'var(--text-muted)', 'stroke-width': 1
+              }));
+              g.appendChild(ChartEngine.el('text', {
+                x: (x1 + x2) / 2, y: yPos - 4,
+                'text-anchor': 'middle',
+                class: 'chart-annotation sig'
+              }, b.text));
+            });
+          }
+        }
+        ,
+
+        /**
+         * SVG-based effect size meter. Renders Cohen's h as a gradient bar
+         * with threshold markers and value label. Auto-sized, no CSS hacks.
+         *
+         * Config: { value: 0.83, label: 'h = 0.83', thresholds: [{v:0.2,t:'small'}, ...] }
+         */
+        drawEffectMeter: function (containerId, config) {
+          var container = document.getElementById(containerId);
+          if (!container) return;
+          container.innerHTML = '';
+
+          var val = config.value || 0;
+          var label = config.label || ('h = ' + val.toFixed(2));
+          var thresholds = config.thresholds || [
+            { v: 0.2, t: 'small' }, { v: 0.5, t: 'med' }, { v: 0.8, t: 'large' }
+          ];
+
+          // Layout constants — generous sizing for readability
+          var w = 500, padL = 32, padR = 32;
+          var barY = 48, barH = 16, barW = w - padL - padR;
+          var totalH = 100;
+
+          var svg = document.createElementNS(this.NS, 'svg');
+          svg.setAttribute('viewBox', '0 0 ' + w + ' ' + totalH);
+          svg.setAttribute('xmlns', this.NS);
+          svg.style.width = '100%';
+          svg.style.maxWidth = w + 'px';
+          svg.style.display = 'block';
+          svg.style.margin = '0 auto';
+
+          // Gradient definition
+          var defs = this.el('defs');
+          var grad = this.el('linearGradient', { id: containerId + '-grad', x1: '0', x2: '1', y1: '0', y2: '0' });
+          grad.appendChild(this.el('stop', { offset: '0%', 'stop-color': '#3b82f6' }));
+          grad.appendChild(this.el('stop', { offset: '100%', 'stop-color': '#ef4444' }));
+          defs.appendChild(grad);
+          svg.appendChild(defs);
+
+          // Track background
+          svg.appendChild(this.el('rect', {
+            x: padL, y: barY, width: barW, height: barH,
+            rx: 8, fill: '#e8e2d6', stroke: '#c5baa6', 'stroke-width': 1
+          }));
+
+          // Fill bar (animated via CSS class)
+          var fillRect = this.el('rect', {
+            x: padL, y: barY, width: 0, height: barH,
+            rx: 8, fill: 'url(#' + containerId + '-grad)',
+            class: 'effect-meter-svg-fill'
+          });
+          fillRect.dataset.targetWidth = (val * barW).toFixed(1);
+          svg.appendChild(fillRect);
+
+          // Threshold markers above bar
+          var me = this;
+          thresholds.forEach(function (th) {
+            var mx = padL + th.v * barW;
+            // Tick line
+            svg.appendChild(me.el('line', {
+              x1: mx, x2: mx, y1: barY - 16, y2: barY - 4,
+              stroke: '#4a4a5a', 'stroke-width': 1, opacity: 0.45
+            }));
+            // Threshold label — 14px for readability
+            svg.appendChild(me.el('text', {
+              x: mx, y: barY - 20,
+              'text-anchor': 'middle',
+              fill: '#4a4a5a', 'font-size': '14', 'font-family': "'Courier New', monospace"
+            }, th.v + ' ' + th.t));
+          });
+
+          // Scale endpoints — 13px
+          svg.appendChild(this.el('text', {
+            x: padL - 4, y: barY + barH + 22,
+            'text-anchor': 'start',
+            fill: '#6b6b7a', 'font-size': '13'
+          }, '0'));
+          svg.appendChild(this.el('text', {
+            x: padL + barW + 4, y: barY + barH + 22,
+            'text-anchor': 'end',
+            fill: '#6b6b7a', 'font-size': '13'
+          }, '1.0'));
+
+          // Value label (centered) — 16px bold for prominence
+          svg.appendChild(this.el('text', {
+            x: w / 2, y: barY + barH + 24,
+            'text-anchor': 'middle',
+            fill: '#ef4444', 'font-size': '16', 'font-weight': '700'
+          }, label));
+
+          container.appendChild(svg);
+        }
+      };
+
+
+      /* ---------------------------------------------------------
+         STUDY 1 CHARTS
+         --------------------------------------------------------- */
+      (function initStudy1Charts() {
+        // Figure 3: Accuracy by condition
+        ChartEngine.drawBarChart('chart-s1-accuracy', {
+          title: 'CRT Accuracy by Trial Type (Study 1)',
+          subtitle: 'N = 359 participants, 7 CRT items each',
+          yLabel: 'Accuracy (%)',
+          groups: [
+            {
+              label: 'Brain-Only',
+              bars: [{ value: 45.8, se: 1.7, color: 'var(--color-system1)' }]
+            },
+            {
+              label: 'AI-Accurate',
+              bars: [{ value: 71.0, se: 1.6, color: 'var(--color-system2)' }]
+            },
+            {
+              label: 'AI-Faulty',
+              bars: [{ value: 31.5, se: 1.6, color: 'var(--color-ai-faulty)' }]
+            }
+          ],
+          brackets: [
+            { fromGroup: 0, toGroup: 1, text: '+25.2pp ***', row: 0 },
+            { fromGroup: 0, toGroup: 2, text: '-14.3pp ***', row: 1 },
+            { fromGroup: 1, toGroup: 2, text: '-39.5pp *** (scissors)', row: 2 }
+          ]
+        });
+
+        // Figure 2: Follow/Override rates
+        ChartEngine.drawBarChart('chart-s1-follow', {
+          title: 'Follow vs Override Rates',
+          subtitle: 'Chat-engaged trials only',
+          yLabel: 'Rate (%)',
+          groups: [
+            {
+              label: 'AI-Accurate',
+              bars: [
+                { value: 92.7, se: 1.2, color: 'var(--color-system2)', label: 'Follow' },
+                { value: 7.3, se: 1.2, color: 'var(--color-follow)', label: 'Override' }
+              ]
+            },
+            {
+              label: 'AI-Faulty',
+              bars: [
+                { value: 79.8, se: 1.9, color: 'var(--color-ai-faulty)', label: 'Follow' },
+                { value: 20.2, se: 1.9, color: 'var(--color-override)', label: 'Override' }
+              ]
+            }
+          ]
+        });
+      })();
+
+
+      /* ---------------------------------------------------------
+         STUDY 2 CHARTS + TOGGLE
+         --------------------------------------------------------- */
+      window.Study2 = (function () {
+        var data = {
+          control: {
+            title: 'Accuracy by Thinking Profile — Control',
+            groups: [
+              {
+                label: 'Brain-Only',
+                sublabel: '(all participants)',
+                bars: [{ value: 46.9, se: 3.1, color: 'var(--color-system1)' }]
+              },
+              {
+                label: 'Independents',
+                bars: [
+                  { value: 46.9, se: 4.6, color: 'var(--color-system1)', label: 'Brain' },
+                  { value: 47.6, se: 5.1, color: 'var(--color-deliberation)', label: 'AI-Acc' },
+                  { value: 45.7, se: 5.2, color: 'var(--color-follow)', label: 'AI-Flt' }
+                ]
+              },
+              {
+                label: 'AI-Users',
+                bars: [
+                  { value: 46.9, se: 3.8, color: 'var(--color-system1)', label: 'Brain' },
+                  { value: 80.0, se: 2.0, color: 'var(--color-system2)', label: 'AI-Acc' },
+                  { value: 20.4, se: 2.0, color: 'var(--color-ai-faulty)', label: 'AI-Flt' }
+                ],
+                annotation: 'h = 0.86 ***'
+              }
+            ]
+          },
+          pressure: {
+            title: 'Accuracy by Thinking Profile — Time Pressure',
+            groups: [
+              {
+                label: 'Brain-Only',
+                sublabel: '(all participants)',
+                bars: [{ value: 32.6, se: 3.6, color: 'var(--color-system1)' }]
+              },
+              {
+                label: 'Independents',
+                bars: [
+                  { value: 28.3, se: 5.0, color: 'var(--color-system1)', label: 'Brain' },
+                  { value: 31.7, se: 7.1, color: 'var(--color-deliberation)', label: 'AI-Acc' },
+                  { value: 26.5, se: 5.9, color: 'var(--color-follow)', label: 'AI-Flt' }
+                ]
+              },
+              {
+                label: 'AI-Users',
+                bars: [
+                  { value: 37.3, se: 5.3, color: 'var(--color-system1)', label: 'Brain' },
+                  { value: 71.3, se: 3.4, color: 'var(--color-system2)', label: 'AI-Acc' },
+                  { value: 12.1, se: 2.4, color: 'var(--color-ai-faulty)', label: 'AI-Flt' }
+                ],
+                annotation: '12.1% !!!'
+              }
+            ]
+          }
+        };
+
+        var current = 'control';
+
+        function draw(condition) {
+          var d = data[condition];
+          ChartEngine.drawBarChart('chart-s2-accuracy', {
+            title: d.title,
+            subtitle: 'N = 485, categorized by AI usage pattern',
+            yLabel: 'Accuracy (%)',
+            groups: d.groups
+          });
+        }
+
+        function toggle(condition) {
+          current = condition;
+          // Update toggle buttons
+          var btns = document.querySelectorAll('#s2-toggle .toggle-btn');
+          btns.forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-condition') === condition);
+          });
+          draw(condition);
+        }
+
+        draw('control');
+        return { toggle: toggle };
+      })();
+
+
+      /* ---------------------------------------------------------
+         STUDY 3 CHARTS + TOGGLE
+         --------------------------------------------------------- */
+      window.Study3 = (function () {
+        var overrideData = {
+          control: {
+            title: 'Follow & Override Rates — Control',
+            groups: [
+              {
+                label: 'AI-Accurate',
+                bars: [
+                  { value: 87.6, se: 1.6, color: 'var(--color-system2)', label: 'Follow' },
+                  { value: 12.4, se: 1.6, color: 'var(--color-follow)', label: 'Override' }
+                ]
+              },
+              {
+                label: 'AI-Faulty',
+                bars: [
+                  { value: 80.0, se: 2.0, color: 'var(--color-ai-faulty)', label: 'Follow' },
+                  { value: 20.0, se: 2.0, color: 'var(--color-override)', label: 'Override' }
+                ]
+              }
+            ]
+          },
+          incentives: {
+            title: 'Follow & Override Rates — Incentives + Feedback',
+            groups: [
+              {
+                label: 'AI-Accurate',
+                bars: [
+                  { value: 93.4, se: 1.2, color: 'var(--color-system2)', label: 'Follow' },
+                  { value: 6.6, se: 1.2, color: 'var(--color-follow)', label: 'Override' }
+                ]
+              },
+              {
+                label: 'AI-Faulty',
+                bars: [
+                  { value: 57.7, se: 2.5, color: 'var(--color-ai-faulty)', label: 'Follow' },
+                  { value: 42.3, se: 2.5, color: 'var(--color-override)', label: 'Override' }
+                ],
+                annotation: '2x override rate!'
+              }
+            ]
+          }
+        };
+
+        var accuracyData = {
+          control: {
+            title: 'Accuracy by Trial Type — Control',
+            groups: [
+              { label: 'Brain-Only', bars: [{ value: 46.3, se: 2.4, color: 'var(--color-system1)' }] },
+              { label: 'AI-Accurate', bars: [{ value: 74.4, se: 2.1, color: 'var(--color-system2)' }] },
+              { label: 'AI-Faulty', bars: [{ value: 30.7, se: 1.7, color: 'var(--color-ai-faulty)' }] }
+            ],
+            brackets: [
+              { fromGroup: 1, toGroup: 2, text: '-43.7pp ***', row: 0 }
+            ]
+          },
+          incentives: {
+            title: 'Accuracy by Trial Type — Incentives + Feedback',
+            groups: [
+              { label: 'Brain-Only', bars: [{ value: 53.2, se: 2.5, color: 'var(--color-system1)' }] },
+              { label: 'AI-Accurate', bars: [{ value: 82.5, se: 1.8, color: 'var(--color-system2)' }] },
+              { label: 'AI-Faulty', bars: [{ value: 44.2, se: 2.3, color: 'var(--color-ai-faulty)' }] }
+            ],
+            brackets: [
+              { fromGroup: 1, toGroup: 2, text: '-38.3pp *** (still large)', row: 0 }
+            ]
+          }
+        };
+
+        var profileData = {
+          control: {
+            title: 'Accuracy by Thinking Profile — Control',
+            groups: [
+              {
+                label: 'Brain-Only',
+                sublabel: '(all participants)',
+                bars: [{ value: 44.7, se: 3.2, color: 'var(--color-system1)' }]
+              },
+              {
+                label: 'Independents',
+                bars: [
+                  { value: 47.6, se: 3.4, color: 'var(--color-deliberation)', label: 'AI-Acc' },
+                  { value: 41.9, se: 3.6, color: 'var(--color-follow)', label: 'AI-Flt' }
+                ]
+              },
+              {
+                label: 'AI-Users',
+                bars: [
+                  { value: 77.2, se: 1.9, color: 'var(--color-system2)', label: 'AI-Acc' },
+                  { value: 26.8, se: 1.9, color: 'var(--color-ai-faulty)', label: 'AI-Flt' }
+                ],
+                annotation: '~50pp gap'
+              }
+            ]
+          },
+          incentives: {
+            title: 'Accuracy by Thinking Profile — Incentives + Feedback',
+            groups: [
+              {
+                label: 'Brain-Only',
+                sublabel: '(all participants)',
+                bars: [{ value: 64.6, se: 3.5, color: 'var(--color-system1)' }]
+              },
+              {
+                label: 'Independents',
+                bars: [
+                  { value: 69.2, se: 3.7, color: 'var(--color-deliberation)', label: 'AI-Acc' },
+                  { value: 59.9, se: 3.8, color: 'var(--color-follow)', label: 'AI-Flt' }
+                ]
+              },
+              {
+                label: 'AI-Users',
+                bars: [
+                  { value: 84.8, se: 1.6, color: 'var(--color-system2)', label: 'AI-Acc' },
+                  { value: 40.6, se: 2.3, color: 'var(--color-ai-faulty)', label: 'AI-Flt' }
+                ],
+                annotation: '~44pp gap (still large)'
+              }
+            ]
+          }
+        };
+
+        var current = 'control';
+
+        function draw(condition) {
+          var od = overrideData[condition];
+          ChartEngine.drawBarChart('chart-s3-override', {
+            title: od.title,
+            subtitle: 'Chat-engaged trials, N = 450',
+            yLabel: 'Rate (%)',
+            groups: od.groups
+          });
+
+          var ad = accuracyData[condition];
+          ChartEngine.drawBarChart('chart-s3-accuracy', {
+            title: ad.title,
+            subtitle: 'All trial types, N = 450',
+            yLabel: 'Accuracy (%)',
+            groups: ad.groups,
+            brackets: ad.brackets
+          });
+
+          var pd = profileData[condition];
+          ChartEngine.drawBarChart('chart-s3-profiles', {
+            title: pd.title,
+            subtitle: 'N = 450, categorized by AI usage pattern',
+            yLabel: 'Accuracy (%)',
+            groups: pd.groups
+          });
+        }
+
+        function toggle(condition) {
+          current = condition;
+          var btns = document.querySelectorAll('#s3-toggle .toggle-btn');
+          btns.forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-condition') === condition);
+          });
+          draw(condition);
+        }
+
+        draw('control');
+        return { toggle: toggle };
+      })();
+
+
+      /* ---------------------------------------------------------
+         CROSS-STUDY EFFECT SIZE CHART
+         --------------------------------------------------------- */
+      (function initCrossStudyChart() {
+        ChartEngine.drawBarChart('chart-cross-study', {
+          title: 'Cognitive Surrender Effect Across Studies',
+          subtitle: 'Cohen\'s h (faulty AI follow rate vs. accurate AI)',
+          yLabel: 'Cohen\'s h',
+          yUnit: '',
+          maxY: 1.0,
+          gridSteps: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+          groups: [
+            {
+              label: 'Study 1',
+              sublabel: 'N = 359',
+              bars: [{ value: 0.83, color: 'var(--color-system1)' }],
+              annotation: 'h = 0.83'
+            },
+            {
+              label: 'Study 2',
+              sublabel: 'N = 485',
+              bars: [{ value: 0.86, color: 'var(--color-ai-faulty)' }],
+              annotation: 'h = 0.86'
+            },
+            {
+              label: 'Study 3',
+              sublabel: 'N = 450',
+              bars: [{ value: 0.78, color: 'var(--color-override)' }],
+              annotation: 'h = 0.78'
+            },
+            {
+              label: 'Weighted',
+              sublabel: 'N = 1,294',
+              bars: [{ value: 0.82, color: 'var(--color-system2)' }],
+              annotation: 'h = 0.82'
+            }
+          ]
+        });
+      })();
+
+
+      /* ---------------------------------------------------------
+         DOSE-RESPONSE CURVE EXPLORER (Figure 10)
+         --------------------------------------------------------- */
+      window.DoseResponse = (function () {
+        var NS = 'http://www.w3.org/2000/svg';
+        var svg = document.getElementById('dose-svg');
+        if (!svg) return {};
+
+        // Chart layout
+        var margin = { top: 30, right: 25, bottom: 45, left: 55 };
+        var vb = svg.viewBox.baseVal;
+        var W = vb.width - margin.left - margin.right;
+        var H = vb.height - margin.top - margin.bottom;
+
+        // Data: accuracy curves for each condition
+        // Points: [aiUsage%, accurateAccuracy%, faultyAccuracy%]
+        // Derived from paper's reported values and Figure 10
+        var conditions = {
+          study1: {
+            label: 'Study 1 — Baseline',
+            baseline: 45.8,
+            points: [
+              [0, 45.8, 45.8],
+              [10, 49.2, 44.2],
+              [20, 53.0, 42.0],
+              [30, 57.0, 39.8],
+              [40, 61.0, 37.5],
+              [50, 64.5, 35.5],
+              [60, 67.0, 34.0],
+              [70, 69.0, 32.8],
+              [80, 70.2, 32.0],
+              [90, 70.8, 31.7],
+              [100, 71.0, 31.5]
+            ],
+            ciWidth: 4.5  // +/- for confidence band
+          },
+          study2: {
+            label: 'Study 2 — Time Pressure',
+            baseline: 32.6,
+            points: [
+              [0, 32.6, 32.6],
+              [10, 36.8, 30.0],
+              [20, 42.0, 27.0],
+              [30, 48.0, 23.5],
+              [40, 54.0, 20.0],
+              [50, 59.5, 17.2],
+              [60, 63.8, 15.0],
+              [70, 67.0, 13.5],
+              [80, 69.5, 12.7],
+              [90, 70.8, 12.3],
+              [100, 71.3, 12.1]
+            ],
+            ciWidth: 5.5
+          },
+          study3: {
+            label: 'Study 3 — Incentives + Feedback',
+            baseline: 53.2,
+            points: [
+              [0, 53.2, 53.2],
+              [10, 56.5, 52.0],
+              [20, 60.5, 50.5],
+              [30, 64.5, 49.0],
+              [40, 68.5, 47.8],
+              [50, 72.5, 46.8],
+              [60, 76.0, 45.8],
+              [70, 79.0, 45.2],
+              [80, 80.8, 44.6],
+              [90, 81.8, 44.4],
+              [100, 82.5, 44.2]
+            ],
+            ciWidth: 4.0
+          }
+        };
+
+        var current = 'study1';
+        var sliderX = 0.5;  // 0..1 normalized position
+
+        function el(tag, attrs, text) {
+          var e = document.createElementNS(NS, tag);
+          if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+          if (text !== undefined) e.textContent = text;
+          return e;
+        }
+
+        // Convert data coords to SVG coords
+        function xScale(usage) { return margin.left + (usage / 100) * W; }
+        function yScale(acc) { return margin.top + H - (acc / 100) * H; }
+
+        // Interpolate value at given usage% from points array
+        function interpolate(points, usage, colIdx) {
+          if (usage <= points[0][0]) return points[0][colIdx];
+          if (usage >= points[points.length - 1][0]) return points[points.length - 1][colIdx];
+          for (var i = 0; i < points.length - 1; i++) {
+            if (usage >= points[i][0] && usage <= points[i + 1][0]) {
+              var t = (usage - points[i][0]) / (points[i + 1][0] - points[i][0]);
+              return points[i][colIdx] + t * (points[i + 1][colIdx] - points[i][colIdx]);
+            }
+          }
+          return points[0][colIdx];
+        }
+
+        // Build smooth SVG path from points
+        function buildPath(points, colIdx) {
+          var coords = points.map(function (p) {
+            return { x: xScale(p[0]), y: yScale(p[colIdx]) };
+          });
+          if (coords.length < 2) return '';
+          var d = 'M ' + coords[0].x + ' ' + coords[0].y;
+          for (var i = 1; i < coords.length; i++) {
+            var prev = coords[i - 1];
+            var curr = coords[i];
+            var cpx = (prev.x + curr.x) / 2;
+            d += ' C ' + cpx + ' ' + prev.y + ' ' + cpx + ' ' + curr.y + ' ' + curr.x + ' ' + curr.y;
+          }
+          return d;
+        }
+
+        // Build confidence band path (upper + lower bounds)
+        function buildBand(points, colIdx, ci) {
+          var upper = points.map(function (p) {
+            return { x: xScale(p[0]), y: yScale(Math.min(100, p[colIdx] + ci)) };
+          });
+          var lower = points.map(function (p) {
+            return { x: xScale(p[0]), y: yScale(Math.max(0, p[colIdx] - ci)) };
+          }).reverse();
+
+          var all = upper.concat(lower);
+          var d = 'M ' + all[0].x + ' ' + all[0].y;
+          for (var i = 1; i < all.length; i++) {
+            d += ' L ' + all[i].x + ' ' + all[i].y;
+          }
+          d += ' Z';
+          return d;
+        }
+
+        function draw() {
+          svg.innerHTML = '';
+          var data = conditions[current];
+          var pts = data.points;
+
+          // Background group
+          var g = el('g');
+          svg.appendChild(g);
+
+          // Grid lines
+          [0, 20, 40, 60, 80, 100].forEach(function (v) {
+            var y = yScale(v);
+            g.appendChild(el('line', {
+              x1: margin.left, y1: y, x2: margin.left + W, y2: y,
+              stroke: 'rgba(148,163,184,0.08)', 'stroke-width': 1
+            }));
+            g.appendChild(el('text', {
+              x: margin.left - 8, y: y + 4, 'text-anchor': 'end',
+              fill: 'var(--text-muted)', 'font-size': '10', 'font-family': 'var(--font-body)'
+            }, v + '%'));
+          });
+
+          // X-axis grid & labels
+          [0, 20, 40, 60, 80, 100].forEach(function (v) {
+            var x = xScale(v);
+            g.appendChild(el('line', {
+              x1: x, y1: margin.top, x2: x, y2: margin.top + H,
+              stroke: 'rgba(148,163,184,0.06)', 'stroke-width': 1
+            }));
+            g.appendChild(el('text', {
+              x: x, y: margin.top + H + 18, 'text-anchor': 'middle',
+              fill: 'var(--text-muted)', 'font-size': '10', 'font-family': 'var(--font-body)'
+            }, v + '%'));
+          });
+
+          // Axis labels
+          g.appendChild(el('text', {
+            x: margin.left + W / 2, y: margin.top + H + 38, 'text-anchor': 'middle',
+            fill: 'var(--text-secondary)', 'font-size': '11', 'font-family': 'var(--font-body)'
+          }, 'System 3 (AI) Usage'));
+
+          var yLabel = el('text', {
+            x: 0, y: 0, 'text-anchor': 'middle',
+            fill: 'var(--text-secondary)', 'font-size': '11', 'font-family': 'var(--font-body)',
+            transform: 'translate(14,' + (margin.top + H / 2) + ') rotate(-90)'
+          }, 'Estimated Accuracy');
+          g.appendChild(yLabel);
+
+          // Confidence bands
+          g.appendChild(el('path', {
+            d: buildBand(pts, 1, data.ciWidth), class: 'dose-band accurate'
+          }));
+          g.appendChild(el('path', {
+            d: buildBand(pts, 2, data.ciWidth), class: 'dose-band faulty'
+          }));
+
+          // Baseline horizontal line
+          var baseY = yScale(data.baseline);
+          g.appendChild(el('line', {
+            x1: margin.left, y1: baseY, x2: margin.left + W, y2: baseY,
+            stroke: 'var(--color-system1)', 'stroke-width': 1, 'stroke-dasharray': '6 4',
+            opacity: 0.6
+          }));
+          g.appendChild(el('text', {
+            x: margin.left + W + 4, y: baseY + 3, 'text-anchor': 'start',
+            fill: 'var(--color-system1)', 'font-size': '9', 'font-family': 'var(--font-body)'
+          }, 'Brain-Only'));
+
+          // Curves
+          g.appendChild(el('path', { d: buildPath(pts, 1), class: 'dose-curve accurate' }));
+          g.appendChild(el('path', { d: buildPath(pts, 2), class: 'dose-curve faulty' }));
+
+          // Endpoint dots
+          var lastPt = pts[pts.length - 1];
+          g.appendChild(el('circle', {
+            cx: xScale(lastPt[0]), cy: yScale(lastPt[1]), r: 4,
+            fill: 'var(--color-system2)'
+          }));
+          g.appendChild(el('circle', {
+            cx: xScale(lastPt[0]), cy: yScale(lastPt[2]), r: 4,
+            fill: 'var(--color-ai-faulty)'
+          }));
+
+          // Origin dot (baseline)
+          g.appendChild(el('circle', {
+            cx: xScale(0), cy: yScale(data.baseline), r: 5,
+            fill: 'var(--color-system1)', stroke: 'var(--bg-dark)', 'stroke-width': 2
+          }));
+
+          // Slider line + handle
+          var sx = xScale(sliderX * 100);
+          g.appendChild(el('line', {
+            x1: sx, y1: margin.top, x2: sx, y2: margin.top + H,
+            class: 'dose-slider-line', id: 'dose-slider-vline'
+          }));
+
+          // Intersection dots
+          var accVal = interpolate(pts, sliderX * 100, 1);
+          var fltVal = interpolate(pts, sliderX * 100, 2);
+
+          g.appendChild(el('circle', {
+            cx: sx, cy: yScale(accVal), r: 5,
+            fill: 'var(--color-system2)', stroke: 'var(--bg-dark)', 'stroke-width': 2
+          }));
+          g.appendChild(el('circle', {
+            cx: sx, cy: yScale(fltVal), r: 5,
+            fill: 'var(--color-ai-faulty)', stroke: 'var(--bg-dark)', 'stroke-width': 2
+          }));
+
+          // Gap line between intersection dots
+          g.appendChild(el('line', {
+            x1: sx, y1: yScale(accVal), x2: sx, y2: yScale(fltVal),
+            stroke: 'var(--color-system1)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2',
+            opacity: 0.7
+          }));
+
+          // Gap label
+          var gapMid = (yScale(accVal) + yScale(fltVal)) / 2;
+          g.appendChild(el('text', {
+            x: sx + 10, y: gapMid + 4, 'text-anchor': 'start',
+            fill: 'var(--color-system1)', 'font-size': '10', 'font-weight': '600',
+            'font-family': 'var(--font-body)'
+          }, (accVal - fltVal).toFixed(0) + 'pp'));
+
+          // Slider handle (bottom)
+          g.appendChild(el('circle', {
+            cx: sx, cy: margin.top + H + 2, r: 7,
+            class: 'dose-slider-handle', id: 'dose-handle'
+          }));
+
+          // Condition label
+          g.appendChild(el('text', {
+            x: margin.left + W / 2, y: 16, 'text-anchor': 'middle',
+            fill: 'var(--text-secondary)', 'font-size': '12', 'font-weight': '500',
+            'font-family': 'var(--font-body)'
+          }, data.label));
+
+          updateReadout();
+        }
+
+        function updateReadout() {
+          var data = conditions[current];
+          var usage = Math.round(sliderX * 100);
+          var accVal = interpolate(data.points, usage, 1);
+          var fltVal = interpolate(data.points, usage, 2);
+          var gap = accVal - fltVal;
+
+          document.getElementById('dose-val-usage').textContent = usage + '%';
+          document.getElementById('dose-val-accurate').textContent = accVal.toFixed(1) + '%';
+          document.getElementById('dose-val-faulty').textContent = fltVal.toFixed(1) + '%';
+          document.getElementById('dose-val-gap').textContent = gap.toFixed(0) + 'pp';
+        }
+
+        // Slider drag interaction
+        var dragging = false;
+        var chartArea = document.getElementById('dose-chart-area');
+
+        function getSliderPos(e) {
+          var rect = svg.getBoundingClientRect();
+          var svgScale = vb.width / rect.width;
+          var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          var svgX = (clientX - rect.left) * svgScale;
+          var normalized = (svgX - margin.left) / W;
+          return Math.max(0, Math.min(1, normalized));
+        }
+
+        function onPointerDown(e) {
+          if (e.target.id === 'dose-handle' || e.target.closest('#dose-chart-area')) {
+            dragging = true;
+            sliderX = getSliderPos(e);
+            draw();
+            e.preventDefault();
+          }
+        }
+
+        function onPointerMove(e) {
+          if (!dragging) return;
+          sliderX = getSliderPos(e);
+          draw();
+          e.preventDefault();
+        }
+
+        function onPointerUp() {
+          dragging = false;
+        }
+
+        if (chartArea) {
+          chartArea.addEventListener('mousedown', onPointerDown);
+          chartArea.addEventListener('touchstart', onPointerDown, { passive: false });
+          document.addEventListener('mousemove', onPointerMove);
+          document.addEventListener('touchmove', onPointerMove, { passive: false });
+          document.addEventListener('mouseup', onPointerUp);
+          document.addEventListener('touchend', onPointerUp);
+        }
+
+        function toggle(condition) {
+          current = condition;
+          var btns = document.querySelectorAll('#dose-toggle .toggle-btn');
+          btns.forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-condition') === condition);
+          });
+          draw();
+        }
+
+        // Initial draw
+        draw();
+
+        return { toggle: toggle };
+      })();
+
+
+      /* ---------------------------------------------------------
+         EFFECT SIZE METERS (SVG rendered by ChartEngine)
+         --------------------------------------------------------- */
+      ChartEngine.drawEffectMeter('effect-meter-s1', {
+        value: 0.83, label: 'h = 0.83'
+      });
+      ChartEngine.drawEffectMeter('effect-meter-s2', {
+        value: 0.86, label: 'h = 0.86 (largest of 3 studies)'
+      });
+      ChartEngine.drawEffectMeter('effect-meter-s3', {
+        value: 0.78, label: 'h = 0.78 (still "large")'
+      });
+
+      // Scroll-triggered fill animation
+      var meterObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var fills = entry.target.querySelectorAll('.effect-meter-svg-fill');
+            fills.forEach(function (f) {
+              f.setAttribute('width', f.dataset.targetWidth);
+              f.classList.add('animate');
+            });
+            meterObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('.effect-meter').forEach(function (m) {
+        meterObserver.observe(m);
+      });
+
+
+      /* ---------------------------------------------------------
+         VULNERABILITY BARS ANIMATION (scroll triggered)
+         --------------------------------------------------------- */
+      var vulnContainer = document.getElementById('vuln-bars');
+      if (vulnContainer) {
+        var vulnObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var fills = entry.target.querySelectorAll('.vuln-bar-fill');
+              fills.forEach(function (f, i) {
+                setTimeout(function () {
+                  f.style.width = f.getAttribute('data-width');
+                  f.classList.add('animate');
+                }, i * 200);
+              });
+              vulnObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        vulnObserver.observe(vulnContainer);
+      }
+
+
+      window.TriSystem = (function () {
+        var routes = {
+          intuition: {
+            paths: ['path-intuition', 'path-intuition-2'],
+            nodes: ['tri-s1'],
+            title: 'Intuition',
+            desc: 'The fastest route. A stimulus triggers an automatic System 1 response without engaging deliberate reasoning or AI. This produces snap judgments\u2014often biased, but effortless. Example: immediately saying "$0.10" to the bat-and-ball problem.'
+          },
+          deliberation: {
+            paths: ['path-delib-1', 'path-delib-2', 'path-delib-3'],
+            nodes: ['tri-s1', 'tri-s2'],
+            title: 'Deliberation',
+            desc: 'System 1 generates an initial impression, which is then overridden or refined by System 2\'s conscious reasoning. This is the hallmark of careful thinking\u2014effortful, slower, but more accurate. Example: catching the "$0.10" intuition and working out that $0.05 is correct.'
+          },
+          offloading: {
+            paths: ['path-offload-1', 'path-offload-2', 'path-offload-3'],
+            nodes: ['tri-s1', 'tri-s3', 'tri-s2'],
+            title: 'Cognitive Offloading',
+            desc: 'The adaptive route. System 1 recognizes uncertainty, prompts a query to System 3 (AI), and the result is evaluated by System 2 before responding. This is strategic delegation\u2014the ideal use of AI as a tool. The human retains critical oversight.'
+          },
+          surrender: {
+            paths: ['path-surrender-1', 'path-surrender-2'],
+            nodes: ['tri-s1', 'tri-s3'],
+            title: 'Cognitive Surrender',
+            desc: 'The dangerous route. System 1 briefly activates, then the person outsources to System 3 and accepts the AI output without System 2 scrutiny. This bypasses deliberation entirely. When AI is wrong, accuracy plummets below brain-only levels. This is the core finding of the paper.'
+          },
+          autopilot: {
+            paths: ['path-autopilot-1', 'path-autopilot-2'],
+            nodes: ['tri-s3'],
+            title: 'Autopilot',
+            desc: 'The most extreme form. Neither System 1 nor System 2 meaningfully engage\u2014the person defaults entirely to AI output. This represents full cognitive outsourcing, where AI becomes the sole decision-maker while the human merely ratifies.'
+          },
+          recursive: {
+            paths: ['path-surrender-1', 'path-delib-2', 'path-delib-3'],
+            nodes: ['tri-s1', 'tri-s2', 'tri-s3'],
+            title: 'Recursive / Hybrid Routes',
+            desc: 'Loopbacks and corrections. These include verify-then-adopt (checking AI output before accepting), overriding System 3 with System 1 intuition, post-hoc rationalization, and reanchoring of intuition after AI exposure. Recursive routes reflect reflective engagement, narrative repair, or shifts in intuitive response patterns shaped by repeated AI interaction.'
+          }
+        };
+
+        var activeRoute = null;
+
+        function clearHighlights() {
+          document.querySelectorAll('.tri-path').forEach(function (p) {
+            p.classList.remove('highlight');
+          });
+          document.querySelectorAll('.tri-node').forEach(function (n) {
+            n.classList.remove('active');
+          });
+          document.querySelectorAll('.route-card').forEach(function (c) {
+            c.classList.remove('active');
+          });
+        }
+
+        function selectRoute(routeId) {
+          clearHighlights();
+
+          if (activeRoute === routeId) {
+            activeRoute = null;
+            document.getElementById('route-desc-title').textContent = 'Select a route above';
+            document.getElementById('route-desc-text').textContent = 'Click one of the cognitive routes to see how information flows through the three systems.';
+            return;
+          }
+
+          activeRoute = routeId;
+          var route = routes[routeId];
+
+          // Highlight paths
+          route.paths.forEach(function (pid) {
+            var el = document.getElementById(pid);
+            if (el) el.classList.add('highlight');
+          });
+
+          // Highlight nodes
+          route.nodes.forEach(function (nid) {
+            var el = document.getElementById(nid);
+            if (el) el.classList.add('active');
+          });
+
+          // Highlight card
+          var card = document.querySelector('.route-card[data-route="' + routeId + '"]');
+          if (card) card.classList.add('active');
+
+          // Update description
+          document.getElementById('route-desc-title').textContent = route.title;
+          document.getElementById('route-desc-text').textContent = route.desc;
+        }
+
+        function selectNode(nodeId) {
+          // Map node clicks to the most relevant route
+          var map = { s1: 'intuition', s2: 'deliberation', s3: 'surrender' };
+          selectRoute(map[nodeId] || 'intuition');
+        }
+
+        return { selectRoute: selectRoute, selectNode: selectNode };
+      })();
+
+    })();
+  </script>
+
+</body>
+</html>
