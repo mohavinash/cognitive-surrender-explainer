@@ -1817,6 +1817,180 @@
       .stat-highlight {
         font-size: 2.5rem;
       }
+
+      .know-more-tabs {
+        flex-wrap: wrap;
+      }
+      .know-more-tab {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+      }
+    }
+
+    /* ============================================================
+       KNOW MORE PANELS
+       ============================================================ */
+    .know-more {
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    /* Collapsed trigger — tiny pill */
+    .know-more-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      background: none;
+      border: 1px solid var(--border-light);
+      border-radius: 100px;
+      padding: 0.3rem 0.75rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .know-more-trigger:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .know-more-trigger .km-arrow {
+      transition: transform 0.25s ease;
+      font-size: 0.6rem;
+    }
+    .know-more.open .know-more-trigger {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .know-more.open .know-more-trigger .km-arrow {
+      transform: rotate(45deg);
+    }
+    /* Expanded body */
+    .know-more-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+    .know-more.open .know-more-body {
+      grid-template-rows: 1fr;
+    }
+    .know-more-body-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    .know-more-card {
+      margin-top: var(--space-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .know-more-tabs {
+      display: inline-flex;
+      gap: 0;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 3px;
+    }
+    .know-more-tab {
+      padding: 0.35rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.03em;
+      border: none;
+      border-radius: calc(var(--radius-md) - 2px);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .know-more-tab:hover {
+      color: var(--text-primary);
+      background: rgba(0,0,0,0.04);
+    }
+    .know-more-tab.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .know-more-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+    .know-more-panel > * {
+      overflow: hidden;
+    }
+    .know-more-panel.active {
+      grid-template-rows: 1fr;
+    }
+    .know-more-panel-inner {
+      padding-top: var(--space-md);
+    }
+    .know-more-panel p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .know-more-snippet {
+      border-left: 3px solid var(--accent);
+      padding: 0.8rem 1.2rem;
+      background: rgba(218, 165, 32, 0.06);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-style: italic;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .know-more-snippet .snippet-ref,
+    .know-more-panel-inner > .snippet-ref {
+      display: block;
+      margin-top: var(--space-sm);
+      font-style: normal;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    /* Math expression styling for technical tabs */
+    .know-more-panel .math {
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+    .know-more-panel .math var,
+    .know-more-panel .math .var {
+      font-style: italic;
+      font-family: 'Times New Roman', 'Georgia', serif;
+    }
+    .know-more-panel .math .num {
+      font-style: normal;
+    }
+    .know-more-panel .math sub,
+    .know-more-panel .math sup {
+      font-size: 0.75em;
+      line-height: 0;
+    }
+    .know-more-panel .math-block {
+      display: block;
+      text-align: center;
+      margin: var(--space-sm) 0;
+      font-family: 'Times New Roman', 'Georgia', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(218, 165, 32, 0.04);
+      border-radius: var(--radius-sm);
+    }
+    .know-more-panel .math-block .num {
+      font-style: normal;
+    }
+    .know-more-paper-img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
   </style>
 </head>
@@ -2154,8 +2328,10 @@
         <h2>The Tri-System Mind</h2>
         <hr class="section-divider">
         <p>
-          Beyond Kahneman's dual-process model. Shaw &amp; Nave propose that AI introduces
-          a third cognitive system&mdash;and with it, new pathways for both insight and surrender.
+          Psychologists have long used a two-system model of thinking &mdash; fast intuition (System 1)
+          and slow deliberation (System 2), a framework developed by Nobel laureate Daniel Kahneman.
+          Shaw &amp; Nave propose that AI introduces a third cognitive system&mdash;and with it, new pathways
+          for both insight and surrender.
         </p>
       </div>
 
@@ -2268,6 +2444,33 @@
           </div>
         </div>
 
+<div id="km-cognitiveRoutes" class="know-more reveal">
+  <button class="know-more-trigger" onclick="KnowMore.open('cognitiveRoutes')">Know more <span class="km-arrow">+</span></button>
+  <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+    <div class="know-more-tabs">
+    <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('cognitiveRoutes','simple')">Plain English</button>
+    <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('cognitiveRoutes','technical')">Technical</button>
+    <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('cognitiveRoutes','paper')">From the Paper</button>
+  </div>
+  <div id="km-cognitiveRoutes-simple" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <p>Think of these six routes as the different paths your mind can take when solving a problem. <strong>Intuition</strong> is your gut reaction — no AI involved. <strong>Deliberation</strong> is when you slow down and think carefully — also no AI. <strong>Cognitive offloading</strong> is the healthy version of using AI: you ask it for help but you still check the answer with your own reasoning. <strong>Cognitive surrender</strong> is when you skip that checking step and just go with whatever the AI says. <strong>Autopilot</strong> is the extreme — you don't even think before handing the question to AI. The paper's key finding is that most AI users follow the surrender path, not the offloading path.</p>
+    </div>
+  </div>
+  <div id="km-cognitiveRoutes-technical" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <p>Table 2 (p. 16) formalises six canonical routes through the triadic cognitive system. The critical distinction is the <em>cognitive locus</em> — which system ultimately governs the response. In cognitive offloading (locus: System 2), the user delegates to System 3 but retains evaluative oversight: <span class="math">Stimulus &rarr; S1/S2 &rarr; S3 (assist) &rarr; S2 &rarr; Response</span>. In cognitive surrender (locus: System 3), System 2 is bypassed: <span class="math">Stimulus &rarr; S1 (brief) &rarr; S3 &rarr; Response</span>. Empirically, on chat-engaged faulty trials across all three studies, <span class="math"><span class="num">73.2%</span></span> of responses reflected surrender vs. <span class="math"><span class="num">19.7%</span></span> offloading — a nearly 4:1 ratio favouring the path of least cognitive resistance.</p>
+    </div>
+  </div>
+  <div id="km-cognitiveRoutes-paper" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <img src="pdf-highlights/km_cognitiveRoutes.png" alt="Paper excerpt: Table 2 — Canonical routes of cognition under Tri-System Theory (Shaw &amp; Nave, 2025, p. 16)" class="know-more-paper-img" loading="lazy">
+      <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Table 2 (p. 16)</span>
+  </div>
+  </div></div></div>
+</div>
+</div>
+
         <!-- System Comparison Table -->
         <div class="reveal reveal-delay-3" style="margin-top: var(--space-2xl);">
           <h3 style="margin-bottom: var(--space-lg);">System Comparison</h3>
@@ -2311,10 +2514,65 @@
           </div>
         </div>
 
+        <div id="km-trisystem" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('trisystem')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('trisystem','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('trisystem','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('trisystem','paper')">From the Paper</button>
+          </div>
+          <div id="km-trisystem-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Psychologists have long described two ways humans think. <strong>System 1</strong> is fast and automatic &mdash; it&rsquo;s the gut reaction that makes you flinch at a loud noise or blurt out &ldquo;10 cents&rdquo; to a trick math question. <strong>System 2</strong> is slow and effortful &mdash; it&rsquo;s what you engage when you stop, re-read the question, and work through the algebra. This framework, developed by Daniel Kahneman (who won a Nobel Prize for it), has shaped decades of research on decision-making.</p>
+            <p>Shaw &amp; Nave&rsquo;s contribution is arguing that AI has become a <strong>third system</strong> &mdash; not a tool like a calculator, but something you think <em>with</em>, the way you think with your own intuition. The critical question their paper investigates: when you consult AI, do you actually evaluate its answer with System 2, or do you just accept it and move on?</p>
+            </div>
+          </div>
+          <div id="km-trisystem-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>The paper extends Kahneman&rsquo;s (2011) dual-process framework by introducing System 3 as a formally distinct cognitive system with four defining properties: (1) <strong>External</strong> &mdash; resides outside the biological nervous system; (2) <strong>Automated</strong> &mdash; executes via statistical/algorithmic processes; (3) <strong>Data-driven</strong> &mdash; based on large-scale training corpora; (4) <strong>Dynamic</strong> &mdash; responds to human and environmental inputs in real-time. Table 1 (p. 10) compares System 3 against Systems 1 and 2 across eight dimensions: origin, speed, effort, accuracy, affect, ethics, justification, and locus. The authors propose six canonical cognitive routes (Table 2, p. 14) including <em>cognitive offloading</em> (S1/S2 &rarr; S3 &rarr; S2 &rarr; Response) and <em>cognitive surrender</em> (S1 brief &rarr; S3 &rarr; Response), where the key distinction is whether System 2 evaluates System 3&rsquo;s output.</p>
+            </div>
+          </div>
+          <div id="km-trisystem-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_trisystem.png" alt="Paper excerpt: Table 1 — Cognitive affordances and tradeoffs of System 3 (Shaw &amp; Nave, 2025, p. 12)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Table 1 (p. 12)</span>
+          </div>
+          </div></div></div>
+        </div>
+        </div>
+
         <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-2xl);">
           Cognitive surrender is an uncritical abdication of reasoning itself. It reflects
           not merely the use of external assistance, but a relinquishing of cognitive control.
           <cite>Shaw &amp; Nave, 2025</cite>
+        </div>
+
+        <div id="km-surrender" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('surrender')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('surrender','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('surrender','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('surrender','paper')">From the Paper</button>
+          </div>
+          <div id="km-surrender-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Cognitive surrender is what happens when you stop thinking for yourself and just go with whatever the AI says &mdash; not because you evaluated its answer and found it convincing, but because you didn&rsquo;t evaluate it at all. It&rsquo;s the difference between using a GPS while still paying attention to where you&rsquo;re going versus blindly following turn-by-turn directions into a lake. The paper found this isn&rsquo;t rare or irrational &mdash; it&rsquo;s the default behaviour for most people most of the time when AI is available.</p>
+            </div>
+          </div>
+          <div id="km-surrender-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>The authors define cognitive surrender as distinct from cognitive offloading (Risko &amp; Gilbert, 2016) along two axes: (1) the presence/absence of System 2 evaluation of System 3 output, and (2) the retention/abdication of metacognitive monitoring. Operationally, surrender is measured as following AI-Faulty advice &mdash; accepting an incorrect AI suggestion without override. Across three studies, surrender rates on chat-engaged faulty trials ranged from 57.7% (Study 3, Incentives+Feedback) to 87.9% (Study 2, Time Pressure). Manifestation indicators include low override rates, shorter justification text, and inflated confidence.</p>
+            </div>
+          </div>
+          <div id="km-surrender-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_surrender.png" alt="Paper excerpt: Cognitive surrender definition (Shaw &amp; Nave, 2025, p. 17)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025 (p. 17)</span>
+          </div>
+          </div></div></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2348,11 +2606,65 @@
           </div>
         </div>
 
+        <div id="km-followrate" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('followrate')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('followrate','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('followrate','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('followrate','paper')">From the Paper</button>
+          </div>
+          <div id="km-followrate-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>In this experiment, people answered 7 reasoning puzzles &mdash; classic brain teasers designed to have a tempting wrong answer. Some participants could ask an AI chatbot for help. What the participants didn&rsquo;t know: the AI was rigged. On some questions it gave the correct answer; on others, it confidently gave the wrong one. The result: nearly 4 out of 5 times someone asked the AI and got a wrong answer, they submitted that wrong answer anyway. They didn&rsquo;t just get it wrong &mdash; they performed worse than people who had no AI at all.</p>
+            </div>
+          </div>
+          <div id="km-followrate-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p><span class="math"><var>N</var> = <span class="num">238</span></span> AI-Assisted participants answered 7 CRT (Cognitive Reflection Test) items. AI accuracy was manipulated within-subjects via hidden seed prompts: 4 items received accurate AI responses, 3 received faulty (confidently incorrect) responses. On chat-engaged faulty trials, 79.8% of responses followed the AI&rsquo;s incorrect suggestion. Follow rate on accurate trials was 92.7%. The AI-Accurate vs. AI-Faulty accuracy contrast was &minus;39.5 percentage points (<span class="math">Cohen&rsquo;s <var>h</var> = <span class="num">0.81</span></span>, <span class="math"><var>p</var> &lt; <span class="num">2.20 &times; 10<sup>&minus;16</sup></span></span>). Chat engagement was similar across trial types (54.4% accurate, 52.8% faulty), suggesting participants did not selectively avoid faulty items.</p>
+            </div>
+          </div>
+          <div id="km-followrate-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_followrate.png" alt="Paper excerpt: Figure 2 — Participants adopt System 3 answers (Shaw &amp; Nave, 2025, p. 23)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 2 (p. 23)</span>
+          </div>
+          </div></div></div>
+        </div>
+        </div>
+
         <!-- Figure 3: Accuracy by Condition -->
         <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
           <div class="chart-svg-container">
             <svg id="chart-s1-accuracy" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg"></svg>
           </div>
+        </div>
+
+        <div id="km-accuracy" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('accuracy')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('accuracy','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('accuracy','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('accuracy','paper')">From the Paper</button>
+          </div>
+          <div id="km-accuracy-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>This chart shows three bars. The gold bar (45.8%) is how people scored without any AI &mdash; just their own thinking. The blue bar (71%) is how they scored when the AI gave them the right answer &mdash; a big boost. The red bar (31.5%) is how they scored when the AI gave them a wrong answer &mdash; worse than having no AI at all. That last bar is the key finding. AI didn&rsquo;t just fail to help; it actively dragged performance below what people would have achieved on their own. The researchers call the gap between the blue and red bars the &ldquo;scissors effect&rdquo; &mdash; the more you rely on AI, the more your fate depends on whether the AI happens to be right.</p>
+            </div>
+          </div>
+          <div id="km-accuracy-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>CRT accuracy by trial type (Study 1, <span class="math"><var>N</var> = <span class="num">359</span></span>): Brain-Only <var>M</var> = 45.8%; AI-Accurate <var>M</var> = 71.0% (<span class="math"><var>p</var> &lt; <span class="num">.001</span></span>); AI-Faulty <var>M</var> = 31.5% (<span class="math"><var>p</var> &lt; <span class="num">.001</span></span>). The scissors gap (AI-Accurate minus AI-Faulty) = 39.5pp (<span class="math">Cohen&rsquo;s <var>h</var> = <span class="num">0.83</span></span>). Error bars show 95% CIs. Brain-Only baseline includes <span class="math"><var>n</var> = <span class="num">121</span></span> participants with no AI access plus probe trials from AI-Assisted participants. The accuracy boost from accurate AI (+25.2pp) is nearly twice the accuracy cost of faulty AI (&minus;14.3pp), but the faulty AI result is more consequential because participants don&rsquo;t know which trials are faulty.</p>
+            </div>
+          </div>
+          <div id="km-accuracy-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_accuracy.png" alt="Paper excerpt: Figure 3 — System 3 facilitates cognitive surrender (Shaw &amp; Nave, 2025, p. 24)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 3 (p. 24)</span>
+          </div>
+          </div></div></div>
+        </div>
         </div>
 
         <!-- Figure 2: Follow/Override Rates -->
@@ -2367,7 +2679,7 @@
           <div class="card card--flat" style="display: flex; flex-direction: column; justify-content: center;">
             <h4 style="margin-bottom: var(--space-sm);">Cognitive Surrender Effect</h4>
             <p style="font-size: 0.85rem; margin-bottom: var(--space-lg);">
-              Cohen's h measures how much AI accuracy matters. Anything above 0.8 is considered a &ldquo;large&rdquo; effect.
+              Cohen&rsquo;s h is a statistical measure of how far apart two rates are &mdash; in this case, how differently people perform when AI is right vs. wrong. Anything above 0.8 is considered a &ldquo;large&rdquo; effect, meaning the gap is substantial and unlikely due to chance.
             </p>
             <div class="effect-meter" id="effect-meter-s1"></div>
           </div>
@@ -2378,10 +2690,38 @@
           <div class="finding-stat" style="color: var(--color-system1);">77%</div>
           <div class="finding-text">
             average confidence among AI-assisted participants&mdash;vs. <strong>65.3%</strong> for brain-only
-            (Hedges' g&nbsp;=&nbsp;0.54). AI made people <strong>more confident even when half the AI
+            (Hedges&rsquo; g&nbsp;=&nbsp;0.54 &mdash; a &ldquo;medium&rdquo; effect size, meaning AI access shifted confidence
+            by roughly half a standard deviation). AI made people <strong>more confident even when half the AI
             answers were wrong</strong>. Confidence did not decline as the number of faulty trials increased.
           </div>
         </div>
+
+<div id="km-confidence" class="know-more reveal">
+  <button class="know-more-trigger" onclick="KnowMore.open('confidence')">Know more <span class="km-arrow">+</span></button>
+  <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+    <div class="know-more-tabs">
+    <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('confidence','simple')">Plain English</button>
+    <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('confidence','technical')">Technical</button>
+    <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('confidence','paper')">From the Paper</button>
+  </div>
+  <div id="km-confidence-simple" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <p>Here&rsquo;s what&rsquo;s perhaps most unsettling: using AI didn&rsquo;t just change people&rsquo;s answers &mdash; it changed how <em>sure</em> they felt. Participants who used the AI chatbot rated their confidence at 77 out of 100, compared to 65 for those working alone. That 12-point boost sounds reasonable &mdash; except that roughly half the AI&rsquo;s answers were deliberately wrong. People felt smarter and more confident while their actual performance was being dragged down by faulty AI. Even more troubling: confidence didn&rsquo;t drop as people encountered more wrong answers. Their brains didn&rsquo;t recalibrate. The mere act of consulting AI &mdash; regardless of its accuracy &mdash; made them feel like they knew what they were doing.</p>
+    </div>
+  </div>
+  <div id="km-confidence-technical" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <p>Study 1: Global confidence was significantly higher in AI-Assisted (<span class="math"><var>M</var> = <span class="num">77.0%</span></span>, <span class="math"><var>SE</var> = <span class="num">1.30%</span></span>, <span class="math"><span class="num">95%</span> <var>CI</var> [<span class="num">74.4, 79.6</span>]</span>) than Brain-Only (<span class="math"><var>M</var> = <span class="num">65.3%</span></span>, <span class="math"><var>SE</var> = <span class="num">2.21%</span></span>, <span class="math"><span class="num">95%</span> <var>CI</var> [<span class="num">61.0, 69.6</span>]</span>); <span class="math"><var>t</var>(<span class="num">202.91</span>) = <span class="num">4.57</span></span>, <span class="math"><var>p</var> = <span class="num">8.55 &times; 10<sup>&minus;6</sup></span></span>; <span class="math">Hedges&rsquo; <var>g</var> = <span class="num">0.54</span></span>, <span class="math"><span class="num">95%</span> <var>CI</var> [<span class="num">0.32, 0.77</span>]</span> &mdash; a medium effect. Critically, within the AI-Assisted condition, confidence did not significantly decline as the number of faulty trials increased (<span class="math"><var>&beta;</var> = <span class="num">&minus;1.14</span></span>, <span class="math"><var>SE</var> = <span class="num">0.89</span></span>, <span class="math"><var>t</var> = <span class="num">&minus;1.28</span></span>, <span class="math"><span class="num">95%</span> <var>CI</var> [<span class="num">&minus;2.88, 0.61</span>]</span>, <span class="math"><var>p</var> = <span class="num">0.202</span></span>). Study 3 per-item data confirmed: AI-assisted trial confidence (<span class="math"><var>M</var> = <span class="num">82.2%</span></span>) exceeded brain-only (<span class="math"><var>M</var> = <span class="num">77.5%</span></span>) regardless of AI accuracy (<span class="math"><var>p</var> = <span class="num">6.86 &times; 10<sup>&minus;7</sup></span></span>).</p>
+    </div>
+  </div>
+  <div id="km-confidence-paper" class="know-more-panel">
+    <div class="know-more-panel-inner">
+    <img src="pdf-highlights/km_confidence.png" alt="Paper excerpt: Confidence inflation despite faulty AI (Shaw &amp; Nave, 2025, p. 25)" class="know-more-paper-img" loading="lazy">
+      <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025 (p. 25)</span>
+  </div>
+  </div></div></div>
+</div>
+</div>
 
         <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-xl);">
           When AI gave correct suggestions, accuracy soared to 71%. But when AI was wrong,
@@ -2396,25 +2736,54 @@
             <h4 style="margin-top: var(--space-xs);">Trust in AI</h4>
             <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
               Higher trust &rarr; <strong style="color: var(--color-ai-faulty);">more surrender</strong>.
-              OR = 0.36, meaning 64% less likely to resist faulty AI.
+              The odds ratio (OR) was 0.36 &mdash; meaning for each standard-deviation increase in AI trust, people were 64% less likely to override faulty AI advice.
             </p>
           </div>
           <div class="card card--flat">
             <span class="label" style="color: var(--color-override);">Protection</span>
             <h4 style="margin-top: var(--space-xs);">Need for Cognition</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; margin-bottom: var(--space-xs);">Measures how much someone enjoys effortful thinking</p>
             <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
-              Higher NFC &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
-              OR = 1.86, nearly doubling odds of overriding faulty AI.
+              Enjoys effortful thinking &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
+              OR = 1.86 &mdash; meaning each standard-deviation increase in enjoyment of thinking nearly doubled the odds of catching and overriding AI mistakes.
             </p>
           </div>
           <div class="card card--flat">
             <span class="label" style="color: var(--color-override);">Protection</span>
             <h4 style="margin-top: var(--space-xs);">Fluid Intelligence</h4>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; margin-bottom: var(--space-xs);">Raw reasoning ability &mdash; pattern recognition and logic, independent of learned knowledge</p>
             <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
-              Higher IQ &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
-              OR = 1.96, nearly doubling odds of catching AI errors.
+              Higher reasoning ability &rarr; <strong style="color: var(--color-override);">less surrender</strong>.
+              OR = 1.96 &mdash; meaning each standard-deviation increase in reasoning ability nearly doubled the odds of resisting faulty AI.
             </p>
           </div>
+        </div>
+
+        <div id="km-individual" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('individual')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('individual','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('individual','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('individual','paper')">From the Paper</button>
+          </div>
+          <div id="km-individual-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Not everyone surrendered equally. The study measured three traits in each participant. <strong>Trust in AI</strong>: people who reported higher trust in AI systems were significantly more likely to follow wrong AI answers &mdash; they gave the AI the benefit of the doubt even when it was wrong. <strong>Need for Cognition</strong>: this is a psychological scale measuring how much someone enjoys thinking through hard problems (as opposed to preferring shortcuts). People who scored higher were nearly twice as likely to catch the AI&rsquo;s mistakes. <strong>Fluid intelligence</strong>: this measures raw reasoning ability &mdash; the kind tested by pattern-recognition puzzles, not learned knowledge. Higher scores nearly doubled the odds of overriding faulty AI. In short: your willingness to think and your ability to reason both protect you, while blind trust in AI makes you vulnerable.</p>
+            </div>
+          </div>
+          <div id="km-individual-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Three individual-difference moderators were assessed via validated scales. (1) Trust in AI (Jian et al., 2000): Higher trust predicted more System 3 engagement (<span class="math"><var>OR</var> = <span class="num">1.24</span></span>, <span class="math"><var>p</var> = <span class="num">.047</span></span>) and lower override rates on faulty trials (<span class="math"><var>OR</var> = <span class="num">0.36</span></span>, <span class="math"><var>p</var> &lt; <span class="num">.001</span></span>), meaning 64% less likely to resist faulty AI per SD increase. (2) Need for Cognition (Cacioppo et al., 1984): Reduced System 3 usage (<span class="math"><var>OR</var> = <span class="num">0.65</span></span>, <span class="math"><var>p</var> = <span class="num">.003</span></span>) and increased override (<span class="math"><var>OR</var> = <span class="num">1.86</span></span>, <span class="math"><var>p</var> &lt; <span class="num">.001</span></span>). (3) Fluid Intelligence (ICAR-16 matrix reasoning): Higher scores predicted greater override (<span class="math"><var>OR</var> = <span class="num">1.96</span></span>, <span class="math"><var>p</var> &lt; <span class="num">.001</span></span>). These effects held when controlling for the other two variables in a combined model (Figure 4, p. 22).</p>
+            </div>
+          </div>
+          <div id="km-individual-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_individual.png" alt="Paper excerpt: Individual difference moderators — Figure 4 (Shaw &amp; Nave, 2025, p. 26)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 4 (p. 26)</span>
+          </div>
+          </div></div></div>
+        </div>
         </div>
       </div>
     </div>
@@ -2485,6 +2854,33 @@
         <div class="card card--flat reveal reveal-delay-4" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
           <h4 style="margin-bottom: var(--space-sm);">Study 2 Cognitive Surrender Effect</h4>
           <div class="effect-meter" id="effect-meter-s2" style="margin-top: var(--space-md);"></div>
+        </div>
+
+        <div id="km-timepressure" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('timepressure')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('timepressure','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('timepressure','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('timepressure','paper')">From the Paper</button>
+          </div>
+          <div id="km-timepressure-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Study 2 asked: what happens when you&rsquo;re under time pressure? With a 30-second countdown per question, people had less time to think carefully &mdash; which is exactly when you&rsquo;d expect them to lean on AI more. The result was a double-edged sword. When the AI was right, time-pressured participants held up reasonably well (71.3% accuracy). But when the AI was wrong, time-pressured participants hit rock bottom &mdash; just 12.1% accuracy, far below anyone else in the study. Time pressure didn&rsquo;t change whether people surrendered; it made the consequences of surrendering more extreme.</p>
+            </div>
+          </div>
+          <div id="km-timepressure-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Study 2 (<span class="math"><var>N</var> = <span class="num">485</span></span>): 2 &times; 2 between-subjects (Time Pressure: 30s countdown vs. Control: unlimited) &times; within-subjects (AI Accuracy). Time pressure reduced accuracy across the board (<span class="math"><var>&beta;</var> = <span class="num">&minus;0.86</span></span>, <span class="math"><var>p</var> = <span class="num">1.59 &times; 10<sup>&minus;8</sup></span></span>), but critically, no Time Pressure &times; Trial Type interaction emerged (<span class="math"><var>&beta;</var> = <span class="num">&minus;0.02</span></span>, <span class="math"><var>p</var> = <span class="num">0.937</span></span>). This means cognitive surrender was equally strong under both conditions &mdash; time pressure lowered the baseline without differentially affecting the surrender effect. AI-Users under time pressure: AI-Accurate 71.3%, AI-Faulty 12.1% (<span class="math">Cohen&rsquo;s <var>h</var> = <span class="num">0.86</span></span>, largest of all 3 studies). Thinking profile analysis: AI-Users showed <span class="math"><var>OR</var> = <span class="num">40.9</span></span> for Trial Type effect (<span class="math"><var>p</var> &lt; <span class="num">2.20 &times; 10<sup>&minus;16</sup></span></span>).</p>
+            </div>
+          </div>
+          <div id="km-timepressure-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_timepressure.png" alt="Paper excerpt: Time pressure effects — Figure 5 (Shaw &amp; Nave, 2025, p. 30)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 5 (p. 30)</span>
+          </div>
+          </div></div></div>
+        </div>
         </div>
 
         <div class="pull-quote reveal reveal-delay-5">
@@ -2579,6 +2975,33 @@
           <div class="effect-meter" id="effect-meter-s3" style="margin-top: var(--space-md);"></div>
         </div>
 
+        <div id="km-incentives" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('incentives')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('incentives','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('incentives','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('incentives','paper')">From the Paper</button>
+          </div>
+          <div id="km-incentives-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Study 3 tested the obvious fix: what if you pay people to get the right answer and tell them immediately whether they were right or wrong? The results were encouraging but incomplete. Override rates on wrong AI answers more than doubled &mdash; from 20% to 42.3%. People were clearly trying harder. But here&rsquo;s the catch: even with money on the line and instant feedback, the majority of participants still followed wrong AI answers more often than not. Financial motivation helped, but it wasn&rsquo;t enough to overcome the pull of cognitive surrender. The problem isn&rsquo;t laziness &mdash; it&rsquo;s something more structural about how we interact with confident AI outputs.</p>
+            </div>
+          </div>
+          <div id="km-incentives-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Study 3 (<span class="math"><var>N</var> = <span class="num">450</span></span>): Between-subjects Incentives + Feedback (<span class="math"><var>n</var> = <span class="num">238</span></span>) vs. Control (<span class="math"><var>n</var> = <span class="num">212</span></span>). Incentives: $0.20/correct + $20 lottery. Feedback: item-level correct/incorrect post-response. Key results: Override rates on faulty trials increased from 20.0% to 42.3% (<span class="math"><var>&beta;</var> = <span class="num">1.44</span></span>, <span class="math"><var>p</var> = <span class="num">6.30 &times; 10<sup>&minus;9</sup></span></span>, <span class="math"><var>OR</var> = <span class="num">4.25</span></span>). Follow rates on accurate trials also increased (87.6% &rarr; 92.2%, <span class="math"><var>OR</var> = <span class="num">1.94</span></span>), suggesting better calibration overall. However, the AI-Accurate vs. AI-Faulty accuracy gap remained large: 44pp under Incentives+Feedback vs. 50pp under Control. <span class="math">Cohen&rsquo;s <var>h</var> = <span class="num">0.78</span></span> (still &ldquo;large&rdquo;). Per-item confidence data showed AI-assisted trial confidence (82.2%) exceeded brain-only trial confidence (77.5%) regardless of AI accuracy.</p>
+            </div>
+          </div>
+          <div id="km-incentives-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_incentives.png" alt="Paper excerpt: Figure 7 — Incentives and feedback reduce cognitive surrender (Shaw &amp; Nave, 2025, p. 35)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 7 (p. 35)</span>
+          </div>
+          </div></div></div>
+        </div>
+        </div>
+
         <div class="pull-quote reveal" style="margin-top: var(--space-xl);">
           Cognitive surrender persists. Even with incentives and feedback, the fundamental
           vulnerability to faulty AI remains a structural feature of human-AI interaction.
@@ -2610,7 +3033,7 @@
           <div class="key-stat" style="color: var(--color-ai-faulty); font-size: 2.5rem;">16&times;</div>
           <div class="key-desc">
             Correct responding was over <strong>16 times greater</strong> when AI was accurate vs. faulty
-            (OR&nbsp;=&nbsp;16.07, 95%&nbsp;CI&nbsp;[11.50,&nbsp;22.46], p&nbsp;&lt;&nbsp;2.20&nbsp;&times;&nbsp;10<sup>&minus;16</sup>).
+            (the odds ratio was 16.07, with a 95% confidence interval of 11.50 to 22.46 &mdash; meaning this result is extremely robust and statistically overwhelming).
             This &ldquo;scissors effect&rdquo; persisted across all three studies, conditions, and participant profiles.
           </div>
         </div>
@@ -2622,7 +3045,7 @@
             <h4 style="margin-top: var(--space-xs);">Confidence Inflation</h4>
             <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
               AI access inflated confidence by <strong>11.7 percentage points</strong> (77.0% vs 65.3%,
-              Hedges' g&nbsp;=&nbsp;0.54)&mdash;even though roughly half of AI answers were wrong.
+              Hedges&rsquo; g&nbsp;=&nbsp;0.54, a medium-sized effect)&mdash;even though roughly half of AI answers were wrong.
               Per-item data from Study 3 confirmed the pattern: confidence was <strong>higher on AI-assisted
               trials</strong> (82.2%) than brain-only trials (77.5%), regardless of whether AI was accurate or faulty.
             </p>
@@ -2638,6 +3061,33 @@
               Incentives+Feedback shifted surrender down to 57.9% and offloading up to 37.1%.
             </p>
           </div>
+        </div>
+
+        <div id="km-synthesis" class="know-more reveal">
+          <button class="know-more-trigger" onclick="KnowMore.open('synthesis')">Know more <span class="km-arrow">+</span></button>
+          <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
+            <div class="know-more-tabs">
+            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('synthesis','simple')">Plain English</button>
+            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('synthesis','technical')">Technical</button>
+            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('synthesis','paper')">From the Paper</button>
+          </div>
+          <div id="km-synthesis-simple" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Across all three studies &mdash; 1,372 people and 9,593 individual trial responses &mdash; the pattern held. When the AI was right, people were <strong>16 times more likely</strong> to answer correctly than when the AI was wrong. Not 16% more likely &mdash; 16 <em>times</em>. That&rsquo;s a staggering dependency. It means the quality of your thinking has become almost entirely a function of the quality of your AI. The paper also found a troubling side effect: AI access made people more confident in their answers &mdash; by nearly 12 percentage points &mdash; even though roughly half the AI answers were wrong. People felt smarter while getting worse results.</p>
+            </div>
+          </div>
+          <div id="km-synthesis-technical" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <p>Trial-level meta-analytic synthesis across Studies 1&ndash;3 (<span class="math"><var>N</var> = <span class="num">1,372</span></span>; 9,593 trials): <span class="math"><var>OR</var> = <span class="num">16.07</span></span> for correct responding (AI-Accurate vs. AI-Faulty) (<span class="math"><span class="num">95%</span> <var>CI</var> [<span class="num">11.50, 22.46</span>]</span>, <span class="math"><var>p</var> &lt; <span class="num">2.20 &times; 10<sup>&minus;16</sup></span></span>). Per-study Cohen&rsquo;s <var>h</var> values: Study 1 = <span class="num">0.83</span>, Study 2 = <span class="num">0.86</span>, Study 3 = <span class="num">0.78</span>; trial-weighted <var>h</var> = <span class="num">0.82</span> (all &ldquo;large&rdquo; by conventional thresholds). Situational manipulations shifted absolute performance levels but did not eliminate the surrender effect: Time Pressure <span class="math"><var>OR</var> = <span class="num">14.28</span></span>, Incentives + Feedback <span class="math"><var>OR</var> = <span class="num">11.05</span></span>. Confidence inflation: AI-Assisted <var>M</var> = 77.0% vs. Brain-Only <var>M</var> = 65.3% (<span class="math">Hedges&rsquo; <var>g</var> = <span class="num">0.54</span></span>, a &ldquo;medium&rdquo; effect size indicating AI access inflated self-reported confidence by roughly half a standard deviation). Confidence did not decline as faulty trials accumulated (<span class="math"><var>&beta;</var> = <span class="num">&minus;1.14</span></span>, <span class="math"><var>p</var> = <span class="num">0.202</span></span>).</p>
+            </div>
+          </div>
+          <div id="km-synthesis-paper" class="know-more-panel">
+            <div class="know-more-panel-inner">
+            <img src="pdf-highlights/km_synthesis.png" alt="Paper excerpt: Figure 10 — Cognitive surrender as a function of System 3 usage (Shaw &amp; Nave, 2025, p. 43)" class="know-more-paper-img" loading="lazy">
+              <span class="snippet-ref">&mdash; Shaw &amp; Nave, 2025, Figure 10 (p. 43)</span>
+          </div>
+          </div></div></div>
+        </div>
         </div>
 
         <!-- Cross-study effect size comparison chart -->
@@ -2710,6 +3160,7 @@
 
           <p class="dose-instruction">Drag the slider or click anywhere on the chart to explore</p>
         </div>
+
 
         <div class="pull-quote reveal reveal-delay-4" style="margin-top: var(--space-2xl);">
           Correct responding was over 16 times greater when System&nbsp;3 was
@@ -2811,6 +3262,7 @@
           </div>
         </div>
 
+
         <!-- Vulnerability Profile -->
         <div class="card reveal" style="margin-top: var(--space-2xl); padding: var(--space-xl);">
           <h3 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: var(--space-lg);">
@@ -2879,6 +3331,7 @@
             </div>
           </div>
         </div>
+
 
         <div class="pull-quote reveal" style="margin-top: var(--space-2xl);">
           The question is no longer whether AI can think for us&mdash;it&rsquo;s
@@ -3000,6 +3453,48 @@
           el.classList.add('revealed');
         });
       }
+
+
+      /* ============================================================
+         KNOW MORE — 3-tier expandable panels
+         ============================================================ */
+      window.KnowMore = {
+        // Toggle the entire Know More drawer open/closed (accordion: only one open at a time)
+        open: function (id) {
+          var container = document.getElementById('km-' + id);
+          if (!container) return;
+          // Close all other open panels first
+          var allOpen = document.querySelectorAll('.know-more.open');
+          for (var i = 0; i < allOpen.length; i++) {
+            if (allOpen[i] !== container) {
+              allOpen[i].classList.remove('open');
+            }
+          }
+          var isOpen = container.classList.toggle('open');
+          // Auto-select "Plain English" when opening for the first time
+          if (isOpen && !container.querySelector('.know-more-tab.active')) {
+            this.toggle(id, 'simple');
+          }
+        },
+        // Switch between tiers within an open panel
+        toggle: function (id, tier) {
+          var container = document.getElementById('km-' + id);
+          if (!container) return;
+          var tabs = container.querySelectorAll('.know-more-tab');
+          var panels = container.querySelectorAll('.know-more-panel');
+          var clickedTab = container.querySelector('[data-tier="' + tier + '"]');
+          var clickedPanel = document.getElementById('km-' + id + '-' + tier);
+          if (!clickedTab || !clickedPanel) return;
+
+          // Deactivate all
+          for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+          for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+
+          // Activate selected
+          clickedTab.classList.add('active');
+          clickedPanel.classList.add('active');
+        }
+      };
 
 
       /* ---------------------------------------------------------
@@ -3685,8 +4180,8 @@
       (function initStudy1Charts() {
         // Figure 3: Accuracy by condition
         ChartEngine.drawBarChart('chart-s1-accuracy', {
-          title: 'CRT Accuracy by Trial Type (Study 1)',
-          subtitle: 'N = 359 participants, 7 CRT items each',
+          title: 'Cognitive Reflection Test Accuracy by Trial Type (Study 1)',
+          subtitle: 'N = 359 participants, 7 reasoning items each',
           yLabel: 'Accuracy (%)',
           groups: [
             {
