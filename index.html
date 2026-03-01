@@ -4215,12 +4215,17 @@
           return d;
         }
 
-        function draw() {
+        // Persistent group for slider elements (rebuilt on each drag frame)
+        var sliderGroup = null;
+
+        // drawStatic: rebuilds all static SVG elements (grid, axes, bands, curves, dots, labels).
+        // Called on initial render and when a condition toggle is clicked.
+        function drawStatic() {
           svg.innerHTML = '';
           var data = conditions[current];
           var pts = data.points;
 
-          // Background group
+          // Background group for static elements
           var g = el('g');
           svg.appendChild(g);
 
@@ -4304,9 +4309,33 @@
             fill: 'var(--color-system1)', stroke: 'var(--bg-dark)', 'stroke-width': 2
           }));
 
-          // Slider line + handle
+          // Condition label
+          g.appendChild(el('text', {
+            x: margin.left + W / 2, y: 16, 'text-anchor': 'middle',
+            fill: 'var(--text-secondary)', 'font-size': '12', 'font-weight': '500',
+            'font-family': 'var(--font-body)'
+          }, data.label));
+
+          // Create the slider group (sits on top of static elements)
+          sliderGroup = el('g');
+          svg.appendChild(sliderGroup);
+
+          // Position slider elements on the newly drawn chart
+          updateSlider();
+        }
+
+        // updateSlider: rebuilds only the slider-related SVG elements (~6 elements).
+        // Called on each drag frame (mousemove/touchmove) and after drawStatic().
+        function updateSlider() {
+          var data = conditions[current];
+          var pts = data.points;
+
+          // Clear only the slider group
+          sliderGroup.innerHTML = '';
+
+          // Slider line
           var sx = xScale(sliderX * 100);
-          g.appendChild(el('line', {
+          sliderGroup.appendChild(el('line', {
             x1: sx, y1: margin.top, x2: sx, y2: margin.top + H,
             class: 'dose-slider-line', id: 'dose-slider-vline'
           }));
@@ -4315,17 +4344,17 @@
           var accVal = interpolate(pts, sliderX * 100, 1);
           var fltVal = interpolate(pts, sliderX * 100, 2);
 
-          g.appendChild(el('circle', {
+          sliderGroup.appendChild(el('circle', {
             cx: sx, cy: yScale(accVal), r: 5,
             fill: 'var(--color-system2)', stroke: 'var(--bg-dark)', 'stroke-width': 2
           }));
-          g.appendChild(el('circle', {
+          sliderGroup.appendChild(el('circle', {
             cx: sx, cy: yScale(fltVal), r: 5,
             fill: 'var(--color-ai-faulty)', stroke: 'var(--bg-dark)', 'stroke-width': 2
           }));
 
           // Gap line between intersection dots
-          g.appendChild(el('line', {
+          sliderGroup.appendChild(el('line', {
             x1: sx, y1: yScale(accVal), x2: sx, y2: yScale(fltVal),
             stroke: 'var(--color-system1)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2',
             opacity: 0.7
@@ -4333,24 +4362,17 @@
 
           // Gap label
           var gapMid = (yScale(accVal) + yScale(fltVal)) / 2;
-          g.appendChild(el('text', {
+          sliderGroup.appendChild(el('text', {
             x: sx + 10, y: gapMid + 4, 'text-anchor': 'start',
             fill: 'var(--color-system1)', 'font-size': '10', 'font-weight': '600',
             'font-family': 'var(--font-body)'
           }, (accVal - fltVal).toFixed(0) + 'pp'));
 
           // Slider handle (bottom)
-          g.appendChild(el('circle', {
+          sliderGroup.appendChild(el('circle', {
             cx: sx, cy: margin.top + H + 2, r: 7,
             class: 'dose-slider-handle', id: 'dose-handle'
           }));
-
-          // Condition label
-          g.appendChild(el('text', {
-            x: margin.left + W / 2, y: 16, 'text-anchor': 'middle',
-            fill: 'var(--text-secondary)', 'font-size': '12', 'font-weight': '500',
-            'font-family': 'var(--font-body)'
-          }, data.label));
 
           updateReadout();
         }
@@ -4386,7 +4408,7 @@
           if (e.target.id === 'dose-handle' || e.target.closest('#dose-chart-area')) {
             dragging = true;
             sliderX = getSliderPos(e);
-            draw();
+            updateSlider();
             e.preventDefault();
             // Attach move/up listeners only during drag
             document.addEventListener('mousemove', onPointerMove);
@@ -4399,7 +4421,7 @@
         function onPointerMove(e) {
           if (!dragging) return;
           sliderX = getSliderPos(e);
-          draw();
+          updateSlider();
           e.preventDefault();
         }
 
@@ -4423,11 +4445,11 @@
           btns.forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-condition') === condition);
           });
-          draw();
+          drawStatic();
         }
 
-        // Initial draw
-        draw();
+        // Initial render
+        drawStatic();
 
         return { toggle: toggle };
       })();
