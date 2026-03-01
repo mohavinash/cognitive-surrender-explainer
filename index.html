@@ -2068,15 +2068,15 @@
             mirroring the study&rsquo;s design.
           </p>
           <div style="display:flex; gap:var(--space-md); justify-content:center; flex-wrap:wrap;">
-            <button class="crt-btn crt-btn--primary" onclick="CRT.startExperiment()">I&rsquo;m in &mdash; let me try</button>
-            <button class="crt-btn crt-btn--ghost" onclick="CRT.skipExperiment()">Skip to the findings</button>
+            <button class="crt-btn crt-btn--primary" data-action="start">I&rsquo;m in &mdash; let me try</button>
+            <button class="crt-btn crt-btn--ghost" data-action="skip">Skip to the findings</button>
           </div>
         </div>
 
         <!-- Skipped message (hidden by default) -->
         <div class="crt-skipped" id="crt-skipped" style="display:none;">
           <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 var(--space-md) 0;">You skipped the experiment. Scroll down to explore the findings.</p>
-          <button class="crt-btn--ghost-accent" onclick="CRT.undoSkip()">Actually, let me try it</button>
+          <button class="crt-btn--ghost-accent" data-action="undo-skip">Actually, let me try it</button>
         </div>
 
         <div class="crt-demo reveal reveal-delay-1" id="crt-demo" style="display:none;">
@@ -2092,8 +2092,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-1" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-1" onclick="CRT.askAI(1)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-1" onclick="CRT.submit(1)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-1" data-action="ask-ai" data-qid="1">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-1" data-action="submit" data-qid="1">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-1">
               <div class="ai-label">AI Assistant</div>
@@ -2110,8 +2110,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-2" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-2" onclick="CRT.askAI(2)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-2" onclick="CRT.submit(2)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-2" data-action="ask-ai" data-qid="2">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-2" data-action="submit" data-qid="2">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-2">
               <div class="ai-label">AI Assistant</div>
@@ -2128,8 +2128,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-3" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-3" onclick="CRT.askAI(3)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-3" onclick="CRT.submit(3)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-3" data-action="ask-ai" data-qid="3">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-3" data-action="submit" data-qid="3">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-3">
               <div class="ai-label">AI Assistant</div>
@@ -2146,8 +2146,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-4" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-4" onclick="CRT.askAI(4)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-4" onclick="CRT.submit(4)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-4" data-action="ask-ai" data-qid="4">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-4" data-action="submit" data-qid="4">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-4">
               <div class="ai-label">AI Assistant</div>
@@ -2164,8 +2164,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-5" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-5" onclick="CRT.askAI(5)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-5" onclick="CRT.submit(5)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-5" data-action="ask-ai" data-qid="5">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-5" data-action="submit" data-qid="5">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-5">
               <div class="ai-label">AI Assistant</div>
@@ -2182,8 +2182,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-6" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-6" onclick="CRT.askAI(6)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-6" onclick="CRT.submit(6)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-6" data-action="ask-ai" data-qid="6">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-6" data-action="submit" data-qid="6">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-6">
               <div class="ai-label">AI Assistant</div>
@@ -2200,8 +2200,8 @@
             </div>
             <div class="crt-input-row">
               <input type="text" class="crt-input" id="crt-input-7" placeholder="Your answer..." autocomplete="off" maxlength="50">
-              <button class="crt-ask-ai-btn" id="crt-ai-btn-7" onclick="CRT.askAI(7)">Ask AI</button>
-              <button class="crt-submit-btn" id="crt-submit-7" onclick="CRT.submit(7)">Submit</button>
+              <button class="crt-ask-ai-btn" id="crt-ai-btn-7" data-action="ask-ai" data-qid="7">Ask AI</button>
+              <button class="crt-submit-btn" id="crt-submit-7" data-action="submit" data-qid="7">Submit</button>
             </div>
             <div class="crt-ai-bubble" id="crt-ai-7">
               <div class="ai-label">AI Assistant</div>
@@ -2318,21 +2318,21 @@
             </defs>
 
             <!-- System 1 Node (in vivo) -->
-            <g class="tri-node" id="tri-s1" data-system="s1" onclick="TriSystem.selectNode('s1')">
+            <g class="tri-node" id="tri-s1" data-system="s1">
               <circle cx="230" cy="110" r="42" fill="var(--bg-primary)" stroke="var(--color-system1)" stroke-width="2" />
               <text x="230" y="105" class="tri-node-label" fill="var(--color-system1)">System 1</text>
               <text x="230" y="122" class="tri-node-sublabel">Fast &bull; Intuitive</text>
             </g>
 
             <!-- System 2 Node (in vivo) -->
-            <g class="tri-node" id="tri-s2" data-system="s2" onclick="TriSystem.selectNode('s2')">
+            <g class="tri-node" id="tri-s2" data-system="s2">
               <circle cx="450" cy="110" r="42" fill="var(--bg-primary)" stroke="var(--color-deliberation)" stroke-width="2" />
               <text x="450" y="105" class="tri-node-label" fill="var(--color-deliberation)">System 2</text>
               <text x="450" y="122" class="tri-node-sublabel">Slow &bull; Deliberate</text>
             </g>
 
             <!-- System 3 Node (in silico - below boundary) -->
-            <g class="tri-node" id="tri-s3" data-system="s3" onclick="TriSystem.selectNode('s3')">
+            <g class="tri-node" id="tri-s3" data-system="s3">
               <circle cx="340" cy="310" r="48" fill="var(--bg-primary)" stroke="var(--color-system2)" stroke-width="2" />
               <text x="340" y="303" class="tri-node-label" fill="var(--color-system2)">System 3</text>
               <text x="340" y="320" class="tri-node-sublabel">AI &bull; External</text>
@@ -2346,27 +2346,27 @@
           <p style="font-size: 0.9rem; margin-bottom: var(--space-md);">Click a route to see how information flows through the three systems.</p>
 
           <div class="route-cards" id="route-cards">
-            <div class="route-card" data-route="intuition" onclick="TriSystem.selectRoute('intuition')">
+            <div class="route-card" data-route="intuition">
               <div class="route-name" style="color: var(--color-system1);">Intuition</div>
               <div class="route-formula">Stimulus &rarr; S1 &rarr; Response</div>
             </div>
-            <div class="route-card" data-route="deliberation" onclick="TriSystem.selectRoute('deliberation')">
+            <div class="route-card" data-route="deliberation">
               <div class="route-name" style="color: var(--color-deliberation);">Deliberation</div>
               <div class="route-formula">Stimulus &rarr; S1 &rarr; S2 &rarr; Response</div>
             </div>
-            <div class="route-card" data-route="offloading" onclick="TriSystem.selectRoute('offloading')">
+            <div class="route-card" data-route="offloading">
               <div class="route-name" style="color: var(--color-system2);">Offloading</div>
               <div class="route-formula">S1 &rarr; S3 &rarr; S2 &rarr; Response</div>
             </div>
-            <div class="route-card" data-route="surrender" onclick="TriSystem.selectRoute('surrender')">
+            <div class="route-card" data-route="surrender">
               <div class="route-name" style="color: var(--color-ai-faulty);">Surrender</div>
               <div class="route-formula">S1 (brief) &rarr; S3 &rarr; Response</div>
             </div>
-            <div class="route-card" data-route="autopilot" onclick="TriSystem.selectRoute('autopilot')">
+            <div class="route-card" data-route="autopilot">
               <div class="route-name" style="color: var(--text-muted);">Autopilot</div>
               <div class="route-formula">Stimulus &rarr; S3 &rarr; Response</div>
             </div>
-            <div class="route-card" data-route="recursive" onclick="TriSystem.selectRoute('recursive')">
+            <div class="route-card" data-route="recursive">
               <div class="route-name" style="color: var(--color-override);">Recursive</div>
               <div class="route-formula">S3 &rarr; S1 &harr; S2 &rarr; Response</div>
             </div>
@@ -2379,12 +2379,12 @@
         </div>
 
 <div id="km-cognitiveRoutes" class="know-more reveal">
-  <button class="know-more-trigger" onclick="KnowMore.open('cognitiveRoutes')">Know more <span class="km-arrow">+</span></button>
+  <button class="know-more-trigger" data-km="cognitiveRoutes">Know more <span class="km-arrow">+</span></button>
   <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
     <div class="know-more-tabs">
-    <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('cognitiveRoutes','simple')">Plain English</button>
-    <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('cognitiveRoutes','technical')">Technical</button>
-    <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('cognitiveRoutes','paper')">From the Paper</button>
+    <button class="know-more-tab" data-km="cognitiveRoutes" data-tier="simple">Plain English</button>
+    <button class="know-more-tab" data-km="cognitiveRoutes" data-tier="technical">Technical</button>
+    <button class="know-more-tab" data-km="cognitiveRoutes" data-tier="paper">From the Paper</button>
   </div>
   <div id="km-cognitiveRoutes-simple" class="know-more-panel">
     <div class="know-more-panel-inner">
@@ -2449,12 +2449,12 @@
         </div>
 
         <div id="km-trisystem" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('trisystem')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="trisystem">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('trisystem','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('trisystem','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('trisystem','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="trisystem" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="trisystem" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="trisystem" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-trisystem-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2483,12 +2483,12 @@
         </div>
 
         <div id="km-surrender" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('surrender')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="surrender">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('surrender','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('surrender','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('surrender','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="surrender" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="surrender" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="surrender" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-surrender-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2541,12 +2541,12 @@
         </div>
 
         <div id="km-followrate" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('followrate')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="followrate">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('followrate','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('followrate','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('followrate','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="followrate" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="followrate" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="followrate" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-followrate-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2575,12 +2575,12 @@
         </div>
 
         <div id="km-accuracy" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('accuracy')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="accuracy">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('accuracy','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('accuracy','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('accuracy','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="accuracy" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="accuracy" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="accuracy" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-accuracy-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2631,12 +2631,12 @@
         </div>
 
 <div id="km-confidence" class="know-more reveal">
-  <button class="know-more-trigger" onclick="KnowMore.open('confidence')">Know more <span class="km-arrow">+</span></button>
+  <button class="know-more-trigger" data-km="confidence">Know more <span class="km-arrow">+</span></button>
   <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
     <div class="know-more-tabs">
-    <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('confidence','simple')">Plain English</button>
-    <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('confidence','technical')">Technical</button>
-    <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('confidence','paper')">From the Paper</button>
+    <button class="know-more-tab" data-km="confidence" data-tier="simple">Plain English</button>
+    <button class="know-more-tab" data-km="confidence" data-tier="technical">Technical</button>
+    <button class="know-more-tab" data-km="confidence" data-tier="paper">From the Paper</button>
   </div>
   <div id="km-confidence-simple" class="know-more-panel">
     <div class="know-more-panel-inner">
@@ -2694,12 +2694,12 @@
         </div>
 
         <div id="km-individual" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('individual')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="individual">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('individual','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('individual','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('individual','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="individual" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="individual" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="individual" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-individual-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2791,12 +2791,12 @@
         </div>
 
         <div id="km-timepressure" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('timepressure')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="timepressure">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('timepressure','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('timepressure','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('timepressure','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="timepressure" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="timepressure" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="timepressure" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-timepressure-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2910,12 +2910,12 @@
         </div>
 
         <div id="km-incentives" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('incentives')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="incentives">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('incentives','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('incentives','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('incentives','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="incentives" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="incentives" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="incentives" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-incentives-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -2998,12 +2998,12 @@
         </div>
 
         <div id="km-synthesis" class="know-more reveal">
-          <button class="know-more-trigger" onclick="KnowMore.open('synthesis')">Know more <span class="km-arrow">+</span></button>
+          <button class="know-more-trigger" data-km="synthesis">Know more <span class="km-arrow">+</span></button>
           <div class="know-more-body"><div class="know-more-body-inner"><div class="know-more-card">
             <div class="know-more-tabs">
-            <button class="know-more-tab" data-tier="simple" onclick="KnowMore.toggle('synthesis','simple')">Plain English</button>
-            <button class="know-more-tab" data-tier="technical" onclick="KnowMore.toggle('synthesis','technical')">Technical</button>
-            <button class="know-more-tab" data-tier="paper" onclick="KnowMore.toggle('synthesis','paper')">From the Paper</button>
+            <button class="know-more-tab" data-km="synthesis" data-tier="simple">Plain English</button>
+            <button class="know-more-tab" data-km="synthesis" data-tier="technical">Technical</button>
+            <button class="know-more-tab" data-km="synthesis" data-tier="paper">From the Paper</button>
           </div>
           <div id="km-synthesis-simple" class="know-more-panel">
             <div class="know-more-panel-inner">
@@ -3438,6 +3438,20 @@
         }
       };
 
+      // Delegated listener for all Know More triggers and tabs
+      document.addEventListener('click', function (e) {
+        var trigger = e.target.closest('.know-more-trigger[data-km]');
+        if (trigger) {
+          KnowMore.open(trigger.dataset.km);
+          return;
+        }
+        var tab = e.target.closest('.know-more-tab[data-km]');
+        if (tab) {
+          KnowMore.toggle(tab.dataset.km, tab.dataset.tier);
+          return;
+        }
+      });
+
 
       /* ---------------------------------------------------------
          SMOOTH SCROLL FOR ANCHOR LINKS
@@ -3718,6 +3732,21 @@
           input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') CRT.submit(qid);
           });
+        }
+      });
+
+      // Delegated listener for all CRT buttons
+      document.getElementById('experiment').addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.dataset.action;
+        var qid = btn.dataset.qid ? Number(btn.dataset.qid) : undefined;
+        switch (action) {
+          case 'start':    CRT.startExperiment(); break;
+          case 'skip':     CRT.skipExperiment();  break;
+          case 'undo-skip': CRT.undoSkip();       break;
+          case 'ask-ai':   CRT.askAI(qid);       break;
+          case 'submit':   CRT.submit(qid);      break;
         }
       });
 
@@ -4600,6 +4629,20 @@
 
         return { selectRoute: selectRoute, selectNode: selectNode };
       })();
+
+      // Delegated listener for TriSystem route cards and nodes
+      document.addEventListener('click', function (e) {
+        var routeCard = e.target.closest('.route-card[data-route]');
+        if (routeCard) {
+          TriSystem.selectRoute(routeCard.dataset.route);
+          return;
+        }
+        var triNode = e.target.closest('.tri-node[data-system]');
+        if (triNode) {
+          TriSystem.selectNode(triNode.dataset.system);
+          return;
+        }
+      });
 
     })();
   </script>
