@@ -3338,12 +3338,12 @@
       /* ---------------------------------------------------------
          LOAD EXTERNAL DATA
          --------------------------------------------------------- */
-      var [chartDataResponse, crtDataResponse] = await Promise.all([
+      const [chartDataResponse, crtDataResponse] = await Promise.all([
         fetch('data/chart-data.json'),
         fetch('data/crt-data.json')
       ]);
-      var CHART_DATA = await chartDataResponse.json();
-      var CRT_DATA = await crtDataResponse.json();
+      const CHART_DATA = await chartDataResponse.json();
+      const CRT_DATA = await crtDataResponse.json();
 
       /* ---------------------------------------------------------
          READING PROGRESS BAR
@@ -3403,16 +3403,16 @@
       window.KnowMore = {
         // Toggle the entire Know More drawer open/closed (accordion: only one open at a time)
         open: function (id) {
-          var container = document.getElementById('km-' + id);
+          const container = document.getElementById('km-' + id);
           if (!container) return;
           // Close all other open panels first
-          var allOpen = document.querySelectorAll('.know-more.open');
-          for (var i = 0; i < allOpen.length; i++) {
+          const allOpen = document.querySelectorAll('.know-more.open');
+          for (let i = 0; i < allOpen.length; i++) {
             if (allOpen[i] !== container) {
               allOpen[i].classList.remove('open');
             }
           }
-          var isOpen = container.classList.toggle('open');
+          const isOpen = container.classList.toggle('open');
           // Auto-select "Plain English" when opening for the first time
           if (isOpen && !container.querySelector('.know-more-tab.active')) {
             this.toggle(id, 'simple');
@@ -3420,17 +3420,17 @@
         },
         // Switch between tiers within an open panel
         toggle: function (id, tier) {
-          var container = document.getElementById('km-' + id);
+          const container = document.getElementById('km-' + id);
           if (!container) return;
-          var tabs = container.querySelectorAll('.know-more-tab');
-          var panels = container.querySelectorAll('.know-more-panel');
-          var clickedTab = container.querySelector('[data-tier="' + tier + '"]');
-          var clickedPanel = document.getElementById('km-' + id + '-' + tier);
+          const tabs = container.querySelectorAll('.know-more-tab');
+          const panels = container.querySelectorAll('.know-more-panel');
+          const clickedTab = container.querySelector('[data-tier="' + tier + '"]');
+          const clickedPanel = document.getElementById('km-' + id + '-' + tier);
           if (!clickedTab || !clickedPanel) return;
 
           // Deactivate all
-          for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
-          for (var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+          for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+          for (let i = 0; i < panels.length; i++) panels[i].classList.remove('active');
 
           // Activate selected
           clickedTab.classList.add('active');
@@ -3440,12 +3440,12 @@
 
       // Delegated listener for all Know More triggers and tabs
       document.addEventListener('click', function (e) {
-        var trigger = e.target.closest('.know-more-trigger[data-km]');
+        const trigger = e.target.closest('.know-more-trigger[data-km]');
         if (trigger) {
           KnowMore.open(trigger.dataset.km);
           return;
         }
-        var tab = e.target.closest('.know-more-tab[data-km]');
+        const tab = e.target.closest('.know-more-tab[data-km]');
         if (tab) {
           KnowMore.toggle(tab.dataset.km, tab.dataset.tier);
           return;
@@ -3476,17 +3476,17 @@
          MINI-CRT INTERACTIVE DEMO
          --------------------------------------------------------- */
       window.CRT = (function () {
-        var questions = CRT_DATA.questions;
+        const questions = CRT_DATA.questions;
 
-        var state = { answered: 0, results: [], aiAsked: {} };
-        var condition = null; // 'brain-only' or 'ai-assisted'
-        var isBrainOnly = false;
+        const state = { answered: 0, results: [], aiAsked: {} };
+        let condition = null; // 'brain-only' or 'ai-assisted'
+        let isBrainOnly = false;
 
         // Cache gate DOM elements (queried once, used by multiple functions)
-        var gateEl = document.getElementById('crt-gate');
-        var skippedEl = document.getElementById('crt-skipped');
-        var demoEl = document.getElementById('crt-demo');
-        var bannerEl = document.getElementById('crt-condition-banner');
+        const gateEl = document.getElementById('crt-gate');
+        const skippedEl = document.getElementById('crt-skipped');
+        const demoEl = document.getElementById('crt-demo');
+        const bannerEl = document.getElementById('crt-condition-banner');
 
         function startExperiment() {
           // Random assignment: ~34% brain-only, ~66% ai-assisted (Study 1 ratio)
@@ -3502,8 +3502,8 @@
             bannerEl.className = 'crt-condition-banner crt-condition-banner--brain-only';
             bannerEl.innerHTML = CRT_DATA.conditionBanners.brainOnly;
             // Hide all Ask AI buttons
-            var aiButtons = document.querySelectorAll('.crt-ask-ai-btn');
-            for (var i = 0; i < aiButtons.length; i++) aiButtons[i].style.display = 'none';
+            const aiButtons = document.querySelectorAll('.crt-ask-ai-btn');
+            for (let i = 0; i < aiButtons.length; i++) aiButtons[i].style.display = 'none';
           } else {
             bannerEl.className = 'crt-condition-banner crt-condition-banner--ai-assisted';
             bannerEl.innerHTML = CRT_DATA.conditionBanners.aiAssisted;
@@ -3525,26 +3525,26 @@
         }
 
         function isCorrect(qid, answer) {
-          var norm = normalize(answer);
+          const norm = normalize(answer);
           return questions[qid].correctAliases.some(function (a) { return normalize(a) === norm; });
         }
 
         function askAI(qid) {
           document.getElementById('crt-ai-' + qid).classList.add('visible');
           state.aiAsked[qid] = true;
-          var btn = document.getElementById('crt-ai-btn-' + qid);
+          const btn = document.getElementById('crt-ai-btn-' + qid);
           btn.disabled = true;
           btn.textContent = 'AI Asked';
         }
 
         function submit(qid) {
-          var input = document.getElementById('crt-input-' + qid);
-          var answer = input.value.trim();
+          const input = document.getElementById('crt-input-' + qid);
+          const answer = input.value.trim();
           if (!answer) return;
 
-          var q = questions[qid];
-          var correct = isCorrect(qid, answer);
-          var followedAI = state.aiAsked[qid] && normalize(answer) === normalize(q.aiSuggestion);
+          const q = questions[qid];
+          const correct = isCorrect(qid, answer);
+          const followedAI = state.aiAsked[qid] && normalize(answer) === normalize(q.aiSuggestion);
 
           // Disable inputs
           input.disabled = true;
@@ -3552,8 +3552,8 @@
           document.getElementById('crt-ai-btn-' + qid).disabled = true;
 
           // Show feedback
-          var qEl = document.getElementById('crt-q' + qid);
-          var feedback = document.getElementById('crt-feedback-' + qid);
+          const qEl = document.getElementById('crt-q' + qid);
+          const feedback = document.getElementById('crt-feedback-' + qid);
           qEl.classList.add(correct ? 'correct' : 'incorrect');
           feedback.classList.add('visible');
 
@@ -3562,7 +3562,7 @@
             feedback.innerHTML = '<strong>Correct!</strong> ' + q.explanation;
           } else {
             feedback.classList.add('incorrect-feedback');
-            var extra = (state.aiAsked[qid] && !q.aiCorrect && followedAI)
+            const extra = (state.aiAsked[qid] && !q.aiCorrect && followedAI)
               ? ' <em>You followed the AI\'s faulty advice&mdash;this is cognitive surrender.</em>'
               : '';
             feedback.innerHTML = '<strong>Incorrect.</strong> The answer is <strong>' + q.correct + '</strong>. ' + q.explanation + extra;
@@ -3581,13 +3581,13 @@
         }
 
         function showResults() {
-          var panel = document.getElementById('crt-results');
-          var list = document.getElementById('crt-results-list');
+          const panel = document.getElementById('crt-results');
+          const list = document.getElementById('crt-results-list');
           list.innerHTML = '';
 
           // Calculate stats in a single pass
-          var totalCorrect = 0, aiUsedCount = 0, followedCount = 0, overrodeCount = 0;
-          var followedFaultyCount = 0, faultyAiAsked = 0;
+          let totalCorrect = 0, aiUsedCount = 0, followedCount = 0, overrodeCount = 0;
+          let followedFaultyCount = 0, faultyAiAsked = 0;
 
           state.results.forEach(function (r) {
             if (r.correct) totalCorrect++;
@@ -3602,11 +3602,11 @@
             }
           });
 
-          var pct = Math.round(totalCorrect / 7 * 100);
+          const pct = Math.round(totalCorrect / 7 * 100);
 
           // Build result items
           state.results.forEach(function (r) {
-            var mapping;
+            let mapping;
             if (r.usedAI && r.followedAI && r.aiWasCorrect) {
               mapping = CRT_DATA.resultTexts.followedCorrectAI;
             } else if (r.usedAI && r.followedAI && !r.aiWasCorrect) {
@@ -3621,14 +3621,14 @@
                 : CRT_DATA.resultTexts.noAIIndependent;
             }
 
-            var aiTag = '';
+            let aiTag = '';
             if (r.usedAI) {
               aiTag = r.aiWasCorrect
                 ? ' <span style="font-size:0.7rem;color:var(--color-system2);font-weight:600;">AI-ACCURATE</span>'
                 : ' <span style="font-size:0.7rem;color:var(--color-ai-faulty);font-weight:600;">AI-FAULTY</span>';
             }
 
-            var item = document.createElement('div');
+            const item = document.createElement('div');
             item.className = 'crt-result-item';
             item.innerHTML =
               '<div class="crt-result-icon ' + (r.correct ? 'correct-icon' : 'incorrect-icon') + '">' +
@@ -3642,10 +3642,10 @@
           });
 
           // Populate stats
-          var statCorrect = document.getElementById('crt-stat-correct');
-          var statAiUsed = document.getElementById('crt-stat-ai-used');
-          var statFollowed = document.getElementById('crt-stat-followed');
-          var statOverrode = document.getElementById('crt-stat-overrode');
+          const statCorrect = document.getElementById('crt-stat-correct');
+          const statAiUsed = document.getElementById('crt-stat-ai-used');
+          const statFollowed = document.getElementById('crt-stat-followed');
+          const statOverrode = document.getElementById('crt-stat-overrode');
 
           statCorrect.textContent = totalCorrect + '/7';
           if (isBrainOnly) {
@@ -3659,9 +3659,9 @@
           }
 
           // Thinking profile — shared setup, then condition-specific content
-          var profileLabel = document.getElementById('crt-profile-label');
-          var profileTitle = document.getElementById('crt-profile-title');
-          var profileDesc = document.getElementById('crt-profile-desc');
+          const profileLabel = document.getElementById('crt-profile-label');
+          const profileTitle = document.getElementById('crt-profile-title');
+          const profileDesc = document.getElementById('crt-profile-desc');
           profileLabel.textContent = 'YOUR THINKING PROFILE';
 
           // Template helper: replaces {key} placeholders with values from a vars object
@@ -3669,27 +3669,27 @@
             return str.replace(/\{(\w+)\}/g, function (_, k) { return vars[k] !== undefined ? vars[k] : ''; });
           }
 
-          var tplVars = { totalCorrect: totalCorrect, pct: pct, aiUsedCount: aiUsedCount };
+          const tplVars = { totalCorrect: totalCorrect, pct: pct, aiUsedCount: aiUsedCount };
 
-          var profileColor, profileName, profileText;
+          let profileColor, profileName, profileText;
           if (isBrainOnly) {
-            var p = CRT_DATA.thinkingProfiles.brainOnly;
+            const p = CRT_DATA.thinkingProfiles.brainOnly;
             profileColor = p.color;
             profileName = p.name;
             profileText = tpl(p.text, tplVars);
           } else if (aiUsedCount <= 1) {
-            var p = CRT_DATA.thinkingProfiles.independent;
+            const p = CRT_DATA.thinkingProfiles.independent;
             profileColor = p.color;
             profileName = p.name;
             profileText = (aiUsedCount === 0 ? p.prefixNeverUsed : p.prefixUsedOnce) +
               tpl(p.text, tplVars);
           } else {
-            var p = CRT_DATA.thinkingProfiles.aiUser;
+            const p = CRT_DATA.thinkingProfiles.aiUser;
             profileColor = p.color;
             profileName = p.name;
-            var surrenderRate = faultyAiAsked > 0 ? Math.round(followedFaultyCount / faultyAiAsked * 100) : 0;
-            var surrenderVars = { followedFaultyCount: followedFaultyCount, faultyAiAsked: faultyAiAsked, surrenderRate: surrenderRate };
-            var surrenderNote = '';
+            const surrenderRate = faultyAiAsked > 0 ? Math.round(followedFaultyCount / faultyAiAsked * 100) : 0;
+            const surrenderVars = { followedFaultyCount: followedFaultyCount, faultyAiAsked: faultyAiAsked, surrenderRate: surrenderRate };
+            let surrenderNote = '';
             if (faultyAiAsked > 0 && followedFaultyCount > 0) {
               surrenderNote = tpl(
                 surrenderRate >= 70 ? p.surrenderHigh :
@@ -3711,7 +3711,7 @@
           profileDesc.innerHTML = profileText;
 
           // Bridge text
-          var bridgeText = document.getElementById('crt-bridge-text');
+          const bridgeText = document.getElementById('crt-bridge-text');
           bridgeText.innerHTML = isBrainOnly
             ? CRT_DATA.bridgeTexts.brainOnly
             : CRT_DATA.bridgeTexts.aiAssisted;
@@ -3727,7 +3727,7 @@
 
       // Allow Enter key to submit CRT answers
       [1, 2, 3, 4, 5, 6, 7].forEach(function (qid) {
-        var input = document.getElementById('crt-input-' + qid);
+        const input = document.getElementById('crt-input-' + qid);
         if (input) {
           input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') CRT.submit(qid);
@@ -3737,10 +3737,10 @@
 
       // Delegated listener for all CRT buttons
       document.getElementById('experiment').addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-action]');
+        const btn = e.target.closest('[data-action]');
         if (!btn) return;
-        var action = btn.dataset.action;
-        var qid = btn.dataset.qid ? Number(btn.dataset.qid) : undefined;
+        const action = btn.dataset.action;
+        const qid = btn.dataset.qid ? Number(btn.dataset.qid) : undefined;
         switch (action) {
           case 'start':    CRT.startExperiment(); break;
           case 'skip':     CRT.skipExperiment();  break;
@@ -3757,11 +3757,11 @@
       /* ---------------------------------------------------------
          SVG BAR CHART ENGINE
          --------------------------------------------------------- */
-      var ChartEngine = {
+      const ChartEngine = {
         NS: 'http://www.w3.org/2000/svg',
 
         el: function (tag, attrs, text) {
-          var e = document.createElementNS(this.NS, tag);
+          const e = document.createElementNS(this.NS, tag);
           if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
           if (text !== undefined) e.textContent = text;
           return e;
@@ -3772,23 +3772,23 @@
          * Never clips labels, brackets, or annotations.
          */
         drawBarChart: function (svgId, config) {
-          var svg = document.getElementById(svgId);
+          const svg = document.getElementById(svgId);
           if (!svg) return;
           svg.innerHTML = '';
 
-          var groups = config.groups || [];
-          var maxVal = config.maxY || 100;
-          var yUnit = config.yUnit !== undefined ? config.yUnit : '%';
+          const groups = config.groups || [];
+          const maxVal = config.maxY || 100;
+          const yUnit = config.yUnit !== undefined ? config.yUnit : '%';
 
           // --- Analyze content to compute margins ---
-          var hasBrackets = config.brackets && config.brackets.length > 0;
-          var maxBracketRow = 0;
+          const hasBrackets = config.brackets && config.brackets.length > 0;
+          let maxBracketRow = 0;
           if (hasBrackets) {
             config.brackets.forEach(function (b) {
               maxBracketRow = Math.max(maxBracketRow, b.row || 0);
             });
           }
-          var hasSublabels = false, hasBarLabels = false, hasAnnotations = false;
+          let hasSublabels = false, hasBarLabels = false, hasAnnotations = false;
           groups.forEach(function (g) {
             if (g.sublabel) hasSublabels = true;
             if (g.annotation) hasAnnotations = true;
@@ -3796,38 +3796,38 @@
           });
 
           // Top margin: title (20) + subtitle (16) + bracket rows (22 each) + padding
-          var topM = 8;
+          let topM = 8;
           if (config.title) topM += 20;
           if (config.subtitle) topM += 16;
           if (hasBrackets) topM += (maxBracketRow + 1) * 22 + 12;
           else topM += 6;
 
           // Bottom margin: group labels (22) + sublabels (16) + bar labels (16) + annotations (14) + padding
-          var bottomM = 28; // base: group labels at h+20, plus 8 padding
+          let bottomM = 28; // base: group labels at h+20, plus 8 padding
           if (hasSublabels) bottomM += 16;
           if (hasBarLabels) bottomM += 16;
           if (hasAnnotations) bottomM += 14;
 
           // Left margin: y-axis tick labels (35) + y-axis title (15)
-          var leftM = config.yLabel ? 55 : 40;
-          var rightM = 15;
+          const leftM = config.yLabel ? 55 : 40;
+          const rightM = 15;
 
           // Chart area dimensions
-          var vbWidth = svg.viewBox.baseVal.width || 600;
-          var chartH = config.chartHeight || 180;
-          var w = vbWidth - leftM - rightM;
-          var h = chartH;
+          const vbWidth = svg.viewBox.baseVal.width || 600;
+          const chartH = config.chartHeight || 180;
+          const w = vbWidth - leftM - rightM;
+          const h = chartH;
 
           // Set viewBox to exactly fit all content
-          var totalH = topM + chartH + bottomM;
+          const totalH = topM + chartH + bottomM;
           svg.setAttribute('viewBox', '0 0 ' + vbWidth + ' ' + totalH);
 
           // --- Main chart group ---
-          var g = this.el('g', { transform: 'translate(' + leftM + ',' + topM + ')' });
+          const g = this.el('g', { transform: 'translate(' + leftM + ',' + topM + ')' });
           svg.appendChild(g);
 
           // Title + subtitle (positioned in SVG coordinates, above chart group)
-          var titleY = 18;
+          const titleY = 18;
           if (config.title) {
             svg.appendChild(this.el('text', {
               x: vbWidth / 2, y: titleY, 'text-anchor': 'middle',
@@ -3842,9 +3842,9 @@
           }
 
           // Grid lines + Y-axis tick labels
-          var gridSteps = config.gridSteps || [0, 20, 40, 60, 80, 100];
+          const gridSteps = config.gridSteps || [0, 20, 40, 60, 80, 100];
           gridSteps.forEach(function (val) {
-            var y = h - (val / maxVal) * h;
+            const y = h - (val / maxVal) * h;
             g.appendChild(ChartEngine.el('line', {
               x1: 0, y1: y, x2: w, y2: y, class: 'chart-gridline'
             }));
@@ -3863,23 +3863,23 @@
           }
 
           // --- Groups and bars ---
-          var groupCount = groups.length;
-          var groupWidth = w / groupCount;
-          var barPad = config.barPad || 8;
+          const groupCount = groups.length;
+          const groupWidth = w / groupCount;
+          const barPad = config.barPad || 8;
 
           // Stacking y-positions for bottom labels (each layer adds offset)
-          var yGroup = h + 18;                                        // group label
-          var ySublabel = yGroup + (hasSublabels ? 14 : 0);          // sublabel row
-          var yBarLabel = ySublabel + (hasBarLabels ? 14 : 0);       // per-bar label row
-          var yAnnotation = yBarLabel + (hasAnnotations ? 12 : 0);   // annotation row
+          const yGroup = h + 18;                                        // group label
+          const ySublabel = yGroup + (hasSublabels ? 14 : 0);          // sublabel row
+          const yBarLabel = ySublabel + (hasBarLabels ? 14 : 0);       // per-bar label row
+          const yAnnotation = yBarLabel + (hasAnnotations ? 12 : 0);   // annotation row
 
           groups.forEach(function (group, gi) {
-            var bars = group.bars;
-            var barCount = bars.length;
-            var totalBarSpace = groupWidth - barPad * 2;
-            var barWidth = Math.min(totalBarSpace / barCount - 4, 50);
-            var barStart = gi * groupWidth + (groupWidth - barCount * (barWidth + 4)) / 2;
-            var gx = gi * groupWidth + groupWidth / 2;
+            const bars = group.bars;
+            const barCount = bars.length;
+            const totalBarSpace = groupWidth - barPad * 2;
+            const barWidth = Math.min(totalBarSpace / barCount - 4, 50);
+            const barStart = gi * groupWidth + (groupWidth - barCount * (barWidth + 4)) / 2;
+            const gx = gi * groupWidth + groupWidth / 2;
 
             // Group label (always)
             g.appendChild(ChartEngine.el('text', {
@@ -3897,9 +3897,9 @@
             }
 
             bars.forEach(function (bar, bi) {
-              var bx = barStart + bi * (barWidth + 4);
-              var barH = (bar.value / maxVal) * h;
-              var by = h - barH;
+              const bx = barStart + bi * (barWidth + 4);
+              const barH = (bar.value / maxVal) * h;
+              const by = h - barH;
 
               // Bar rect
               g.appendChild(ChartEngine.el('rect', {
@@ -3915,9 +3915,9 @@
 
               // Error bar (SE)
               if (bar.se) {
-                var seTop = h - ((bar.value + bar.se) / maxVal) * h;
-                var seBot = h - ((bar.value - bar.se) / maxVal) * h;
-                var cx = bx + barWidth / 2;
+                const seTop = h - ((bar.value + bar.se) / maxVal) * h;
+                const seBot = h - ((bar.value - bar.se) / maxVal) * h;
+                const cx = bx + barWidth / 2;
                 g.appendChild(ChartEngine.el('line', { x1: cx, y1: seTop, x2: cx, y2: seBot, class: 'chart-error-bar' }));
                 g.appendChild(ChartEngine.el('line', { x1: cx - 4, y1: seTop, x2: cx + 4, y2: seTop, class: 'chart-error-bar' }));
                 g.appendChild(ChartEngine.el('line', { x1: cx - 4, y1: seBot, x2: cx + 4, y2: seBot, class: 'chart-error-bar' }));
@@ -3946,9 +3946,9 @@
           // Bracket annotations (above chart area)
           if (config.brackets) {
             config.brackets.forEach(function (b) {
-              var x1 = b.fromGroup * groupWidth + groupWidth / 2;
-              var x2 = b.toGroup * groupWidth + groupWidth / 2;
-              var yPos = -10 - (b.row || 0) * 22;
+              const x1 = b.fromGroup * groupWidth + groupWidth / 2;
+              const x2 = b.toGroup * groupWidth + groupWidth / 2;
+              const yPos = -10 - (b.row || 0) * 22;
               g.appendChild(ChartEngine.el('line', {
                 x1: x1, y1: yPos, x2: x2, y2: yPos,
                 stroke: 'var(--text-muted)', 'stroke-width': 1
@@ -3978,22 +3978,22 @@
          * Config: { value: 0.83, label: 'h = 0.83', thresholds: [{v:0.2,t:'small'}, ...] }
          */
         drawEffectMeter: function (containerId, config) {
-          var container = document.getElementById(containerId);
+          const container = document.getElementById(containerId);
           if (!container) return;
           container.innerHTML = '';
 
-          var val = config.value || 0;
-          var label = config.label || ('h = ' + val.toFixed(2));
-          var thresholds = config.thresholds || [
+          const val = config.value || 0;
+          const label = config.label || ('h = ' + val.toFixed(2));
+          const thresholds = config.thresholds || [
             { v: 0.2, t: 'small' }, { v: 0.5, t: 'med' }, { v: 0.8, t: 'large' }
           ];
 
           // Layout constants — generous sizing for readability
-          var w = 500, padL = 32, padR = 32;
-          var barY = 48, barH = 16, barW = w - padL - padR;
-          var totalH = 100;
+          const w = 500, padL = 32, padR = 32;
+          const barY = 48, barH = 16, barW = w - padL - padR;
+          const totalH = 100;
 
-          var svg = document.createElementNS(this.NS, 'svg');
+          const svg = document.createElementNS(this.NS, 'svg');
           svg.setAttribute('viewBox', '0 0 ' + w + ' ' + totalH);
           svg.setAttribute('xmlns', this.NS);
           svg.style.width = '100%';
@@ -4002,8 +4002,8 @@
           svg.style.margin = '0 auto';
 
           // Gradient definition
-          var defs = this.el('defs');
-          var grad = this.el('linearGradient', { id: containerId + '-grad', x1: '0', x2: '1', y1: '0', y2: '0' });
+          const defs = this.el('defs');
+          const grad = this.el('linearGradient', { id: containerId + '-grad', x1: '0', x2: '1', y1: '0', y2: '0' });
           grad.appendChild(this.el('stop', { offset: '0%', 'stop-color': '#3b82f6' }));
           grad.appendChild(this.el('stop', { offset: '100%', 'stop-color': '#ef4444' }));
           defs.appendChild(grad);
@@ -4016,7 +4016,7 @@
           }));
 
           // Fill bar (animated via CSS class)
-          var fillRect = this.el('rect', {
+          const fillRect = this.el('rect', {
             x: padL, y: barY, width: 0, height: barH,
             rx: 8, fill: 'url(#' + containerId + '-grad)',
             class: 'effect-meter-svg-fill'
@@ -4025,9 +4025,9 @@
           svg.appendChild(fillRect);
 
           // Threshold markers above bar
-          var me = this;
+          const me = this;
           thresholds.forEach(function (th) {
-            var mx = padL + th.v * barW;
+            const mx = padL + th.v * barW;
             // Tick line
             svg.appendChild(me.el('line', {
               x1: mx, x2: mx, y1: barY - 16, y2: barY - 4,
@@ -4069,7 +4069,7 @@
          STUDY 1 CHARTS
          --------------------------------------------------------- */
       (function initStudy1Charts() {
-        var s1 = CHART_DATA.study1;
+        const s1 = CHART_DATA.study1;
         ChartEngine.drawBarChart('chart-s1-accuracy', s1.accuracy);
         ChartEngine.drawBarChart('chart-s1-follow', s1.followOverride);
       })();
@@ -4079,11 +4079,11 @@
          STUDY 2 CHARTS + TOGGLE
          --------------------------------------------------------- */
       window.Study2 = (function () {
-        var data = CHART_DATA.study2;
-        var current = 'control';
+        const data = CHART_DATA.study2;
+        let current = 'control';
 
         function draw(condition) {
-          var d = data[condition];
+          const d = data[condition];
           ChartEngine.drawBarChart('chart-s2-accuracy', {
             title: d.title,
             subtitle: 'N = 485, categorized by AI usage pattern',
@@ -4095,7 +4095,7 @@
         function toggle(condition) {
           current = condition;
           // Update toggle buttons
-          var btns = document.querySelectorAll('#s2-toggle .toggle-btn');
+          const btns = document.querySelectorAll('#s2-toggle .toggle-btn');
           btns.forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-condition') === condition);
           });
@@ -4111,14 +4111,14 @@
          STUDY 3 CHARTS + TOGGLE
          --------------------------------------------------------- */
       window.Study3 = (function () {
-        var overrideData = CHART_DATA.study3.override;
-        var accuracyData = CHART_DATA.study3.accuracy;
-        var profileData = CHART_DATA.study3.profile;
+        const overrideData = CHART_DATA.study3.override;
+        const accuracyData = CHART_DATA.study3.accuracy;
+        const profileData = CHART_DATA.study3.profile;
 
-        var current = 'control';
+        let current = 'control';
 
         function draw(condition) {
-          var od = overrideData[condition];
+          const od = overrideData[condition];
           ChartEngine.drawBarChart('chart-s3-override', {
             title: od.title,
             subtitle: 'Chat-engaged trials, N = 450',
@@ -4126,7 +4126,7 @@
             groups: od.groups
           });
 
-          var ad = accuracyData[condition];
+          const ad = accuracyData[condition];
           ChartEngine.drawBarChart('chart-s3-accuracy', {
             title: ad.title,
             subtitle: 'All trial types, N = 450',
@@ -4135,7 +4135,7 @@
             brackets: ad.brackets
           });
 
-          var pd = profileData[condition];
+          const pd = profileData[condition];
           ChartEngine.drawBarChart('chart-s3-profiles', {
             title: pd.title,
             subtitle: 'N = 450, categorized by AI usage pattern',
@@ -4146,7 +4146,7 @@
 
         function toggle(condition) {
           current = condition;
-          var btns = document.querySelectorAll('#s3-toggle .toggle-btn');
+          const btns = document.querySelectorAll('#s3-toggle .toggle-btn');
           btns.forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-condition') === condition);
           });
@@ -4170,24 +4170,24 @@
          DOSE-RESPONSE CURVE EXPLORER (Figure 10)
          --------------------------------------------------------- */
       window.DoseResponse = (function () {
-        var NS = 'http://www.w3.org/2000/svg';
-        var svg = document.getElementById('dose-svg');
+        const NS = 'http://www.w3.org/2000/svg';
+        const svg = document.getElementById('dose-svg');
         if (!svg) return {};
 
         // Chart layout
-        var margin = { top: 30, right: 25, bottom: 45, left: 55 };
-        var vb = svg.viewBox.baseVal;
-        var W = vb.width - margin.left - margin.right;
-        var H = vb.height - margin.top - margin.bottom;
+        const margin = { top: 30, right: 25, bottom: 45, left: 55 };
+        const vb = svg.viewBox.baseVal;
+        const W = vb.width - margin.left - margin.right;
+        const H = vb.height - margin.top - margin.bottom;
 
         // Data loaded from chart-data.json
-        var conditions = CHART_DATA.doseResponse;
+        const conditions = CHART_DATA.doseResponse;
 
-        var current = 'study1';
-        var sliderX = 0.5;  // 0..1 normalized position
+        let current = 'study1';
+        let sliderX = 0.5;  // 0..1 normalized position
 
         function el(tag, attrs, text) {
-          var e = document.createElementNS(NS, tag);
+          const e = document.createElementNS(NS, tag);
           if (attrs) Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
           if (text !== undefined) e.textContent = text;
           return e;
@@ -4201,9 +4201,9 @@
         function interpolate(points, usage, colIdx) {
           if (usage <= points[0][0]) return points[0][colIdx];
           if (usage >= points[points.length - 1][0]) return points[points.length - 1][colIdx];
-          for (var i = 0; i < points.length - 1; i++) {
+          for (let i = 0; i < points.length - 1; i++) {
             if (usage >= points[i][0] && usage <= points[i + 1][0]) {
-              var t = (usage - points[i][0]) / (points[i + 1][0] - points[i][0]);
+              const t = (usage - points[i][0]) / (points[i + 1][0] - points[i][0]);
               return points[i][colIdx] + t * (points[i + 1][colIdx] - points[i][colIdx]);
             }
           }
@@ -4212,15 +4212,15 @@
 
         // Build smooth SVG path from points
         function buildPath(points, colIdx) {
-          var coords = points.map(function (p) {
+          const coords = points.map(function (p) {
             return { x: xScale(p[0]), y: yScale(p[colIdx]) };
           });
           if (coords.length < 2) return '';
-          var d = 'M ' + coords[0].x + ' ' + coords[0].y;
-          for (var i = 1; i < coords.length; i++) {
-            var prev = coords[i - 1];
-            var curr = coords[i];
-            var cpx = (prev.x + curr.x) / 2;
+          let d = 'M ' + coords[0].x + ' ' + coords[0].y;
+          for (let i = 1; i < coords.length; i++) {
+            const prev = coords[i - 1];
+            const curr = coords[i];
+            const cpx = (prev.x + curr.x) / 2;
             d += ' C ' + cpx + ' ' + prev.y + ' ' + cpx + ' ' + curr.y + ' ' + curr.x + ' ' + curr.y;
           }
           return d;
@@ -4228,16 +4228,16 @@
 
         // Build confidence band path (upper + lower bounds)
         function buildBand(points, colIdx, ci) {
-          var upper = points.map(function (p) {
+          const upper = points.map(function (p) {
             return { x: xScale(p[0]), y: yScale(Math.min(100, p[colIdx] + ci)) };
           });
-          var lower = points.map(function (p) {
+          const lower = points.map(function (p) {
             return { x: xScale(p[0]), y: yScale(Math.max(0, p[colIdx] - ci)) };
           }).reverse();
 
-          var all = upper.concat(lower);
-          var d = 'M ' + all[0].x + ' ' + all[0].y;
-          for (var i = 1; i < all.length; i++) {
+          const all = upper.concat(lower);
+          let d = 'M ' + all[0].x + ' ' + all[0].y;
+          for (let i = 1; i < all.length; i++) {
             d += ' L ' + all[i].x + ' ' + all[i].y;
           }
           d += ' Z';
@@ -4245,22 +4245,22 @@
         }
 
         // Persistent group for slider elements (rebuilt on each drag frame)
-        var sliderGroup = null;
+        let sliderGroup = null;
 
         // drawStatic: rebuilds all static SVG elements (grid, axes, bands, curves, dots, labels).
         // Called on initial render and when a condition toggle is clicked.
         function drawStatic() {
           svg.innerHTML = '';
-          var data = conditions[current];
-          var pts = data.points;
+          const data = conditions[current];
+          const pts = data.points;
 
           // Background group for static elements
-          var g = el('g');
+          const g = el('g');
           svg.appendChild(g);
 
           // Grid lines
           [0, 20, 40, 60, 80, 100].forEach(function (v) {
-            var y = yScale(v);
+            const y = yScale(v);
             g.appendChild(el('line', {
               x1: margin.left, y1: y, x2: margin.left + W, y2: y,
               stroke: 'rgba(148,163,184,0.08)', 'stroke-width': 1
@@ -4273,7 +4273,7 @@
 
           // X-axis grid & labels
           [0, 20, 40, 60, 80, 100].forEach(function (v) {
-            var x = xScale(v);
+            const x = xScale(v);
             g.appendChild(el('line', {
               x1: x, y1: margin.top, x2: x, y2: margin.top + H,
               stroke: 'rgba(148,163,184,0.06)', 'stroke-width': 1
@@ -4290,7 +4290,7 @@
             fill: 'var(--text-secondary)', 'font-size': '11', 'font-family': 'var(--font-body)'
           }, 'System 3 (AI) Usage'));
 
-          var yLabel = el('text', {
+          const yLabel = el('text', {
             x: 0, y: 0, 'text-anchor': 'middle',
             fill: 'var(--text-secondary)', 'font-size': '11', 'font-family': 'var(--font-body)',
             transform: 'translate(14,' + (margin.top + H / 2) + ') rotate(-90)'
@@ -4306,7 +4306,7 @@
           }));
 
           // Baseline horizontal line
-          var baseY = yScale(data.baseline);
+          const baseY = yScale(data.baseline);
           g.appendChild(el('line', {
             x1: margin.left, y1: baseY, x2: margin.left + W, y2: baseY,
             stroke: 'var(--color-system1)', 'stroke-width': 1, 'stroke-dasharray': '6 4',
@@ -4322,7 +4322,7 @@
           g.appendChild(el('path', { d: buildPath(pts, 2), class: 'dose-curve faulty' }));
 
           // Endpoint dots
-          var lastPt = pts[pts.length - 1];
+          const lastPt = pts[pts.length - 1];
           g.appendChild(el('circle', {
             cx: xScale(lastPt[0]), cy: yScale(lastPt[1]), r: 4,
             fill: 'var(--color-system2)'
@@ -4356,22 +4356,22 @@
         // updateSlider: rebuilds only the slider-related SVG elements (~6 elements).
         // Called on each drag frame (mousemove/touchmove) and after drawStatic().
         function updateSlider() {
-          var data = conditions[current];
-          var pts = data.points;
+          const data = conditions[current];
+          const pts = data.points;
 
           // Clear only the slider group
           sliderGroup.innerHTML = '';
 
           // Slider line
-          var sx = xScale(sliderX * 100);
+          const sx = xScale(sliderX * 100);
           sliderGroup.appendChild(el('line', {
             x1: sx, y1: margin.top, x2: sx, y2: margin.top + H,
             class: 'dose-slider-line', id: 'dose-slider-vline'
           }));
 
           // Intersection dots
-          var accVal = interpolate(pts, sliderX * 100, 1);
-          var fltVal = interpolate(pts, sliderX * 100, 2);
+          const accVal = interpolate(pts, sliderX * 100, 1);
+          const fltVal = interpolate(pts, sliderX * 100, 2);
 
           sliderGroup.appendChild(el('circle', {
             cx: sx, cy: yScale(accVal), r: 5,
@@ -4390,7 +4390,7 @@
           }));
 
           // Gap label
-          var gapMid = (yScale(accVal) + yScale(fltVal)) / 2;
+          const gapMid = (yScale(accVal) + yScale(fltVal)) / 2;
           sliderGroup.appendChild(el('text', {
             x: sx + 10, y: gapMid + 4, 'text-anchor': 'start',
             fill: 'var(--color-system1)', 'font-size': '10', 'font-weight': '600',
@@ -4407,11 +4407,11 @@
         }
 
         function updateReadout() {
-          var data = conditions[current];
-          var usage = Math.round(sliderX * 100);
-          var accVal = interpolate(data.points, usage, 1);
-          var fltVal = interpolate(data.points, usage, 2);
-          var gap = accVal - fltVal;
+          const data = conditions[current];
+          const usage = Math.round(sliderX * 100);
+          const accVal = interpolate(data.points, usage, 1);
+          const fltVal = interpolate(data.points, usage, 2);
+          const gap = accVal - fltVal;
 
           document.getElementById('dose-val-usage').textContent = usage + '%';
           document.getElementById('dose-val-accurate').textContent = accVal.toFixed(1) + '%';
@@ -4420,15 +4420,15 @@
         }
 
         // Slider drag interaction
-        var dragging = false;
-        var chartArea = document.getElementById('dose-chart-area');
+        let dragging = false;
+        const chartArea = document.getElementById('dose-chart-area');
 
         function getSliderPos(e) {
-          var rect = svg.getBoundingClientRect();
-          var svgScale = vb.width / rect.width;
-          var clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          var svgX = (clientX - rect.left) * svgScale;
-          var normalized = (svgX - margin.left) / W;
+          const rect = svg.getBoundingClientRect();
+          const svgScale = vb.width / rect.width;
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const svgX = (clientX - rect.left) * svgScale;
+          const normalized = (svgX - margin.left) / W;
           return Math.max(0, Math.min(1, normalized));
         }
 
@@ -4470,7 +4470,7 @@
 
         function toggle(condition) {
           current = condition;
-          var btns = document.querySelectorAll('#dose-toggle .toggle-btn');
+          const btns = document.querySelectorAll('#dose-toggle .toggle-btn');
           btns.forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-condition') === condition);
           });
@@ -4492,10 +4492,10 @@
       ChartEngine.drawEffectMeter('effect-meter-s3', CHART_DATA.effectMeters.s3);
 
       // Scroll-triggered fill animation
-      var meterObserver = new IntersectionObserver(function (entries) {
+      const meterObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            var fills = entry.target.querySelectorAll('.effect-meter-svg-fill');
+            const fills = entry.target.querySelectorAll('.effect-meter-svg-fill');
             fills.forEach(function (f) {
               f.setAttribute('width', f.dataset.targetWidth);
               f.classList.add('animate');
@@ -4513,12 +4513,12 @@
       /* ---------------------------------------------------------
          VULNERABILITY BARS ANIMATION (scroll triggered)
          --------------------------------------------------------- */
-      var vulnContainer = document.getElementById('vuln-bars');
+      const vulnContainer = document.getElementById('vuln-bars');
       if (vulnContainer) {
-        var vulnObserver = new IntersectionObserver(function (entries) {
+        const vulnObserver = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              var fills = entry.target.querySelectorAll('.vuln-bar-fill');
+              const fills = entry.target.querySelectorAll('.vuln-bar-fill');
               fills.forEach(function (f, i) {
                 setTimeout(function () {
                   f.style.width = f.getAttribute('data-width');
@@ -4534,7 +4534,7 @@
 
 
       window.TriSystem = (function () {
-        var routes = {
+        const routes = {
           intuition: {
             paths: ['path-intuition', 'path-intuition-2'],
             nodes: ['tri-s1'],
@@ -4573,7 +4573,7 @@
           }
         };
 
-        var activeRoute = null;
+        let activeRoute = null;
 
         function clearHighlights() {
           document.querySelectorAll('.tri-path').forEach(function (p) {
@@ -4598,22 +4598,22 @@
           }
 
           activeRoute = routeId;
-          var route = routes[routeId];
+          const route = routes[routeId];
 
           // Highlight paths
           route.paths.forEach(function (pid) {
-            var el = document.getElementById(pid);
+            const el = document.getElementById(pid);
             if (el) el.classList.add('highlight');
           });
 
           // Highlight nodes
           route.nodes.forEach(function (nid) {
-            var el = document.getElementById(nid);
+            const el = document.getElementById(nid);
             if (el) el.classList.add('active');
           });
 
           // Highlight card
-          var card = document.querySelector('.route-card[data-route="' + routeId + '"]');
+          const card = document.querySelector('.route-card[data-route="' + routeId + '"]');
           if (card) card.classList.add('active');
 
           // Update description
@@ -4623,7 +4623,7 @@
 
         function selectNode(nodeId) {
           // Map node clicks to the most relevant route
-          var map = { s1: 'intuition', s2: 'deliberation', s3: 'surrender' };
+          const map = { s1: 'intuition', s2: 'deliberation', s3: 'surrender' };
           selectRoute(map[nodeId] || 'intuition');
         }
 
@@ -4632,12 +4632,12 @@
 
       // Delegated listener for TriSystem route cards and nodes
       document.addEventListener('click', function (e) {
-        var routeCard = e.target.closest('.route-card[data-route]');
+        const routeCard = e.target.closest('.route-card[data-route]');
         if (routeCard) {
           TriSystem.selectRoute(routeCard.dataset.route);
           return;
         }
-        var triNode = e.target.closest('.tri-node[data-system]');
+        const triNode = e.target.closest('.tri-node[data-system]');
         if (triNode) {
           TriSystem.selectNode(triNode.dataset.system);
           return;
