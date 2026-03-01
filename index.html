@@ -72,10 +72,7 @@
       --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
       --transition-reveal: 700ms cubic-bezier(0.16, 1, 0.3, 1);
 
-      /* Borders — clean, no glass */
-      --glass-bg: #ffffff;
-      --glass-border: #c5baa6;
-      --glass-blur: 0px;
+      /* Borders */
       --border: #c5baa6;
       --border-light: #d8cfbe;
 
@@ -268,9 +265,6 @@
     .card--ai-faulty { border-left: 3px solid var(--color-ai-faulty); }
     .card--deliberation { border-left: 3px solid var(--color-deliberation); }
     .card--override { border-left: 3px solid var(--color-override); }
-    .card--flat {
-      background: var(--bg-surface);
-    }
 
 
     /* --- Stat Highlight --- */
@@ -1096,13 +1090,11 @@
     /* Results panel */
     .crt-results {
       display: none;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: var(--space-xl);
       margin-top: var(--space-xl);
-      backdrop-filter: blur(var(--glass-blur));
-      -webkit-backdrop-filter: blur(var(--glass-blur));
       animation: fadeSlideIn 0.5s ease-out;
     }
 
@@ -1120,7 +1112,7 @@
       align-items: center;
       gap: var(--space-md);
       padding: var(--space-md) 0;
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--border);
     }
 
     .crt-result-item:last-child {
@@ -1347,7 +1339,7 @@
 
     .route-card {
       background: var(--bg-surface);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: var(--space-md);
       cursor: pointer;
@@ -1380,7 +1372,7 @@
     /* Route description panel */
     .route-desc-panel {
       background: var(--bg-surface);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: var(--space-xl);
       margin-top: var(--space-lg);
@@ -1406,7 +1398,7 @@
 
     .system-col {
       background: var(--bg-surface);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
       transition: border-color var(--transition-base);
@@ -1444,7 +1436,7 @@
 
     .system-col-row {
       padding: var(--space-sm) var(--space-lg);
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--border);
       font-size: 0.8rem;
     }
 
@@ -1534,8 +1526,8 @@
       justify-content: center;
       margin-top: var(--space-lg);
       padding: var(--space-md) var(--space-lg);
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       font-size: 0.875rem;
       font-variant-numeric: tabular-nums;
@@ -1640,7 +1632,7 @@
        ============================================================ */
     .footer {
       padding: var(--space-2xl) 0;
-      border-top: 1px solid var(--glass-border);
+      border-top: 1px solid var(--border);
       text-align: center;
       color: var(--text-muted);
       font-size: 0.8125rem;
@@ -2618,7 +2610,7 @@
           </div>
 
           <!-- Cohen's h Effect Size Meter -->
-          <div class="card card--flat" style="display: flex; flex-direction: column; justify-content: center;">
+          <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
             <h4 style="margin-bottom: var(--space-sm);">Cognitive Surrender Effect</h4>
             <p style="font-size: 0.85rem; margin-bottom: var(--space-lg);">
               Cohen&rsquo;s h is a statistical measure of how far apart two rates are &mdash; in this case, how differently people perform when AI is right vs. wrong. Anything above 0.8 is considered a &ldquo;large&rdquo; effect, meaning the gap is substantial and unlikely due to chance.
@@ -2673,7 +2665,7 @@
 
         <!-- Individual Differences Summary -->
         <div class="grid-3col reveal reveal-delay-5" style="margin-top: var(--space-xl);">
-          <div class="card card--flat">
+          <div class="card">
             <span class="label" style="color: var(--color-ai-faulty);">Vulnerability</span>
             <h4 style="margin-top: var(--space-xs);">Trust in AI</h4>
             <p style="font-size: 0.85rem; margin-top: var(--space-sm);">
@@ -2681,7 +2673,7 @@
               The odds ratio (OR) was 0.36 &mdash; meaning for each standard-deviation increase in AI trust, people were 64% less likely to override faulty AI advice.
             </p>
           </div>
-          <div class="card card--flat">
+          <div class="card">
             <span class="label" style="color: var(--color-override);">Protection</span>
             <h4 style="margin-top: var(--space-xs);">Need for Cognition</h4>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; margin-bottom: var(--space-xs);">Measures how much someone enjoys effortful thinking</p>
@@ -2690,7 +2682,7 @@
               OR = 1.86 &mdash; meaning each standard-deviation increase in enjoyment of thinking nearly doubled the odds of catching and overriding AI mistakes.
             </p>
           </div>
-          <div class="card card--flat">
+          <div class="card">
             <span class="label" style="color: var(--color-override);">Protection</span>
             <h4 style="margin-top: var(--space-xs);">Fluid Intelligence</h4>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; margin-bottom: var(--space-xs);">Raw reasoning ability &mdash; pattern recognition and logic, independent of learned knowledge</p>
@@ -2793,7 +2785,7 @@
         </div>
 
         <!-- Effect size -->
-        <div class="card card--flat reveal reveal-delay-4" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
+        <div class="card reveal reveal-delay-4" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
           <h4 style="margin-bottom: var(--space-sm);">Study 2 Cognitive Surrender Effect</h4>
           <div class="effect-meter" id="effect-meter-s2" style="margin-top: var(--space-md);"></div>
         </div>
@@ -2912,7 +2904,7 @@
         </div>
 
         <!-- Effect size -->
-        <div class="card card--flat reveal reveal-delay-5" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
+        <div class="card reveal reveal-delay-5" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
           <h4 style="margin-bottom: var(--space-sm);">Study 3 Cognitive Surrender Effect</h4>
           <div class="effect-meter" id="effect-meter-s3" style="margin-top: var(--space-md);"></div>
         </div>
