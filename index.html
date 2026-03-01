@@ -1927,6 +1927,45 @@
       border: 1px solid var(--border-light);
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
+
+    .chart-guide {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: var(--space-sm);
+      padding-left: var(--space-md);
+      border-left: 2px solid var(--accent);
+      line-height: 1.6;
+    }
+    .chart-container .chart-guide {
+      color: rgba(255,255,255,0.55);
+      border-left-color: var(--accent);
+      margin: 0;
+      padding-top: 0;
+    }
+    .chart-guided-layout {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+    }
+    .chart-guided-layout > .chart-guide {
+      flex: 0 0 30%;
+      max-width: 30%;
+    }
+    .chart-guided-layout > .chart-svg-container {
+      flex: 1;
+      min-width: 0;
+    }
+    @media (max-width: 600px) {
+      .chart-guided-layout {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+      .chart-guided-layout > .chart-guide {
+        flex: none;
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 
@@ -2057,6 +2096,12 @@
       </div>
 
       <div class="section-content">
+
+        <div class="reveal" style="max-width: 65ch; margin-bottom: var(--space-lg);">
+          <p class="chart-guide" style="margin-bottom: var(--space-sm);">
+            You&rsquo;ll face 7 reasoning puzzles where the obvious answer is wrong. Each one tests whether you pause and think&mdash;or go with your gut. How will you compare to the 1,372 participants in the actual study?
+          </p>
+        </div>
 
         <!-- Participation Gate -->
         <div class="crt-gate reveal reveal-delay-1" id="crt-gate">
@@ -2262,14 +2307,34 @@
         <h2>The Tri-System Mind</h2>
         <hr class="section-divider">
         <p>
-          Psychologists have long used a two-system model of thinking &mdash; fast intuition (System 1)
-          and slow deliberation (System 2), a framework developed by Nobel laureate Daniel Kahneman.
-          Shaw &amp; Nave propose that AI introduces a third cognitive system&mdash;and with it, new pathways
-          for both insight and surrender.
+          From Kahneman&rsquo;s two systems to the age of AI &mdash; how a third cognitive system is reshaping human reasoning.
         </p>
       </div>
 
       <div class="section-content">
+
+        <div class="grid-2col reveal" style="margin-bottom: var(--space-xl);">
+          <div class="card card--flat" style="border-left: 3px solid var(--color-system1);">
+            <span class="label" style="color: var(--color-system1);">System 1</span>
+            <h4 style="margin-top: var(--space-xs);">Fast &amp; Automatic</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Flinching at a loud noise, reading a stop sign, answering &ldquo;2&nbsp;+&nbsp;2&rdquo;&mdash;and blurting out the wrong answer to a trick question before you can stop yourself.
+            </p>
+          </div>
+          <div class="card card--flat" style="border-left: 3px solid var(--color-system2);">
+            <span class="label" style="color: var(--color-system2);">System 2</span>
+            <h4 style="margin-top: var(--space-xs);">Slow &amp; Deliberate</h4>
+            <p style="margin-top: var(--space-sm); font-size: 0.9rem;">
+              Computing 17&nbsp;&times;&nbsp;24 in your head, parallel parking, comparing insurance plans. Accurate but effortful&mdash;and humans are &ldquo;cognitive misers&rdquo; who avoid it whenever possible.
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal" style="max-width: 65ch; margin-bottom: var(--space-xl);">
+          <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+            This two-system framework, developed by Kahneman &amp; Tversky in the 1970s and popularised by the 2011 bestseller <em>Thinking, Fast and Slow</em>, dominated psychology for fifty years. Then AI arrived&mdash;not as a passive tool, but as something that generates reasoning itself. Shaw &amp; Nave argue it has become a <strong>third cognitive system</strong>: one that sits outside the brain but functions as part of the mind.
+          </p>
+        </div>
 
         <!-- Interactive SVG Diagram -->
         <div class="tri-system-diagram reveal reveal-delay-1" id="tri-diagram">
@@ -2534,7 +2599,7 @@
         <div class="study-key-finding reveal reveal-delay-1">
           <div class="finding-stat" style="color: var(--color-ai-faulty);">79.8%</div>
           <div class="finding-text">
-            of participants followed <strong>faulty</strong> AI advice on chat-engaged trials,
+            of participants followed <strong>faulty</strong> AI advice on chat-engaged trials (trials where the participant actually asked the AI chatbot for help),
             despite the AI confidently giving wrong answers. Accuracy plummeted from
             a 45.8% baseline to just 31.5%.
           </div>
@@ -2569,8 +2634,11 @@
 
         <!-- Figure 3: Accuracy by Condition -->
         <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
-          <div class="chart-svg-container">
-            <svg id="chart-s1-accuracy" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-guided-layout">
+            <p class="chart-guide">Three bars, three stories. Gold = brain-only baseline. Blue = AI helps correctly. Red = the surprise: wrong AI made people <em>worse</em> than no AI at all.</p>
+            <div class="chart-svg-container">
+              <svg id="chart-s1-accuracy" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
           </div>
         </div>
 
@@ -2602,7 +2670,8 @@
         </div>
 
         <!-- Figure 2: Follow/Override Rates -->
-        <div class="grid-2col reveal reveal-delay-3" style="margin-top: var(--space-xl);">
+        <p class="chart-guide" style="margin-top: var(--space-xl);">On faulty AI trials, the red &ldquo;Follow&rdquo; bar towers over green &ldquo;Override&rdquo; &mdash; nearly 4 of 5 people went along with wrong AI.</p>
+        <div class="grid-2col reveal reveal-delay-3" style="margin-top: var(--space-sm);">
           <div class="chart-container" style="padding: var(--space-lg);">
             <div class="chart-svg-container">
               <svg id="chart-s1-follow" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -2719,6 +2788,8 @@
           </div></div></div>
         </div>
         </div>
+
+        <p class="chart-guide" style="margin-top: var(--space-xl); border-left-color: var(--accent);">Study 1 established that cognitive surrender is real and widespread. But does it get worse under pressure? Study 2 puts participants on a 30-second clock to find out what happens when there&rsquo;s no time to think twice.</p>
       </div>
     </div>
   </section>
@@ -2760,8 +2831,11 @@
 
         <!-- Figure 5/6: Accuracy by condition, trial type, thinking profile -->
         <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
-          <div class="chart-svg-container">
-            <svg id="chart-s2-accuracy" viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-guided-layout">
+            <p class="chart-guide">Toggle between conditions. Participants are grouped by <em>thinking profile</em>: AI-Users, Independents (had AI but rarely used it), and Brain-Only (no AI). Under time pressure, the red bar drops to 12.1%.</p>
+            <div class="chart-svg-container">
+              <svg id="chart-s2-accuracy" viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
           </div>
         </div>
 
@@ -2822,6 +2896,8 @@
           dependent on the correctness of System 3 outputs.
           <cite>Shaw &amp; Nave, 2025</cite>
         </div>
+
+        <p class="chart-guide" style="margin-top: var(--space-xl); border-left-color: var(--accent);">If people surrender to AI under normal conditions &mdash; and even more so under pressure &mdash; is there anything that can help? Study 3 tests the most intuitive remedy: pay people to get it right, and tell them immediately whether they did.</p>
       </div>
     </div>
   </section>
@@ -2865,22 +2941,33 @@
 
         <!-- Figure 7: Follow/Override rates -->
         <div class="chart-container reveal reveal-delay-2" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
-          <div class="chart-svg-container">
-            <svg id="chart-s3-override" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-guided-layout">
+            <p class="chart-guide">Green &ldquo;Override&rdquo; bars grow with incentives &mdash; people doubled their willingness to reject bad AI. But even with money on the line, the majority still followed.</p>
+            <div class="chart-svg-container">
+              <svg id="chart-s3-override" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
           </div>
         </div>
 
         <!-- Figure 8: Accuracy -->
         <div class="chart-container reveal reveal-delay-3" style="padding: var(--space-lg) var(--space-xl) var(--space-xl); margin-top: var(--space-xl);">
-          <div class="chart-svg-container">
-            <svg id="chart-s3-accuracy" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-guided-layout">
+            <p class="chart-guide">Even with incentives, the gap between blue and red stays wide &mdash; 44 percentage points. Incentives narrowed it but didn&rsquo;t close it.</p>
+            <div class="chart-svg-container">
+              <svg id="chart-s3-accuracy" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
           </div>
         </div>
 
         <!-- Figure 9: Thinking Profile chart -->
         <div class="chart-wrap reveal reveal-delay-4" style="margin-top: var(--space-xl);">
-          <div class="chart-container">
-            <svg id="chart-s3-profiles" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-container" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
+            <div class="chart-guided-layout">
+              <p class="chart-guide">&ldquo;AI-Users&rdquo; show the starkest contrast. &ldquo;Independents&rdquo; &mdash; who chose not to use AI &mdash; performed consistently regardless of AI accuracy.</p>
+              <div class="chart-svg-container">
+                <svg id="chart-s3-profiles" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"></svg>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2941,6 +3028,8 @@
           vulnerability to faulty AI remains a structural feature of human-AI interaction.
           <cite>Shaw &amp; Nave, 2025</cite>
         </div>
+
+        <p class="chart-guide" style="margin-top: var(--space-xl); border-left-color: var(--accent);">Three studies, 1,372 participants, one consistent finding. Now it&rsquo;s time to step back and see what the numbers reveal when combined &mdash; and what they mean for a world increasingly shaped by AI.</p>
       </div>
     </div>
   </section>
@@ -2968,7 +3057,7 @@
           <div class="key-desc">
             Correct responding was over <strong>16 times greater</strong> when AI was accurate vs. faulty
             (the odds ratio was 16.07, with a 95% confidence interval of 11.50 to 22.46 &mdash; meaning this result is extremely robust and statistically overwhelming).
-            This &ldquo;scissors effect&rdquo; persisted across all three studies, conditions, and participant profiles.
+            This &ldquo;scissors effect&rdquo; &mdash; the diverging gap where accurate AI lifts performance while faulty AI drags it down &mdash; persisted across all three studies, conditions, and participant profiles.
           </div>
         </div>
 
@@ -3026,8 +3115,11 @@
 
         <!-- Cross-study effect size comparison chart -->
         <div class="chart-container reveal reveal-delay-3" style="padding: var(--space-lg) var(--space-xl) var(--space-xl);">
-          <div class="chart-svg-container">
-            <svg id="chart-cross-study" viewBox="0 0 550 230" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="chart-guided-layout">
+            <p class="chart-guide">All four bars exceed the 0.8 &ldquo;large effect&rdquo; threshold (dashed line). The surrender effect was consistent across all three studies &mdash; this is not a fluke.</p>
+            <div class="chart-svg-container">
+              <svg id="chart-cross-study" viewBox="0 0 550 230" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
           </div>
         </div>
 
@@ -3289,6 +3381,12 @@
             has arrived, and it demands a rethinking of how we design, deploy, and live with
             artificial intelligence.
           </p>
+        </div>
+
+        <!-- CRT Callback — deferred reveal for experiment participants -->
+        <div id="crt-callback" class="reveal" style="margin-top: var(--space-2xl); padding: 0; border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; max-height: 0; overflow: hidden; transition: max-height 0.5s ease, padding 0.5s ease, border-color 0.5s ease, background 0.5s ease;">
+          <span class="label" style="color: var(--accent); display: block; margin-bottom: var(--space-sm);">Your Experiment Results &mdash; Revisited</span>
+          <p id="crt-callback-text" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8;"></p>
         </div>
 
         <!-- Citation Block -->
@@ -3716,6 +3814,22 @@
             ? CRT_DATA.bridgeTexts.brainOnly
             : CRT_DATA.bridgeTexts.aiAssisted;
 
+          // Store results for end-of-article callback
+          window.__crtResults = {
+            profile: profileName,
+            correct: totalCorrect,
+            pct: pct,
+            isBrainOnly: isBrainOnly,
+            aiUsed: aiUsedCount,
+            followed: followedCount,
+            overrode: overrodeCount,
+            followedFaulty: followedFaultyCount,
+            faultyAsked: faultyAiAsked
+          };
+
+          // Activate end-of-article callback observer now that results are stored
+          if (window.__initCrtCallback) window.__initCrtCallback();
+
           setTimeout(function () {
             panel.classList.add('visible');
             panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -3749,6 +3863,46 @@
           case 'submit':   CRT.submit(qid);      break;
         }
       });
+
+      // CRT end-of-article callback — start observing only after results are stored
+      window.__initCrtCallback = function () {
+        const cb = document.getElementById('crt-callback');
+        if (!cb || !window.__crtResults) return;
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const r = window.__crtResults;
+              const el = document.getElementById('crt-callback-text');
+              if (r.isBrainOnly) {
+                el.innerHTML = 'You scored <strong>' + r.correct + '/7 (' + r.pct + '%)</strong> in the Brain-Only condition. ' +
+                  'The study\u2019s Brain-Only participants averaged 45.8%. ' +
+                  'Now you\u2019ve seen what happened when others had AI: accuracy soared to 71% with correct AI, ' +
+                  'but crashed to 31.5% with faulty AI\u2014worse than no AI at all. ' +
+                  'Would you have caught the AI\u2019s mistakes, or would you have surrendered too?';
+              } else {
+                let surrenderLine = '';
+                if (r.faultyAsked > 0) {
+                  const rate = Math.round(r.followedFaulty / r.faultyAsked * 100);
+                  surrenderLine = rate >= 50
+                    ? ' You followed faulty AI on ' + r.followedFaulty + '/' + r.faultyAsked + ' faulty trials (' + rate + '%)\u2014consistent with the study\u2019s 79.8% surrender rate.'
+                    : ' You overrode faulty AI on ' + (r.faultyAsked - r.followedFaulty) + '/' + r.faultyAsked + ' faulty trials\u2014better than most. In the study, only 20.2% managed to override.';
+                }
+                el.innerHTML = 'You scored <strong>' + r.correct + '/7 (' + r.pct + '%)</strong> as an <strong>' + r.profile + '</strong>. ' +
+                  'Now you\u2019ve seen the full picture: the scissors effect, confidence inflation, and how even incentives couldn\u2019t close the gap.' +
+                  surrenderLine +
+                  ' Across 1,372 participants, correct responding was <strong>16 times more likely</strong> when AI was accurate vs. faulty. ' +
+                  'That\u2019s the core finding\u2014and you were part of it.';
+              }
+              cb.style.maxHeight = '300px';
+              cb.style.padding = 'var(--space-xl)';
+              cb.style.borderColor = 'var(--accent)';
+              cb.style.background = 'var(--bg-surface)';
+              observer.unobserve(cb);
+            }
+          });
+        }, { threshold: 0.1 });
+        observer.observe(cb);
+      };
 
 
       /* ---------------------------------------------------------
