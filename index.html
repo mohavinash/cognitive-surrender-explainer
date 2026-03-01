@@ -3336,10 +3336,14 @@
       'use strict';
 
       /* ---------------------------------------------------------
-         LOAD CHART DATA
+         LOAD EXTERNAL DATA
          --------------------------------------------------------- */
-      var chartDataResponse = await fetch('data/chart-data.json');
+      var [chartDataResponse, crtDataResponse] = await Promise.all([
+        fetch('data/chart-data.json'),
+        fetch('data/crt-data.json')
+      ]);
       var CHART_DATA = await chartDataResponse.json();
+      var CRT_DATA = await crtDataResponse.json();
 
       /* ---------------------------------------------------------
          READING PROGRESS BAR
@@ -3458,64 +3462,7 @@
          MINI-CRT INTERACTIVE DEMO
          --------------------------------------------------------- */
       window.CRT = (function () {
-        var questions = {
-          1: {
-            correct: '$0.05',
-            correctAliases: ['0.05', '5 cents', '5c', '.05', '$0.05', '5', '$0.05.'],
-            intuitive: '$0.10',
-            aiCorrect: true,
-            aiSuggestion: '$0.05',
-            explanation: 'If the ball costs $0.05, the bat costs $1.05 ($1.00 more), totaling $1.10.'
-          },
-          2: {
-            correct: '5 minutes',
-            correctAliases: ['5', '5 min', '5 minutes', '5 mins', '5min', 'five', 'five minutes'],
-            intuitive: '100 minutes',
-            aiCorrect: false,
-            aiSuggestion: '100 minutes',
-            explanation: 'Each machine makes one widget in 5 minutes. 100 machines each making one widget still takes 5 minutes.'
-          },
-          3: {
-            correct: '47 days',
-            correctAliases: ['47', '47 days', 'forty-seven', 'forty seven', '47days'],
-            intuitive: '24 days',
-            aiCorrect: true,
-            aiSuggestion: '47 days',
-            explanation: 'Since the patch doubles daily, the day before full coverage (day 48) it was half covered: day 47.'
-          },
-          4: {
-            correct: '2nd place',
-            correctAliases: ['2nd', '2', 'second', '2nd place', 'second place'],
-            intuitive: '1st place',
-            aiCorrect: false,
-            aiSuggestion: '1st place',
-            explanation: 'You passed the person in 2nd place, so you take their position\u20142nd place. You didn\u2019t pass the person in 1st.'
-          },
-          5: {
-            correct: 'Emily',
-            correctAliases: ['emily'],
-            intuitive: 'June',
-            aiCorrect: true,
-            aiSuggestion: 'Emily',
-            explanation: 'The question says "Emily\u2019s father has three daughters." Emily is the third daughter\u2014her name is in the question itself.'
-          },
-          6: {
-            correct: '8',
-            correctAliases: ['8', 'eight', '8 sheep'],
-            intuitive: '7',
-            aiCorrect: false,
-            aiSuggestion: '7',
-            explanation: '"All but 8 died" means 8 survived. The answer is 8, not 15 minus 8.'
-          },
-          7: {
-            correct: '4 days',
-            correctAliases: ['4', '4 days', 'four', 'four days'],
-            intuitive: '9 days',
-            aiCorrect: true,
-            aiSuggestion: '4 days',
-            explanation: 'John drinks 1/6 per day, Mary drinks 1/12 per day. Together: 1/6 + 1/12 = 1/4 barrel per day, so 4 days total.'
-          }
-        };
+        var questions = CRT_DATA.questions;
 
         var state = { answered: 0, results: [], aiAsked: {} };
         var condition = null; // 'brain-only' or 'ai-assisted'
@@ -3539,17 +3486,13 @@
           bannerEl.style.display = 'block';
           if (isBrainOnly) {
             bannerEl.className = 'crt-condition-banner crt-condition-banner--brain-only';
-            bannerEl.innerHTML = '<strong style="color:var(--color-override);">Brain-Only Condition</strong><br>' +
-              'You\u2019ve been assigned to the <strong>Brain-Only</strong> condition\u2014no AI assistance available. ' +
-              'This is how 121 participants experienced Study 1.';
+            bannerEl.innerHTML = CRT_DATA.conditionBanners.brainOnly;
             // Hide all Ask AI buttons
             var aiButtons = document.querySelectorAll('.crt-ask-ai-btn');
             for (var i = 0; i < aiButtons.length; i++) aiButtons[i].style.display = 'none';
           } else {
             bannerEl.className = 'crt-condition-banner crt-condition-banner--ai-assisted';
-            bannerEl.innerHTML = '<strong style="color:var(--color-system2);">AI-Assisted Condition</strong><br>' +
-              'You\u2019ve been assigned to the <strong>AI-Assisted</strong> condition\u2014you can consult an AI chatbot on any question. ' +
-              'This is how 238 participants experienced Study 1.';
+            bannerEl.innerHTML = CRT_DATA.conditionBanners.aiAssisted;
           }
         }
 
@@ -3651,17 +3594,17 @@
           state.results.forEach(function (r) {
             var mapping;
             if (r.usedAI && r.followedAI && r.aiWasCorrect) {
-              mapping = 'You followed correct AI\u2014like 92.7% of participants in the study.';
+              mapping = CRT_DATA.resultTexts.followedCorrectAI;
             } else if (r.usedAI && r.followedAI && !r.aiWasCorrect) {
-              mapping = '<strong style="color:var(--color-ai-faulty)">Cognitive surrender.</strong> You followed faulty AI\u2014like 79.8% of participants.';
+              mapping = CRT_DATA.resultTexts.followedFaultyAI;
             } else if (r.usedAI && !r.followedAI && !r.aiWasCorrect) {
-              mapping = '<strong style="color:var(--color-override)">Cognitive offloading.</strong> You overrode faulty AI\u2014only 20.2% managed this.';
+              mapping = CRT_DATA.resultTexts.overrodeFaultyAI;
             } else if (r.usedAI && !r.followedAI && r.aiWasCorrect) {
-              mapping = 'You overrode correct AI\u2014only 7.3% of participants did this.';
+              mapping = CRT_DATA.resultTexts.overrodeCorrectAI;
             } else {
               mapping = isBrainOnly
-                ? 'You relied on your own reasoning\u2014no AI was available in your condition.'
-                : 'You relied on your own reasoning (Independent).';
+                ? CRT_DATA.resultTexts.noAIBrainOnly
+                : CRT_DATA.resultTexts.noAIIndependent;
             }
 
             var aiTag = '';
@@ -3707,42 +3650,45 @@
           var profileDesc = document.getElementById('crt-profile-desc');
           profileLabel.textContent = 'YOUR THINKING PROFILE';
 
+          // Template helper: replaces {key} placeholders with values from a vars object
+          function tpl(str, vars) {
+            return str.replace(/\{(\w+)\}/g, function (_, k) { return vars[k] !== undefined ? vars[k] : ''; });
+          }
+
+          var tplVars = { totalCorrect: totalCorrect, pct: pct, aiUsedCount: aiUsedCount };
+
           var profileColor, profileName, profileText;
           if (isBrainOnly) {
-            profileColor = 'var(--color-override)';
-            profileName = 'Brain-Only';
-            profileText = 'You were assigned to the <strong>Brain-Only</strong> condition\u2014just like 121 participants in Study 1 who had no access to AI. ' +
-              'They averaged <strong>45.8% accuracy</strong>. ' +
-              'You got <strong>' + totalCorrect + '/7</strong> (' + pct + '%). ' +
-              'Brain-Only participants serve as the control group\u2014their performance reflects pure human reasoning without any AI influence.';
+            var p = CRT_DATA.thinkingProfiles.brainOnly;
+            profileColor = p.color;
+            profileName = p.name;
+            profileText = tpl(p.text, tplVars);
           } else if (aiUsedCount <= 1) {
-            profileColor = 'var(--color-deliberation)';
-            profileName = 'Independent';
-            profileText = (aiUsedCount === 0
-              ? 'You had access to AI but never consulted it\u2014you relied entirely on your own cognition. '
-              : 'You consulted the AI just once out of 7 questions. ') +
-              'In the study, <strong>Independents</strong> (\u22641 AI use, n\u2009=\u2009170 in Study 2) primarily relied on their own reasoning. ' +
-              'Under normal conditions, Independents averaged <strong>51.5% accuracy</strong>\u2014similar to Brain-Only participants (45.8%). ' +
-              'You got <strong>' + totalCorrect + '/7</strong> (' + pct + '%). ' +
-              'Their performance was not tied to AI quality, making them resistant to cognitive surrender but also unable to benefit from accurate AI.';
+            var p = CRT_DATA.thinkingProfiles.independent;
+            profileColor = p.color;
+            profileName = p.name;
+            profileText = (aiUsedCount === 0 ? p.prefixNeverUsed : p.prefixUsedOnce) +
+              tpl(p.text, tplVars);
           } else {
-            profileColor = 'var(--color-system2)';
-            profileName = 'AI-User';
+            var p = CRT_DATA.thinkingProfiles.aiUser;
+            profileColor = p.color;
+            profileName = p.name;
             var surrenderRate = faultyAiAsked > 0 ? Math.round(followedFaultyCount / faultyAiAsked * 100) : 0;
+            var surrenderVars = { followedFaultyCount: followedFaultyCount, faultyAiAsked: faultyAiAsked, surrenderRate: surrenderRate };
             var surrenderNote = '';
             if (faultyAiAsked > 0 && followedFaultyCount > 0) {
-              surrenderNote = ' You followed faulty AI on <strong>' + followedFaultyCount + '/' + faultyAiAsked + ' faulty trials (' + surrenderRate + '%)</strong>\u2014' +
-                (surrenderRate >= 70 ? 'a high surrender rate, consistent with the 79.8% found in the study.' :
-                 surrenderRate >= 40 ? 'a moderate surrender rate. In the study, 79.8% followed faulty AI.' :
-                 'you showed good resistance to faulty AI. In the study, only 20.2% overrode faulty advice.');
+              surrenderNote = tpl(
+                surrenderRate >= 70 ? p.surrenderHigh :
+                surrenderRate >= 40 ? p.surrenderModerate :
+                p.surrenderLow,
+                surrenderVars
+              );
             } else if (faultyAiAsked > 0 && followedFaultyCount === 0) {
-              surrenderNote = ' Impressively, you <strong>overrode all faulty AI advice</strong>\u2014only 20.2% of participants managed this in the study.';
+              surrenderNote = p.surrenderNone;
             }
-            profileText = 'You consulted the AI on <strong>' + aiUsedCount + ' out of 7</strong> questions. ' +
-              'In the study, <strong>AI-Users</strong> (\u22652 AI uses, n\u2009=\u2009315 in Study 2) showed the strongest effects of cognitive surrender. ' +
-              'They scored <strong>80% on AI-Accurate trials</strong> but only <strong>20.4% on AI-Faulty trials</strong>\u2014their performance tracked AI quality, not their own ability.' +
-              surrenderNote +
-              ' AI-Users in the study scored higher on Trust in AI (4.44 vs 3.45) and lower on Need for Cognition (3.36 vs 3.57) compared to Independents.';
+            tplVars.aiUsedCount = aiUsedCount;
+            tplVars.surrenderNote = surrenderNote;
+            profileText = tpl(p.text, tplVars);
           }
 
           profileLabel.style.color = profileColor;
@@ -3753,16 +3699,8 @@
           // Bridge text
           var bridgeText = document.getElementById('crt-bridge-text');
           bridgeText.innerHTML = isBrainOnly
-            ? '<strong>You just experienced the control condition.</strong> With no AI available, your answers reflect pure human reasoning. ' +
-              'In the real study, Brain-Only participants (n\u2009=\u2009121) averaged 45.8% accuracy. ' +
-              'Other participants had access to an AI chatbot that was sometimes correct and sometimes confidently wrong. ' +
-              'Those participants followed correct AI <strong>92.7%</strong> of the time\u2014but also followed ' +
-              '<em>faulty</em> AI <strong>79.8%</strong> of the time. That\u2019s cognitive surrender.'
-            : '<strong>You just experienced the actual experiment.</strong> In the real study, 1,372 participants ' +
-              'answered these same 7 CRT questions with access to an AI chatbot. The AI was sometimes correct ' +
-              'and sometimes gave a confident but wrong answer\u2014exactly as you experienced. ' +
-              'Participants followed correct AI <strong>92.7%</strong> of the time\u2014but also followed ' +
-              '<em>faulty</em> AI <strong>79.8%</strong> of the time. That\u2019s cognitive surrender.';
+            ? CRT_DATA.bridgeTexts.brainOnly
+            : CRT_DATA.bridgeTexts.aiAssisted;
 
           setTimeout(function () {
             panel.classList.add('visible');
