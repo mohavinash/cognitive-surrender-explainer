@@ -12,6 +12,9 @@ venv/
 
 # Development screenshots
 *.png
+!og-image.png
+!favicon-32.png
+!apple-touch-icon.png
 
 # Playwright MCP
 .playwright-mcp/

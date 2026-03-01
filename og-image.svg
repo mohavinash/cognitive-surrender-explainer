@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#252540"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="rgba(255,255,255,0.04)" stroke-width="1">
+    <line x1="0" y1="157" x2="1200" y2="157"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="473" x2="1200" y2="473"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+  </g>
+
+  <!-- S1 circle — Intuition (gold) -->
+  <circle cx="510" cy="155" r="52" fill="none" stroke="#c8a438" stroke-width="2.5" opacity="0.9"/>
+  <text x="510" y="160" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#c8a438">S1</text>
+  <text x="510" y="178" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#c8a438" opacity="0.7">Intuition</text>
+
+  <!-- S2 circle — Deliberation (blue) -->
+  <circle cx="690" cy="155" r="52" fill="none" stroke="#5b8dd9" stroke-width="2.5" opacity="0.9"/>
+  <text x="690" y="160" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#5b8dd9">S2</text>
+  <text x="690" y="178" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#5b8dd9" opacity="0.7">Deliberation</text>
+
+  <!-- S3 circle — AI (purple) -->
+  <circle cx="600" cy="100" r="52" fill="none" stroke="#9b72cf" stroke-width="2.5" opacity="0.9"/>
+  <text x="600" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#9b72cf">S3</text>
+  <text x="600" y="123" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#9b72cf" opacity="0.7">AI</text>
+
+  <!-- Connecting lines -->
+  <line x1="548" y1="118" x2="563" y2="132" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <line x1="652" y1="118" x2="637" y2="132" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <line x1="555" y1="155" x2="645" y2="155" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+  <!-- "IN VIVO • IN SILICO" label -->
+  <text x="600" y="222" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" letter-spacing="3" fill="rgba(255,255,255,0.3)">IN VIVO • IN SILICO</text>
+
+  <!-- Title -->
+  <text x="600" y="310" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="56" font-weight="700" fill="#f5f0e8">Thinking—Fast, Slow,</text>
+  <text x="600" y="375" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="56" font-weight="700" fill="#f5f0e8">and <tspan font-style="italic" fill="#c8a438">Artificial</tspan></text>
+
+  <!-- Subtitle -->
+  <text x="600" y="425" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" fill="rgba(245,240,232,0.7)">How AI is Reshaping Human Reasoning</text>
+  <text x="600" y="455" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" fill="rgba(245,240,232,0.7)">and the Rise of <tspan fill="#c8a438" font-weight="600">Cognitive Surrender</tspan></text>
+
+  <!-- Divider -->
+  <line x1="460" y1="488" x2="740" y2="488" stroke="#c8a438" stroke-width="1" opacity="0.4"/>
+
+  <!-- Authors -->
+  <text x="600" y="520" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="rgba(245,240,232,0.5)">An Interactive Explainer of the Paper by</text>
+  <text x="600" y="545" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="rgba(245,240,232,0.7)">Steven D. Shaw &amp; Gideon Nave</text>
+  <text x="600" y="568" text-anchor="middle" font-family="monospace" font-size="12" fill="rgba(245,240,232,0.35)" letter-spacing="1">The Wharton School, University of Pennsylvania</text>
+
+  <!-- Stats bar -->
+  <g transform="translate(320, 590)">
+    <text x="0" y="0" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#c8a438">1,372</text>
+    <text x="42" y="0" font-family="Inter, sans-serif" font-size="10" fill="rgba(245,240,232,0.4)">participants</text>
+    <text x="150" y="0" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#c8a438">9,593</text>
+    <text x="192" y="0" font-family="Inter, sans-serif" font-size="10" fill="rgba(245,240,232,0.4)">trials</text>
+    <text x="260" y="0" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#c8a438">3</text>
+    <text x="272" y="0" font-family="Inter, sans-serif" font-size="10" fill="rgba(245,240,232,0.4)">experiments</text>
+    <text x="380" y="0" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#c8a438">16x</text>
+    <text x="410" y="0" font-family="Inter, sans-serif" font-size="10" fill="rgba(245,240,232,0.4)">surrender effect</text>
+  </g>
+</svg>
