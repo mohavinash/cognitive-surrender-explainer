@@ -212,7 +212,6 @@
 
     section {
       padding: var(--space-2xl) 0;
-      min-height: auto;
       border-bottom: 1px solid var(--border-light);
     }
 
@@ -370,19 +369,6 @@
       height: auto;
     }
 
-    .chart-placeholder {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      text-align: center;
-    }
-
-    .chart-placeholder .icon {
-      font-size: 2rem;
-      margin-bottom: var(--space-sm);
-      opacity: 0.5;
-    }
-
-
     /* --- Toggle Group --- */
     .toggle-group {
       display: inline-flex;
@@ -517,10 +503,6 @@
       color: #f8fafc;
     }
 
-    #hero::before {
-      display: none;
-    }
-
     #hero h1, #hero h2, #hero h3, #hero h4 {
       color: #f8fafc;
     }
@@ -533,10 +515,6 @@
       text-transform: uppercase;
       color: var(--accent-light);
       margin-bottom: var(--space-xl);
-    }
-
-    .hero-badge .dot {
-      display: none;
     }
 
     .hero-title {
@@ -779,29 +757,6 @@
     }
 
 
-    /* ============================================================
-       SECTION-SPECIFIC PLACEHOLDER STYLES
-       ============================================================ */
-    .placeholder-block {
-      border: 1px dashed var(--glass-border);
-      border-radius: var(--radius-md);
-      padding: var(--space-2xl);
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-sm);
-    }
-
-    .placeholder-block .placeholder-icon {
-      font-size: 1.5rem;
-      opacity: 0.4;
-    }
-
     .grid-2col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -904,10 +859,6 @@
 
     .effect-meter-svg-fill {
       transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .effect-meter-svg-fill.animate {
-      /* width set via JS dataset.targetWidth */
     }
 
     /* Study section narrative cards */
@@ -1677,10 +1628,6 @@
       transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .vuln-bar-fill.animate {
-      /* width set via inline style */
-    }
-
     .vuln-bar-desc {
       font-size: 0.8125rem;
       color: var(--text-muted);
@@ -1769,10 +1716,6 @@
       :root {
         --space-4xl: 3rem;
         --space-3xl: 2rem;
-      }
-
-      section {
-        min-height: auto;
       }
 
       .hero-subtitle {
@@ -2008,7 +1951,6 @@
     <div class="container" style="max-width: 800px;">
       <div class="reveal">
         <div class="hero-badge">
-          <span class="dot"></span>
           The Cognitive Lab &mdash; Interactive Explainer
         </div>
       </div>
@@ -3404,8 +3346,6 @@
       /* ---------------------------------------------------------
          READING PROGRESS BAR
          --------------------------------------------------------- */
-      const progressBar = document.getElementById('reading-progress');
-
       function updateProgress() {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -3512,20 +3452,6 @@
               block: 'start'
             });
           }
-        });
-      });
-
-
-      /* ---------------------------------------------------------
-         TOGGLE BUTTON INTERACTION (for prototyping)
-         --------------------------------------------------------- */
-      document.querySelectorAll('.toggle-group').forEach(function (group) {
-        var buttons = group.querySelectorAll('.toggle-btn');
-        buttons.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            buttons.forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-          });
         });
       });
 
