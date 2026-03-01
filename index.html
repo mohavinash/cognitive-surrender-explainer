@@ -4827,6 +4827,7 @@
         }
 
         function onPointerDown(e) {
+          if (dragging) return;
           if (e.target.id === 'dose-handle' || e.target.closest('#dose-chart-area')) {
             dragging = true;
             sliderX = getSliderPos(e);
