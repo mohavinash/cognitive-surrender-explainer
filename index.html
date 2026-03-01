@@ -4832,6 +4832,11 @@
             sliderX = getSliderPos(e);
             draw();
             e.preventDefault();
+            // Attach move/up listeners only during drag
+            document.addEventListener('mousemove', onPointerMove);
+            document.addEventListener('touchmove', onPointerMove, { passive: false });
+            document.addEventListener('mouseup', onPointerUp);
+            document.addEventListener('touchend', onPointerUp);
           }
         }
 
@@ -4844,15 +4849,16 @@
 
         function onPointerUp() {
           dragging = false;
+          // Remove move/up listeners when drag ends
+          document.removeEventListener('mousemove', onPointerMove);
+          document.removeEventListener('touchmove', onPointerMove);
+          document.removeEventListener('mouseup', onPointerUp);
+          document.removeEventListener('touchend', onPointerUp);
         }
 
         if (chartArea) {
           chartArea.addEventListener('mousedown', onPointerDown);
           chartArea.addEventListener('touchstart', onPointerDown, { passive: false });
-          document.addEventListener('mousemove', onPointerMove);
-          document.addEventListener('touchmove', onPointerMove, { passive: false });
-          document.addEventListener('mouseup', onPointerUp);
-          document.addEventListener('touchend', onPointerUp);
         }
 
         function toggle(condition) {
